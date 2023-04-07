@@ -1,0 +1,62 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Circuit {
+  id              String   @id @default(uuid())
+  created_at      DateTime @default(now()) @db.Timestamptz(6)
+  title           String   @unique
+  wikipediaPageId Int?
+  lon             Float?
+  lat             Float?
+  rounds          Round[]
+}
+
+model Round {
+  id         String    @id @default(uuid())
+  created_at DateTime  @default(now()) @db.Timestamptz(6)
+  title      String
+  season     String    @db.VarChar
+  link       String?
+  circuitId  String
+  sport      Sport
+  circuit    Circuit   @relation(fields: [circuitId], references: [id])
+  sessions   Session[]
+
+  @@unique([title, sport, season], name: "uniqueRoundPerSportSeason")
+}
+
+model Session {
+  id         String      @id @default(uuid())
+  created_at DateTime    @default(now()) @db.Timestamptz(6)
+  number     Int         @default(0)
+  startDate  DateTime    @db.Timestamptz(6)
+  endDate    DateTime    @db.Timestamptz(6)
+  roundId    String
+  type       SessionType
+  round      Round       @relation(fields: [roundId], references: [id])
+
+  @@unique([type, number, roundId], name: "uniqueSessionPerRoundId")
+}
+
+enum Sport {
+  F1
+  FE
+  XE
+  INDY
+  W
+  WEC
+}
+
+enum SessionType {
+  PRACTICE
+  QUALIFYING
+  RACE
+  SHAKEDOWN
+  SPRINT
+}
