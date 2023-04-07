@@ -1,15 +1,19 @@
 {
-  "name": "motorsport-cal-astro",
-  "type": "module",
-  "version": "0.0.1",
-  "scripts": {
-    "dev": "astro dev",
-    "start": "astro dev",
-    "build": "astro build",
-    "preview": "astro preview",
-    "astro": "astro"
-  },
-  "dependencies": {
-    "astro": "^2.2.0"
-  }
+    "name": "motorsport-cal-astro",
+    "type": "module",
+    "version": "0.0.1",
+    "description": "A calendar for motorsport",
+    "author": "Sebastiaan Benjamins",
+    "license": "MIT",
+    "private": true,
+    "scripts": {
+        "dev": "astro dev",
+        "start": "astro dev",
+        "build": "astro build",
+        "preview": "astro preview",
+        "astro": "astro"
+    },
+    "dependencies": {
+        "astro": "^2.2.0"
+    }
 }
