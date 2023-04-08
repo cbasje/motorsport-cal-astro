@@ -26,13 +26,6 @@ const mappedRounds = rounds
         };
     })
     .sort((a, b) => {
-        console.log("🚀 ----------------------------------------🚀");
-        console.log(
-            "🚀 ~ .map ~ raceStartDate:",
-            a.raceStartDate,
-            b.raceStartDate
-        );
-        console.log("🚀 ----------------------------------------🚀");
         return a.raceStartDate !== undefined && b.raceStartDate !== undefined
             ? new Date(a.raceStartDate).getTime() -
                   new Date(b.raceStartDate).getTime()
