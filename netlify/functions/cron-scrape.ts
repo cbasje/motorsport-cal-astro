@@ -4,18 +4,20 @@ import {
     HandlerContext,
     schedule,
 } from "@netlify/functions";
+import { main } from "../../lib/scraper";
 
-const myHandler: Handler = async (
+const scrapeHandler: Handler = async (
     event: HandlerEvent,
     context: HandlerContext
 ) => {
-    console.log("Received event:", event);
+    await main();
 
     return {
         statusCode: 200,
     };
 };
 
-const handler = schedule("@hourly", myHandler);
+// const handler = schedule("0 0 * * FRI,SAT,SUN", scrapeHandler);
+const handler = schedule("@daily", scrapeHandler);
 
 export { handler };

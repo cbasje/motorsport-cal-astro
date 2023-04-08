@@ -19,8 +19,14 @@
         "@prisma/client": "^4.12.0",
         "@types/node": "^14.18.42",
         "astro": "^2.1.0",
+        "cheerio": "^1.0.0-rc.12",
         "ics": "^3.1.0",
+        "luxon": "^3.3.0",
+        "node-fetch": "^3.3.1",
         "prisma": "^4.12.0",
         "typescript": "^4.9.5"
+    },
+    "devDependencies": {
+        "@types/luxon": "^3.3.0"
     }
 }
