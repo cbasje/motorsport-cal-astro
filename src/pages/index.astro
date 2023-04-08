@@ -1,56 +1,15 @@
 ---
+import Countdown from "../components/Countdown.svelte";
 import MainLayout from "../layouts/main.astro";
+
+const res = await fetch(new URL("/api/next-race", "http://localhost:3000"));
+const dateString: string = (await res.json()).date;
 ---
 
 <MainLayout>
     <div class="w-full flex flex-col gap-3">
         <h1 class="text-2xl font-medium">Motorsport Calendar</h1>
 
-        <div class="grid grid-flow-col gap-5 text-center auto-cols-max">
-            <div
-                class="flex flex-col p-2 bg-neutral rounded-box text-neutral-content"
-            >
-                <span
-                    class="countdown font-mono text-5xl"
-                    data-date-component="days"
-                >
-                    <span></span>
-                </span>
-                days
-            </div>
-            <div
-                class="flex flex-col p-2 bg-neutral rounded-box text-neutral-content"
-            >
-                <span
-                    class="countdown font-mono text-5xl"
-                    data-date-component="hours"
-                >
-                    <span></span>
-                </span>
-                hours
-            </div>
-            <div
-                class="flex flex-col p-2 bg-neutral rounded-box text-neutral-content"
-            >
-                <span
-                    class="countdown font-mono text-5xl"
-                    data-date-component="mins"
-                >
-                    <span></span>
-                </span>
-                mins
-            </div>
-            <div
-                class="flex flex-col p-2 bg-neutral rounded-box text-neutral-content"
-            >
-                <span
-                    class="countdown font-mono text-5xl"
-                    data-date-component="secs"
-                >
-                    <span></span>
-                </span>
-                secs
-            </div>
-        </div>
+        <Countdown dateString={dateString} client:load />
     </div>
 </MainLayout>
