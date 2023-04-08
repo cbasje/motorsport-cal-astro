@@ -1,0 +1,33 @@
+---
+import MainLayout from "../../layouts/main.astro";
+---
+
+<MainLayout>
+    <div class="w-full flex flex-col gap-3">
+        <h1 class="text-2xl font-medium">Motorsport Calendar REST API</h1>
+        <h2 class="text-lg">Available Routes</h2>
+
+        <table class="table table-zebra w-full">
+            <thead>
+                <tr>
+                    <th>Protocol</th>
+                    <th>Location</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>GET, POST, DELETE</td>
+                    <td><a href="/api/circuits">/api/circuits</a></td>
+                </tr>
+                <tr>
+                    <td>GET, POST, DELETE</td>
+                    <td><a href="/api/rounds">/api/rounds</a></td>
+                </tr>
+                <tr>
+                    <td>GET, POST, DELETE</td>
+                    <td><a href="/api/sessions">/api/sessions</a></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</MainLayout>

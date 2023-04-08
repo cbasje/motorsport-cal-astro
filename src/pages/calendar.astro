@@ -1,0 +1,75 @@
+---
+import { Round, Session, SessionType } from "@prisma/client";
+import MainLayout from "../layouts/main.astro";
+
+type RoundWithSession = Round & { sessions: Session[] };
+const res = await fetch(new URL("/api/rounds", "http://localhost:8888"));
+const rounds: RoundWithSession[] = await res.json();
+
+const mappedRounds = rounds
+    .filter((r) => r.sessions.some((s) => s.type === SessionType.RACE))
+    .map((r) => {
+        const race = r.sessions.find((s) => s.type === SessionType.RACE);
+
+        return {
+            id: r.id,
+            title: r.title,
+            raceStartDate: race?.startDate,
+            raceEndDate: race?.endDate,
+            isFinished:
+                new Date(race?.startDate!) < new Date() &&
+                new Date() < new Date(race?.endDate!)
+                    ? "🏎️"
+                    : new Date(race?.endDate!) < new Date()
+                    ? "🏁"
+                    : "-",
+        };
+    })
+    .sort((a, b) => {
+        console.log("🚀 ----------------------------------------🚀");
+        console.log(
+            "🚀 ~ .map ~ raceStartDate:",
+            a.raceStartDate,
+            b.raceStartDate
+        );
+        console.log("🚀 ----------------------------------------🚀");
+        return a.raceStartDate !== undefined && b.raceStartDate !== undefined
+            ? new Date(a.raceStartDate).getTime() -
+                  new Date(b.raceStartDate).getTime()
+            : 0;
+    });
+
+const getDateString = (date: Date) => {
+    return Intl.DateTimeFormat().format(date);
+};
+---
+
+<MainLayout>
+    <div class="w-full flex flex-col gap-3">
+        <h1 class="text-2xl font-medium">Motorsport Calendar REST API</h1>
+        <h2 class="text-lg">Available Routes</h2>
+
+        <table class="table table-zebra w-full">
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Date</th>
+                    <th>Finished</th>
+                </tr>
+            </thead>
+            <tbody>
+                {
+                    mappedRounds.map((round) => (
+                        <tr>
+                            <td>{round.title}</td>
+                            <td>
+                                {getDateString(new Date(round.raceStartDate!))}
+                            </td>
+                            <td>{round.isFinished}</td>
+                        </tr>
+                    ))
+                }
+            </tbody>
+        </table>
+    </div>
+</MainLayout>
