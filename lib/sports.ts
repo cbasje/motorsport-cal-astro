@@ -4,8 +4,8 @@ const sports: Sport[] = [
     {
         id: "F1",
         baseURL: "https://www.formula1.com",
-        url: "en/racing/2022.html",
-        season: "2022",
+        url: "en/racing/2023.html",
+        season: "2023",
 
         list: ".completed-events > div:not(.seo-wrapper)",
         redirectURLItem: "a.event-item-link",
@@ -30,7 +30,7 @@ const sports: Sport[] = [
         id: "INDY",
         baseURL: "https://www.indycar.com",
         url: "Schedule",
-        season: "2022",
+        season: "2023",
 
         list: ".schedule-list ul > .schedule-list__item",
         redirectURLItem: ".schedule-list__links > a:last-child",
@@ -57,7 +57,7 @@ const sports: Sport[] = [
         id: "FE",
         baseURL: "https://www.fiaformulae.com",
         url: "en/championship/race-calendar",
-        season: "2021-2022",
+        season: "2022-2023",
 
         list: ".race-calendar-grid > .card",
         redirectURLItem: "a",
@@ -83,7 +83,7 @@ const sports: Sport[] = [
         baseURL: "https://www.fiawec.com",
         url: "en/season/about",
         excludedURLs: ["-2", "diriyah"],
-        season: "2022",
+        season: "2023",
 
         list: ".race-slider > figure.seasontimeline-slide-info",
         redirectURLItem: ".seasontimeline-top-link > a",
