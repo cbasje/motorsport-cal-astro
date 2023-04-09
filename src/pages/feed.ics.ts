@@ -67,31 +67,37 @@ export const getFeed = async (
 };
 
 export const get: APIRoute = async ({ params, request }) => {
-    const sessions = await prisma.session.findMany({
-        include: {
-            round: {
-                include: {
-                    circuit: true,
+    try {
+        const sessions = await prisma.session.findMany({
+            include: {
+                round: {
+                    include: {
+                        circuit: true,
+                    },
                 },
             },
-        },
-    });
-
-    const events = await getFeed(sessions);
-    const feed = await new Promise<string>((resolve, reject) => {
-        createEvents(events, (error: Error | undefined, value: string) => {
-            if (error) {
-                reject(error);
-                console.error(error);
-            }
-            resolve(value);
         });
-    });
 
-    return new Response(feed, {
-        status: 200,
-        headers: {
-            "Content-Type": "text/calendar",
-        },
-    });
+        const events = await getFeed(sessions);
+        const feed = await new Promise<string>((resolve, reject) => {
+            createEvents(events, (error: Error | undefined, value: string) => {
+                if (error) {
+                    reject(error);
+                    console.error(error);
+                }
+                resolve(value);
+            });
+        });
+
+        return new Response(feed, {
+            status: 200,
+            headers: {
+                "Content-Type": "text/calendar",
+            },
+        });
+    } catch (error) {
+        return new Response(JSON.stringify({ success: false }), {
+            status: 500,
+        });
+    }
 };
