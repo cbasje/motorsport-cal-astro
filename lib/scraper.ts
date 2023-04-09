@@ -1,7 +1,7 @@
 import { load as loadCheerio } from "cheerio";
 import { DateTime } from "luxon";
-import { CircuitTitle, NewSession, SessionType, Sport, SportId } from "./types";
 import fetch from "node-fetch";
+import { CircuitTitle, NewSession, SessionType, Sport, SportId } from "./types";
 
 import { saveRound, saveSessions } from "./api";
 import sports from "./sports";
