@@ -8,4 +8,7 @@ export default defineConfig({
     output: "server",
     adapter: netlify(),
     integrations: [tailwind(), svelte()],
+    site: import.meta.env.PROD
+        ? "https://motorsport-cal-astro.netlify.app"
+        : "http://localhost:3000",
 });

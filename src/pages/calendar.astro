@@ -3,7 +3,7 @@ import { Round, Session, SessionType } from "@prisma/client";
 import MainLayout from "../layouts/main.astro";
 
 type RoundWithSession = Round & { sessions: Session[] };
-const res = await fetch(new URL("/api/rounds", "http://localhost:8888"));
+const res = await fetch(new URL("/api/rounds", import.meta.env.SITE));
 const rounds: RoundWithSession[] = await res.json();
 
 const mappedRounds = rounds

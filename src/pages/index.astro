@@ -2,7 +2,7 @@
 import Countdown from "../components/Countdown.svelte";
 import MainLayout from "../layouts/main.astro";
 
-const res = await fetch(new URL("/api/next-race", "http://localhost:3000"));
+const res = await fetch(new URL("/api/next-race", import.meta.env.SITE));
 const dateString: string = (await res.json()).date;
 ---
 
