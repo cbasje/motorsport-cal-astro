@@ -1,5 +1,4 @@
 import { load as loadCheerio } from "cheerio";
-import { DateTime } from "luxon";
 import fetch from "node-fetch";
 import { CircuitTitle, NewSession, SessionType, Sport, SportId } from "./types";
 
@@ -77,9 +76,10 @@ const getDate = (
     plusHours = 0
 ): Date | undefined => {
     return source && source != "TBC"
-        ? DateTime.fromISO(source + gmtOffset, { zone: "utc" })
-              .plus({ hours: plusHours })
-              .toJSDate()
+        ? // ? DateTime.fromISO(source + gmtOffset, { zone: "utc" })
+          //       .plus({ hours: plusHours })
+          //       .toJSDate()
+          new Date(source)
         : undefined;
 };
 const getDatesFromString = (source: string, season: string) => {
@@ -101,12 +101,14 @@ const getDatesFromString = (source: string, season: string) => {
     const endDate = `${date}, ${season}, ${endTime}`;
 
     return [
-        DateTime.fromFormat(startDate, "ff", {
-            zone: "America/New_York",
-        }).toJSDate(),
-        DateTime.fromFormat(endDate, "ff", {
-            zone: "America/New_York",
-        }).toJSDate(),
+        // DateTime.fromFormat(startDate, "ff", {
+        //     zone: "America/New_York",
+        // }).toJSDate(),
+        // DateTime.fromFormat(endDate, "ff", {
+        //     zone: "America/New_York",
+        // }).toJSDate(),
+        new Date(startDate),
+        new Date(endDate),
     ];
 };
 
