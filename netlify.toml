@@ -1,5 +1,0 @@
-[dev]
-    framework = "astro"
-
-[functions]
-    external_node_modules = ["astro"]
