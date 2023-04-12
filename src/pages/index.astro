@@ -1,15 +1,12 @@
 ---
 import Countdown from "../components/Countdown.svelte";
 import MainLayout from "../layouts/main.astro";
-
-const res = await fetch(new URL("/api/next-race", import.meta.env.SITE));
-const dateString: string = (await res.json()).date;
 ---
 
 <MainLayout>
     <div class="w-full flex flex-col gap-3">
         <h1 class="text-2xl font-medium">Motorsport Calendar</h1>
 
-        <Countdown dateString={dateString} client:load />
+        <Countdown client:load />
     </div>
 </MainLayout>

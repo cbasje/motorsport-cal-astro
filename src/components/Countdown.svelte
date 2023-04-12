@@ -1,5 +1,12 @@
 <script lang="ts">
-    export let dateString: string;
+    import { onMount } from "svelte";
+
+    let dateString: string;
+
+    const loadDate = async () => {
+        const res = await fetch("/api/next-race");
+        dateString = (await res.json()).date;
+    };
 
     let currentDate = new Date();
 
@@ -32,6 +39,10 @@
             new Date(dateString).valueOf() - currentDate.valueOf()
         ).getSeconds();
     }
+
+    onMount(() => {
+        loadDate();
+    });
 </script>
 
 <div class="grid grid-flow-col gap-5 text-center auto-cols-max">
