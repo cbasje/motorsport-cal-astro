@@ -1,14 +1,18 @@
 <script lang="ts">
     import { onMount } from "svelte";
 
-    let dateString: string;
-    let title: string;
+    $: nextRace = {
+        date: "",
+        title: "",
+        sport: "",
+    };
 
     const loadDate = async () => {
         const res = await fetch("/api/next-race");
         const data = await res.json();
-        dateString = data.date;
-        title = data.title;
+        nextRace.date = data.date;
+        nextRace.title = data.title;
+        nextRace.sport = data.sport;
     };
 
     let currentDate = new Date();
@@ -29,17 +33,17 @@
     $: {
         days =
             new Date(
-                new Date(dateString).valueOf() - currentDate.valueOf()
+                new Date(nextRace.date).valueOf() - currentDate.valueOf()
             ).getDate() - 1;
         hours =
             new Date(
-                new Date(dateString).valueOf() - currentDate.valueOf()
+                new Date(nextRace.date).valueOf() - currentDate.valueOf()
             ).getHours() - 1;
         mins = new Date(
-            new Date(dateString).valueOf() - currentDate.valueOf()
+            new Date(nextRace.date).valueOf() - currentDate.valueOf()
         ).getMinutes();
         secs = new Date(
-            new Date(dateString).valueOf() - currentDate.valueOf()
+            new Date(nextRace.date).valueOf() - currentDate.valueOf()
         ).getSeconds();
     }
 
@@ -48,8 +52,11 @@
     });
 </script>
 
-{#if title !== undefined}
-    <h1 class="text-2xl font-medium">Time to: {title}</h1>
+{#if nextRace.title !== ""}
+    <h1 class="text-2xl font-medium">
+        Time to: {nextRace.sport}
+        {nextRace.title}
+    </h1>
 {:else}
     <h1 class="text-2xl font-medium">Loading...</h1>
 {/if}

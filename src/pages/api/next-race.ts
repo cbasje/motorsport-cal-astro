@@ -12,6 +12,7 @@ export const get: APIRoute = async ({ params, request }) => {
                 round: {
                     select: {
                         title: true,
+                        sport: true,
                     },
                 },
             },
@@ -46,6 +47,7 @@ export const get: APIRoute = async ({ params, request }) => {
                 success: true,
                 date: filteredSessions[0].startDate,
                 title: filteredSessions[0].round.title,
+                sport: filteredSessions[0].round.sport,
             })
         );
     } catch (error) {
