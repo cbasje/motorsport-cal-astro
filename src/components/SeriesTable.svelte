@@ -1,12 +1,12 @@
 <script lang="ts">
-    import type { Round, Session, Sport } from "@prisma/client";
+    import { Round, Session, Sport } from "@prisma/client";
     import SeriesMultiSelect from "./SeriesMultiSelect.svelte";
 
     type MappedRound = Pick<Round, "id" | "title" | "sport"> &
         Partial<Pick<Session, "startDate">> & { isFinished: string };
 
     export let rounds: MappedRound[];
-    let includedSports: Sport[] = ["F1", "INDY"];
+    let includedSports: Sport[] = [Sport.F1, Sport.INDY];
 
     $: filteredRounds =
         rounds &&
