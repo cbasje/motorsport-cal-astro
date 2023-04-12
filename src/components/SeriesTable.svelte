@@ -6,7 +6,7 @@
         Partial<Pick<Session, "startDate">> & { isFinished: string };
 
     export let rounds: MappedRound[];
-    let includedSports: Sport[] = [Sport.F1, Sport.INDY];
+    $: includedSports = [Sport.F1, Sport.INDY];
 
     const getDateString = (date: Date) => {
         return Intl.DateTimeFormat().format(date);
