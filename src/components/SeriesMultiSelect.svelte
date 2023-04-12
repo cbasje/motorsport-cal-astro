@@ -1,40 +1,40 @@
 <script lang="ts">
-    import { Sport } from "@prisma/client";
     import { onMount } from "svelte";
+    import type { SportId } from "../../lib/types";
 
-    export let sports: Sport[];
+    export let sports: SportId[];
 
-    let sportsCopy: Sport[];
+    let sportsCopy: SportId[];
 
-    type SportMetadata = { sport: Sport; title: string; class: string[] };
+    type SportMetadata = { sport: SportId; title: string; class: string[] };
     const metadata: SportMetadata[] = [
         {
-            sport: Sport.F1,
+            sport: "F1",
             title: "Formula 1",
             class: ["peer/f1", "peer-checked/f1:daisy-btn-primary"],
         },
         {
-            sport: Sport.FE,
+            sport: "FE",
             title: "Formula E",
             class: ["peer/fe", "peer-checked/fe:daisy-btn-primary"],
         },
         {
-            sport: Sport.XE,
+            sport: "XE",
             title: "Extreme E",
             class: ["peer/xe", "peer-checked/xe:daisy-btn-primary"],
         },
         {
-            sport: Sport.INDY,
+            sport: "INDY",
             title: "Indycar",
             class: ["peer/indy", "peer-checked/indy:daisy-btn-primary"],
         },
         {
-            sport: Sport.W,
+            sport: "W",
             title: "W Series",
             class: ["peer/w", "peer-checked/w:daisy-btn-primary"],
         },
         {
-            sport: Sport.WEC,
+            sport: "WEC",
             title: "WEC",
             class: ["peer/wec", "peer-checked/wec:daisy-btn-primary"],
         },

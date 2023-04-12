@@ -1,12 +1,13 @@
 <script lang="ts">
-    import { Round, Session, Sport } from "@prisma/client";
+    import type { Round, Session } from "@prisma/client";
+    import type { SportId } from "../../lib/types";
     import SeriesMultiSelect from "./SeriesMultiSelect.svelte";
 
     type MappedRound = Pick<Round, "id" | "title" | "sport"> &
         Partial<Pick<Session, "startDate">> & { isFinished: string };
 
     export let rounds: MappedRound[];
-    $: includedSports = [Sport.F1, Sport.INDY];
+    $: includedSports = ["F1" as SportId, "INDY" as SportId];
 
     const getDateString = (date: Date) => {
         return Intl.DateTimeFormat().format(date);
