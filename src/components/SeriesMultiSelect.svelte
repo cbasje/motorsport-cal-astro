@@ -56,21 +56,23 @@
         Toggle
     </button>
     <div class="daisy-divider daisy-divider-horizontal" />
-    {#each metadata as s}
-        <input
-            type="checkbox"
-            bind:group={sports}
-            value={s.sport}
-            id="{s.title}-check"
-            class="hidden {s.class[0]}"
-        />
-        <label
-            for="{s.title}-check"
-            class="daisy-btn daisy-btn-active daisy-btn-ghost {s.class[1]}"
-        >
-            {s.title}
-        </label>
-    {:else}
-        <p>Nothing</p>
-    {/each}
+    <div class="flex overflow-x-scroll overflow-y-hidden">
+        {#each metadata as s}
+            <input
+                type="checkbox"
+                bind:group={sports}
+                value={s.sport}
+                id="{s.title}-check"
+                class="hidden {s.class[0]}"
+            />
+            <label
+                for="{s.title}-check"
+                class="daisy-btn daisy-btn-active daisy-btn-ghost {s.class[1]}"
+            >
+                {s.title}
+            </label>
+        {:else}
+            <p>Nothing</p>
+        {/each}
+    </div>
 </div>
