@@ -6,7 +6,9 @@
 
     const loadDate = async () => {
         const res = await fetch("/api/next-race");
-        dateString = (await res.json()).date;
+        const data = await res.json();
+        dateString = data.date;
+        title = data.title;
     };
 
     let currentDate = new Date();
@@ -45,6 +47,12 @@
         loadDate();
     });
 </script>
+
+{#if title !== undefined}
+    <h1 class="text-2xl font-medium">Time to: {title}</h1>
+{:else}
+    <h1 class="text-2xl font-medium">Loading...</h1>
+{/if}
 
 <div class="grid grid-flow-col gap-5 text-center auto-cols-max">
     <div class="flex flex-col p-2 bg-neutral rounded-box text-neutral-content">

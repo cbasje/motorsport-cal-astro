@@ -6,6 +6,15 @@ export const get: APIRoute = async ({ params, request }) => {
     try {
         const sessions = await prisma.session.findMany({
             orderBy: { startDate: "desc" },
+            select: {
+                type: true,
+                startDate: true,
+                round: {
+                    select: {
+                        title: true,
+                    },
+                },
+            },
         });
 
         if (!sessions.length)
@@ -36,6 +45,7 @@ export const get: APIRoute = async ({ params, request }) => {
             JSON.stringify({
                 success: true,
                 date: filteredSessions[0].startDate,
+                title: filteredSessions[0].round.title,
             })
         );
     } catch (error) {
