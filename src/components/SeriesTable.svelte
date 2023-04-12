@@ -8,12 +8,6 @@
     export let rounds: MappedRound[];
     let includedSports: Sport[] = [Sport.F1, Sport.INDY];
 
-    $: filteredRounds =
-        rounds &&
-        rounds.filter(
-            (r) => includedSports && includedSports.includes(r.sport)
-        );
-
     const getDateString = (date: Date) => {
         return Intl.DateTimeFormat().format(date);
     };
@@ -21,7 +15,7 @@
 
 <SeriesMultiSelect bind:sports={includedSports} />
 
-<table class="table table-zebra w-full">
+<table class="daisy-table w-full">
     <thead>
         <tr>
             <th>Title</th>
@@ -31,8 +25,11 @@
         </tr>
     </thead>
     <tbody>
-        {#each filteredRounds as round}
-            <tr>
+        {#each rounds as round}
+            <tr
+                class:collapse={includedSports &&
+                    !includedSports.includes(round.sport)}
+            >
                 <td>{round.title}</td>
                 <td>
                     {getDateString(new Date(round.startDate ?? ""))}

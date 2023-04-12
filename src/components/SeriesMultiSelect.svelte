@@ -11,32 +11,32 @@
         {
             sport: Sport.F1,
             title: "Formula 1",
-            class: ["peer/f1", "peer-checked/f1:btn-primary"],
+            class: ["peer/f1", "peer-checked/f1:daisy-btn-primary"],
         },
         {
             sport: Sport.FE,
             title: "Formula E",
-            class: ["peer/fe", "peer-checked/fe:btn-primary"],
+            class: ["peer/fe", "peer-checked/fe:daisy-btn-primary"],
         },
         {
             sport: Sport.XE,
             title: "Extreme E",
-            class: ["peer/xe", "peer-checked/xe:btn-primary"],
+            class: ["peer/xe", "peer-checked/xe:daisy-btn-primary"],
         },
         {
             sport: Sport.INDY,
             title: "Indycar",
-            class: ["peer/indy", "peer-checked/indy:btn-primary"],
+            class: ["peer/indy", "peer-checked/indy:daisy-btn-primary"],
         },
         {
             sport: Sport.W,
             title: "W Series",
-            class: ["peer/w", "peer-checked/w:btn-primary"],
+            class: ["peer/w", "peer-checked/w:daisy-btn-primary"],
         },
         {
             sport: Sport.WEC,
             title: "WEC",
-            class: ["peer/wec", "peer-checked/wec:btn-primary"],
+            class: ["peer/wec", "peer-checked/wec:daisy-btn-primary"],
         },
     ];
 
@@ -49,10 +49,13 @@
 </script>
 
 <div class="flex w-full">
-    <button class="btn btn-square btn-active btn-ghost" on:click={reset}>
+    <button
+        class="daisy-btn daisy-btn-square daisy-btn-active daisy-btn-ghost"
+        on:click={reset}
+    >
         Toggle
     </button>
-    <div class="divider divider-horizontal" />
+    <div class="daisy-divider daisy-divider-horizontal" />
     {#each metadata as s}
         <input
             type="checkbox"
@@ -63,7 +66,7 @@
         />
         <label
             for="{s.title}-check"
-            class="btn btn-active btn-ghost {s.class[1]}"
+            class="daisy-btn daisy-btn-active daisy-btn-ghost {s.class[1]}"
         >
             {s.title}
         </label>
