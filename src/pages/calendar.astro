@@ -1,6 +1,7 @@
 ---
 import { Round, Session, SessionType } from "@prisma/client";
 import MainLayout from "../layouts/main.astro";
+import SeriesTable from "../components/SeriesTable.svelte";
 
 type RoundWithSession = Round & { sessions: Session[] };
 const res = await fetch(new URL("/api/rounds", import.meta.env.SITE));
@@ -14,8 +15,8 @@ const mappedRounds = rounds
         return {
             id: r.id,
             title: r.title,
-            raceStartDate: race?.startDate,
-            raceEndDate: race?.endDate,
+            startDate: race?.startDate,
+            sport: r.sport,
             isFinished:
                 new Date(race?.startDate!) < new Date() &&
                 new Date() < new Date(race?.endDate!)
@@ -26,43 +27,14 @@ const mappedRounds = rounds
         };
     })
     .sort((a, b) => {
-        return a.raceStartDate !== undefined && b.raceStartDate !== undefined
-            ? new Date(a.raceStartDate).getTime() -
-                  new Date(b.raceStartDate).getTime()
+        return a.startDate !== undefined && b.startDate !== undefined
+            ? new Date(a.startDate).getTime() - new Date(b.startDate).getTime()
             : 0;
     });
-
-const getDateString = (date: Date) => {
-    return Intl.DateTimeFormat().format(date);
-};
 ---
 
 <MainLayout>
     <div class="w-full flex flex-col gap-3">
-        <h1 class="text-2xl font-medium">Motorsport Calendar REST API</h1>
-        <h2 class="text-lg">Available Routes</h2>
-
-        <table class="table table-zebra w-full">
-            <thead>
-                <tr>
-                    <th>Title</th>
-                    <th>Date</th>
-                    <th>Finished</th>
-                </tr>
-            </thead>
-            <tbody>
-                {
-                    mappedRounds.map((round) => (
-                        <tr>
-                            <td>{round.title}</td>
-                            <td>
-                                {getDateString(new Date(round.raceStartDate!))}
-                            </td>
-                            <td>{round.isFinished}</td>
-                        </tr>
-                    ))
-                }
-            </tbody>
-        </table>
+        <SeriesTable client:load rounds={mappedRounds} />
     </div>
 </MainLayout>
