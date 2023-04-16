@@ -7,7 +7,7 @@
         Partial<Pick<Session, "startDate">> & { isFinished: string };
 
     export let rounds: MappedRound[];
-    $: includedSeries = seriesIds;
+    $: includedSeries = seriesIds as unknown as SeriesId[];
 
     const timeFormatter = new Intl.RelativeTimeFormat("en", {
         numeric: "auto",
