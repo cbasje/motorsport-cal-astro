@@ -1,4 +1,5 @@
 <script lang="ts">
+    import Icon from "@iconify/svelte";
     import { onMount } from "svelte";
     import type { SportId } from "../../lib/types";
 
@@ -52,11 +53,12 @@
     <button
         class="daisy-btn daisy-btn-square daisy-btn-active daisy-btn-ghost"
         on:click={reset}
+        aria-label="Reset filter"
     >
-        Toggle
+        <Icon icon="ph:arrow-counter-clockwise-bold" />
     </button>
-    <div class="daisy-divider daisy-divider-horizontal" />
-    <div class="flex overflow-x-scroll overflow-y-hidden">
+    <div class="daisy-divider daisy-divider-horizontal" aria-hidden />
+    <div class="flex overflow-x-scroll overflow-y-hidden" aria-label="Filters">
         {#each metadata as s}
             <input
                 type="checkbox"
