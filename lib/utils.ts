@@ -1,7 +1,7 @@
-import type { SportId } from "./types";
+import type { SeriesId } from "./types";
 
-export const getSeriesTitle = (s: SportId) => {
-    const titles: Record<SportId, string> = {
+export const getSeriesTitle = (s: SeriesId) => {
+    const titles: Record<SeriesId, string> = {
         F1: "Formula 1",
         FE: "Formula E",
         XE: "Extreme E",

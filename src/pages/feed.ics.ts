@@ -37,7 +37,7 @@ export const getFeed = async (
 
         const type = session.type ? ` - ${session.type}` : "";
         const number = session.number !== 0 ? ` ${session.number}` : "";
-        const title = `${session.round.sport} ${session.round.title}${type}${number}`;
+        const title = `${session.round.series} ${session.round.title}${type}${number}`;
 
         events.push({
             calName: TITLE,

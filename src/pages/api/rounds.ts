@@ -4,7 +4,7 @@ import type { NewRound } from "../../../lib/types";
 
 export const get: APIRoute = async ({ params, request }) => {
     const rounds = await prisma.round.findMany({
-        orderBy: { sport: "asc" },
+        orderBy: { series: "asc" },
         include: {
             sessions: {
                 orderBy: { startDate: "asc" },
@@ -35,7 +35,7 @@ export const post: APIRoute = async ({ request }) => {
         create: {
             title: data.title,
             season: data.season,
-            sport: data.sport,
+            series: data.series,
             link: data.link,
             circuit: {
                 connectOrCreate: {
@@ -53,14 +53,14 @@ export const post: APIRoute = async ({ request }) => {
         update: {
             title: data.title,
             season: data.season,
-            sport: data.sport,
+            series: data.series,
             link: data.link,
         },
         where: {
-            uniqueRoundPerSportSeason: {
+            uniqueRoundPerSeriesSeason: {
                 title: data.title,
                 season: data.season,
-                sport: data.sport,
+                series: data.series,
             },
         },
     });

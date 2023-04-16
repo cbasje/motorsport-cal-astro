@@ -24,11 +24,11 @@ model Round {
   season     String    @db.VarChar
   link       String?
   circuitId  String
-  sport      Sport
+  series     SeriesId
   circuit    Circuit   @relation(fields: [circuitId], references: [id])
   sessions   Session[]
 
-  @@unique([title, sport, season], name: "uniqueRoundPerSportSeason")
+  @@unique([title, series, season], name: "uniqueRoundPerSeriesSeason")
 }
 
 model Session {
@@ -44,7 +44,7 @@ model Session {
   @@unique([type, number, roundId], name: "uniqueSessionPerRoundId")
 }
 
-enum Sport {
+enum SeriesId {
   F1
   FE
   XE

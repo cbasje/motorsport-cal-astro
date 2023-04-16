@@ -19,7 +19,7 @@ export const saveRound = async (row: NewRound): Promise<Round> => {
         create: {
             title: row.title,
             season: row.season,
-            sport: row.sport,
+            series: row.series,
             link: row.link,
             circuit: {
                 connectOrCreate: {
@@ -37,14 +37,14 @@ export const saveRound = async (row: NewRound): Promise<Round> => {
         update: {
             title: row.title,
             season: row.season,
-            sport: row.sport,
+            series: row.series,
             link: row.link,
         },
         where: {
-            uniqueRoundPerSportSeason: {
+            uniqueRoundPerSeriesSeason: {
                 title: row.title,
                 season: row.season,
-                sport: row.sport,
+                series: row.series,
             },
         },
     });

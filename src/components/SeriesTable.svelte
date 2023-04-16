@@ -1,13 +1,13 @@
 <script lang="ts">
     import type { Round, Session } from "@prisma/client";
-    import type { SportId } from "../../lib/types";
+    import { SeriesId, seriesIds } from "../../lib/types";
     import SeriesMultiSelect from "./SeriesMultiSelect.svelte";
 
-    type MappedRound = Pick<Round, "id" | "title" | "sport"> &
+    type MappedRound = Pick<Round, "id" | "title" | "series"> &
         Partial<Pick<Session, "startDate">> & { isFinished: string };
 
     export let rounds: MappedRound[];
-    $: includedSports = ["F1" as SportId, "INDY" as SportId];
+    $: includedSeries = seriesIds;
 
     const timeFormatter = new Intl.RelativeTimeFormat("en", {
         numeric: "auto",
@@ -22,7 +22,7 @@
     };
 </script>
 
-<SeriesMultiSelect bind:sports={includedSports} />
+<SeriesMultiSelect bind:series={includedSeries} />
 
 <table class="daisy-table w-full">
     <thead>
@@ -36,15 +36,15 @@
     <tbody>
         {#each rounds as round}
             <tr
-                class:collapse={includedSports &&
-                    !includedSports.includes(round.sport)}
+                class:collapse={includedSeries &&
+                    !includedSeries.includes(round.series)}
             >
                 <td>{round.title}</td>
                 <td>
                     {getDateString(new Date(round.startDate ?? ""))}
                 </td>
                 <td>{round.isFinished}</td>
-                <td>{round.sport}</td>
+                <td>{round.series}</td>
             </tr>
         {:else}
             <tr>

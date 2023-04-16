@@ -5,12 +5,12 @@
     $: nextRace = {
         date: new Date(),
         title: "",
-        sport: "",
+        series: "",
     };
 
     const loadDate = async () => {
         type NextRaceData = Pick<Session, "startDate"> & {
-            round: Pick<Round, "title" | "sport">;
+            round: Pick<Round, "title" | "series">;
         };
 
         const res = await fetch("/api/next-race").then(
@@ -20,7 +20,7 @@
         const data: NextRaceData = res.data;
         nextRace.date = data.startDate;
         nextRace.title = data.round.title;
-        nextRace.sport = data.round.sport;
+        nextRace.series = data.round.series;
     };
 
     let currentDate = new Date();
@@ -62,7 +62,7 @@
 
 {#if nextRace.title !== ""}
     <h1 class="text-2xl font-medium">
-        Time to: {nextRace.sport}
+        Time to: {nextRace.series}
         {nextRace.title}
     </h1>
 {:else}

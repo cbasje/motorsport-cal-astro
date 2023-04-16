@@ -16,7 +16,7 @@ const mappedRounds = rounds
             id: r.id,
             title: r.title,
             startDate: race?.startDate,
-            sport: r.sport,
+            series: r.series,
             isFinished:
                 new Date(race?.startDate!) < new Date() &&
                 new Date() < new Date(race?.endDate!)

@@ -1,7 +1,7 @@
 import type { Circuit, Round, Session } from "@prisma/client";
 
-export const sportIds = ["F1", "FE", "XE", "INDY", "W", "WEC"] as const;
-export type SportId = (typeof sportIds)[number];
+export const seriesIds = ["F1", "FE", "XE", "INDY", "W", "WEC"] as const;
+export type SeriesId = (typeof seriesIds)[number];
 export type SessionType =
     | "PRACTICE"
     | "QUALIFYING"
@@ -56,8 +56,8 @@ export enum CircuitTitle {
     Fuji = "Fuji Speedway",
 }
 
-export interface Sport {
-    id: SportId;
+export interface Series {
+    id: SeriesId;
     baseURL: string;
     url: string;
     excludedURLs?: string[];

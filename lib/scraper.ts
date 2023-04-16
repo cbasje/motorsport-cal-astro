@@ -1,10 +1,16 @@
 import { load as loadCheerio } from "cheerio";
 import { DateTime } from "luxon";
 import fetch from "node-fetch";
-import { CircuitTitle, NewSession, SessionType, Sport, SportId } from "./types";
+import {
+    CircuitTitle,
+    NewSession,
+    SessionType,
+    Series,
+    SeriesId,
+} from "./types";
 
 import { saveRound, saveSessions } from "./api";
-import sports from "./sports";
+import series from "./series";
 
 const sessionAliases: Record<SessionType, string> = {
     SHAKEDOWN: "((?:Pre-Season|Session|Day)( \\d)?)",
@@ -111,13 +117,12 @@ const getDatesFromString = (source: string, season: string) => {
 };
 
 const scrape = async () => {
-    let includedSports: SportId[] = ["F1", "INDY"];
+    let includedSeries: SeriesId[] = ["F1", "INDY"];
 
-    for (const sport of sports) {
-        if (includedSports.length && !includedSports.includes(sport.id))
-            continue;
+    for (const s of series) {
+        if (includedSeries.length && !includedSeries.includes(s.id)) continue;
 
-        const url = new URL(sport.url, sport.baseURL);
+        const url = new URL(s.url, s.baseURL);
 
         try {
             const res = await fetch(url);
@@ -128,27 +133,25 @@ const scrape = async () => {
             let sessions: NewSession[] = [];
 
             let i = 0;
-            const elements = $(sport.list, html);
+            const elements = $(s.list, html);
             for await (const el of elements) {
-                // console.log(i++, sport.id);
+                // console.log(i++, s.id);
 
-                const linkString = $(el)
-                    .find(sport.redirectURLItem)
-                    .attr("href");
+                const linkString = $(el).find(s.redirectURLItem).attr("href");
                 const link = new URL(
-                    linkString ?? "" + sport.redirectURLExtension,
-                    sport.baseURL
+                    linkString ?? "" + s.redirectURLExtension,
+                    s.baseURL
                 );
 
                 if (
-                    sport.excludedURLs &&
-                    sport.excludedURLs.some((url: string) =>
+                    s.excludedURLs &&
+                    s.excludedURLs.some((url: string) =>
                         link.toString().includes(url)
                     )
                 )
                     continue;
 
-                let newSessions = await scrapeItem(sport, link);
+                let newSessions = await scrapeItem(s, link);
                 if (newSessions) {
                     sessions.push(...newSessions);
                 }
@@ -164,7 +167,7 @@ const scrape = async () => {
 };
 
 const scrapeItem = async (
-    sport: Sport,
+    s: Series,
     link: URL
 ): Promise<NewSession[] | null> => {
     try {
@@ -174,35 +177,33 @@ const scrapeItem = async (
         const sub$ = loadCheerio(subHtml);
 
         let roundTitle = "";
-        if (sport.roundItems.title) {
-            roundTitle = sub$(sport.roundItems.title, subHtml).first().text();
-        } else if (sport.roundItems.titleAttr) {
+        if (s.roundItems.title) {
+            roundTitle = sub$(s.roundItems.title, subHtml).first().text();
+        } else if (s.roundItems.titleAttr) {
             // @ts-ignore
-            roundTitle = sub$(sport.roundItems.titleAttr.main, subHtml)
-                .attr(sport.roundItems.titleAttr.title)
+            roundTitle = sub$(s.roundItems.titleAttr.main, subHtml)
+                .attr(s.roundItems.titleAttr.title)
                 .trim();
         }
-        if (sport.roundItems.titleRegex) {
+        if (s.roundItems.titleRegex) {
             const matches = roundTitle.match(
-                new RegExp(sport.roundItems.titleRegex, "i")
+                new RegExp(s.roundItems.titleRegex, "i")
             );
             roundTitle = matches && matches[1] ? matches[1].trim() : "";
         }
 
         let roundCircuit = "";
-        if (sport.roundItems.circuit) {
-            roundCircuit = sub$(sport.roundItems.circuit, subHtml)
-                .first()
-                .text();
-        } else if (sport.roundItems.circuitAttr) {
+        if (s.roundItems.circuit) {
+            roundCircuit = sub$(s.roundItems.circuit, subHtml).first().text();
+        } else if (s.roundItems.circuitAttr) {
             // @ts-ignore
-            roundCircuit = sub$(sport.roundItems.circuitAttr.main, subHtml)
-                .attr(sport.roundItems.circuitAttr.circuit)
+            roundCircuit = sub$(s.roundItems.circuitAttr.main, subHtml)
+                .attr(s.roundItems.circuitAttr.circuit)
                 .trim();
         }
-        if (sport.roundItems.circuitRegex) {
+        if (s.roundItems.circuitRegex) {
             const matches = roundCircuit.match(
-                new RegExp(sport.roundItems.circuitRegex, "i")
+                new RegExp(s.roundItems.circuitRegex, "i")
             );
             roundCircuit = matches && matches[1] ? matches[1].trim() : "";
         }
@@ -222,30 +223,30 @@ const scrapeItem = async (
         const { id: roundId } = await saveRound({
             title: roundTitle,
             circuitTitle: roundCircuit,
-            sport: sport.id,
+            series: s.id,
             link: link.toString(),
-            season: sport.season,
+            season: s.season,
         });
         if (!roundId) return null;
 
         let sessions: NewSession[] = [];
 
-        const subElements = sub$(sport.sessionList, subHtml);
+        const subElements = sub$(s.sessionList, subHtml);
         for await (const el of subElements) {
             let titleAliasFound = false;
 
             let sessionType = "";
             let sessionNumber = 0;
-            if (sport.sessionItems.title) {
+            if (s.sessionItems.title) {
                 sessionType = sub$(el)
-                    .find(sport.sessionItems.title)
+                    .find(s.sessionItems.title)
                     .first()
                     .text();
-            } else if (sport.sessionItems.titleAttr) {
+            } else if (s.sessionItems.titleAttr) {
                 // @ts-ignore
                 sessionType = sub$(el)
-                    .find(sport.sessionItems.titleAttr.main)
-                    .attr(sport.sessionItems.titleAttr.title)
+                    .find(s.sessionItems.titleAttr.main)
+                    .attr(s.sessionItems.titleAttr.title)
                     .trim();
             }
 
@@ -273,49 +274,46 @@ const scrapeItem = async (
                 gmtOffsetString: string | undefined = "",
                 startDate: Date | undefined,
                 endDate: Date | undefined;
-            if (
-                sport.sessionItems.dateAttr &&
-                sport.sessionItems.dateAttr.main
-            ) {
+            if (s.sessionItems.dateAttr && s.sessionItems.dateAttr.main) {
                 startDateString = sub$(el)
-                    .find(sport.sessionItems.dateAttr.main)
-                    .attr(sport.sessionItems.dateAttr.startDate);
-                endDateString = sport.sessionItems.dateAttr.endDate
+                    .find(s.sessionItems.dateAttr.main)
+                    .attr(s.sessionItems.dateAttr.startDate);
+                endDateString = s.sessionItems.dateAttr.endDate
                     ? sub$(el)
-                          .find(sport.sessionItems.dateAttr.main)
-                          .attr(sport.sessionItems.dateAttr.endDate)
+                          .find(s.sessionItems.dateAttr.main)
+                          .attr(s.sessionItems.dateAttr.endDate)
                     : "";
-                gmtOffsetString = sport.sessionItems.dateAttr.gmtOffset
+                gmtOffsetString = s.sessionItems.dateAttr.gmtOffset
                     ? sub$(el)
-                          .find(sport.sessionItems.dateAttr.main)
-                          .attr(sport.sessionItems.dateAttr.gmtOffset)
+                          .find(s.sessionItems.dateAttr.main)
+                          .attr(s.sessionItems.dateAttr.gmtOffset)
                     : "";
 
                 startDate = getDate(startDateString, gmtOffsetString);
                 endDate = endDateString
                     ? getDate(endDateString, gmtOffsetString)
                     : getDate(startDateString, gmtOffsetString, 2);
-            } else if (sport.sessionItems.dateAttr) {
+            } else if (s.sessionItems.dateAttr) {
                 startDateString = sub$(el).attr(
-                    sport.sessionItems.dateAttr.startDate
+                    s.sessionItems.dateAttr.startDate
                 );
-                endDateString = sport.sessionItems.dateAttr.endDate
-                    ? sub$(el).attr(sport.sessionItems.dateAttr.endDate)
+                endDateString = s.sessionItems.dateAttr.endDate
+                    ? sub$(el).attr(s.sessionItems.dateAttr.endDate)
                     : "";
-                gmtOffsetString = sport.sessionItems.dateAttr.gmtOffset
-                    ? sub$(el).attr(sport.sessionItems.dateAttr.gmtOffset)
+                gmtOffsetString = s.sessionItems.dateAttr.gmtOffset
+                    ? sub$(el).attr(s.sessionItems.dateAttr.gmtOffset)
                     : "";
 
                 startDate = getDate(startDateString, gmtOffsetString);
                 endDate = endDateString
                     ? getDate(endDateString, gmtOffsetString)
                     : getDate(startDateString, gmtOffsetString, 2);
-            } else if (sport.sessionItems.dateText) {
+            } else if (s.sessionItems.dateText) {
                 const dates = getDatesFromString(
-                    sub$(el).find(sport.sessionItems.dateText.date).text() +
+                    sub$(el).find(s.sessionItems.dateText.date).text() +
                         " " +
-                        sub$(el).find(sport.sessionItems.dateText.time).text(),
-                    sport.season
+                        sub$(el).find(s.sessionItems.dateText.time).text(),
+                    s.season
                 );
                 startDate = dates[0];
                 endDate = dates[1];

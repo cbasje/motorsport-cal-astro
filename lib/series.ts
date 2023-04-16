@@ -1,6 +1,6 @@
-import type { Sport } from "./types";
+import type { Series } from "./types";
 
-const sports: Sport[] = [
+const series: Series[] = [
     {
         id: "F1",
         baseURL: "https://www.formula1.com",
@@ -112,4 +112,4 @@ const sports: Sport[] = [
     },
 ];
 
-export default sports;
+export default series;

@@ -16,7 +16,7 @@ export const get: APIRoute = async () => {
                 round: {
                     select: {
                         title: true,
-                        sport: true,
+                        series: true,
                     },
                 },
             },
