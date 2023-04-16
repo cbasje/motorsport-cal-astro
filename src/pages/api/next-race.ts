@@ -1,7 +1,7 @@
 import type { APIRoute } from "astro";
 import prisma from "../../../lib/prisma-client";
 
-export const get: APIRoute = async ({ params, request }) => {
+export const get: APIRoute = async () => {
     try {
         const sessions = await prisma.session.findMany({
             orderBy: { startDate: "asc" },
@@ -23,7 +23,7 @@ export const get: APIRoute = async ({ params, request }) => {
         });
 
         if (!sessions.length)
-            return new Response(JSON.stringify({ date: null }), {
+            return new Response(JSON.stringify({ success: false }), {
                 status: 404,
                 statusText: "No 'sessions' found",
             });
