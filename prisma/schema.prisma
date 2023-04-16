@@ -46,11 +46,13 @@ model Session {
 
 enum SeriesId {
   F1
+  F2
   FE
   XE
   INDY
   W
   WEC
+  F1A
 }
 
 enum SessionType {

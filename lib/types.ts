@@ -1,6 +1,15 @@
 import type { Circuit, Round, Session } from "@prisma/client";
 
-export const seriesIds = ["F1", "FE", "XE", "INDY", "W", "WEC"] as const;
+export const seriesIds = [
+    "F1",
+    "F2",
+    "FE",
+    "XE",
+    "INDY",
+    "W",
+    "WEC",
+    "F1A",
+] as const;
 export type SeriesId = (typeof seriesIds)[number];
 export type SessionType =
     | "PRACTICE"

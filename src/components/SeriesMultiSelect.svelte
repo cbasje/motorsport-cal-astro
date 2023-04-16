@@ -9,19 +9,23 @@
 
     const checkboxClass: Record<SeriesId, string> = {
         F1: "peer/f1",
+        F2: "peer/f2",
         FE: "peer/fe",
         XE: "peer/xe",
         INDY: "peer/indy",
         W: "peer/w",
         WEC: "peer/wec",
+        F1A: "peer/f1a",
     };
     const labelClass: Record<SeriesId, string> = {
         F1: "peer-checked/f1:daisy-btn-primary",
+        F2: "peer-checked/f2:daisy-btn-primary",
         FE: "peer-checked/fe:daisy-btn-primary",
         XE: "peer-checked/xe:daisy-btn-primary",
         INDY: "peer-checked/indy:daisy-btn-primary",
         W: "peer-checked/w:daisy-btn-primary",
         WEC: "peer-checked/wec:daisy-btn-primary",
+        F1A: "peer-checked/f1a:daisy-btn-primary",
     };
 
     const reset = () => {
