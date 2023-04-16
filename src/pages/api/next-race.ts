@@ -3,7 +3,7 @@ import prisma from "../../../lib/prisma-client";
 
 export const get: APIRoute = async () => {
     try {
-        const sessions = await prisma.session.findMany({
+        const session = await prisma.session.findFirst({
             orderBy: { startDate: "asc" },
             where: {
                 type: "RACE",
@@ -22,22 +22,22 @@ export const get: APIRoute = async () => {
             },
         });
 
-        if (!sessions.length)
+        if (!session)
             return new Response(
                 JSON.stringify({
                     success: false,
-                    reason: "No 'sessions' found",
+                    reason: "No 'session' found",
                 }),
                 {
                     status: 404,
-                    statusText: "No 'sessions' found",
+                    statusText: "No 'session' found",
                 }
             );
 
         return new Response(
             JSON.stringify({
                 success: true,
-                data: sessions[0],
+                data: session,
             })
         );
     } catch (error) {
