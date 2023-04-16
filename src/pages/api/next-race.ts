@@ -23,10 +23,16 @@ export const get: APIRoute = async () => {
         });
 
         if (!sessions.length)
-            return new Response(JSON.stringify({ success: false }), {
-                status: 404,
-                statusText: "No 'sessions' found",
-            });
+            return new Response(
+                JSON.stringify({
+                    success: false,
+                    reason: "No 'sessions' found",
+                }),
+                {
+                    status: 404,
+                    statusText: "No 'sessions' found",
+                }
+            );
 
         return new Response(
             JSON.stringify({
@@ -35,7 +41,8 @@ export const get: APIRoute = async () => {
             })
         );
     } catch (error) {
-        return new Response(JSON.stringify({ success: false }), {
+        console.error(error);
+        return new Response(JSON.stringify({ success: false, reason: error }), {
             status: 500,
         });
     }
