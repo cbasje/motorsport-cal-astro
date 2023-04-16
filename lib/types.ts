@@ -104,3 +104,28 @@ export type NewRound = Omit<Round, "circuitId" | "id" | "created_at"> & {
 };
 export type NewSession = Omit<Session, "id" | "created_at">;
 export type NewCircuit = Omit<Circuit, "id" | "created_at">;
+
+// MARK: WIKIPEDIA
+export interface WikipediaData {
+    batchcomplete: boolean;
+    query: Query;
+}
+
+export interface Query {
+    pages?: Page[];
+}
+
+export interface Page {
+    pageid: number;
+    ns: number;
+    title: string;
+    index: number;
+    coordinates?: Coordinate[];
+}
+
+export interface Coordinate {
+    lat: number;
+    lon: number;
+    primary: boolean;
+    globe: string;
+}
