@@ -1,6 +1,7 @@
 import type { Circuit, Round, Session } from "@prisma/client";
 
-export type SportId = "F1" | "FE" | "XE" | "INDY" | "W" | "WEC";
+export const sportIds = ["F1", "FE", "XE", "INDY", "W", "WEC"] as const;
+export type SportId = (typeof sportIds)[number];
 export type SessionType =
     | "PRACTICE"
     | "QUALIFYING"

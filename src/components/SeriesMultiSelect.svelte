@@ -1,45 +1,28 @@
 <script lang="ts">
     import Icon from "@iconify/svelte";
     import { onMount } from "svelte";
-    import type { SportId } from "../../lib/types";
+    import { SportId, sportIds } from "../../lib/types";
+    import { getSeriesTitle } from "../../lib/utils";
 
     export let sports: SportId[];
-
     let sportsCopy: SportId[];
 
-    type SportMetadata = { sport: SportId; title: string; class: string[] };
-    const metadata: SportMetadata[] = [
-        {
-            sport: "F1",
-            title: "Formula 1",
-            class: ["peer/f1", "peer-checked/f1:daisy-btn-primary"],
-        },
-        {
-            sport: "FE",
-            title: "Formula E",
-            class: ["peer/fe", "peer-checked/fe:daisy-btn-primary"],
-        },
-        {
-            sport: "XE",
-            title: "Extreme E",
-            class: ["peer/xe", "peer-checked/xe:daisy-btn-primary"],
-        },
-        {
-            sport: "INDY",
-            title: "Indycar",
-            class: ["peer/indy", "peer-checked/indy:daisy-btn-primary"],
-        },
-        {
-            sport: "W",
-            title: "W Series",
-            class: ["peer/w", "peer-checked/w:daisy-btn-primary"],
-        },
-        {
-            sport: "WEC",
-            title: "WEC",
-            class: ["peer/wec", "peer-checked/wec:daisy-btn-primary"],
-        },
-    ];
+    const checkboxClass: Record<SportId, string> = {
+        F1: "peer/f1",
+        FE: "peer/fe",
+        XE: "peer/xe",
+        INDY: "peer/indy",
+        W: "peer/w",
+        WEC: "peer/wec",
+    };
+    const labelClass: Record<SportId, string> = {
+        F1: "peer-checked/f1:daisy-btn-primary",
+        FE: "peer-checked/fe:daisy-btn-primary",
+        XE: "peer-checked/xe:daisy-btn-primary",
+        INDY: "peer-checked/indy:daisy-btn-primary",
+        W: "peer-checked/w:daisy-btn-primary",
+        WEC: "peer-checked/wec:daisy-btn-primary",
+    };
 
     const reset = () => {
         sports = sportsCopy.slice(0);
@@ -59,19 +42,21 @@
     </button>
     <div class="daisy-divider daisy-divider-horizontal" aria-hidden />
     <div class="flex overflow-x-scroll overflow-y-hidden" aria-label="Filters">
-        {#each metadata as s}
+        {#each sportIds as s}
             <input
                 type="checkbox"
                 bind:group={sports}
-                value={s.sport}
-                id="{s.title}-check"
-                class="hidden {s.class[0]}"
+                value={s}
+                id="{s}-check"
+                class="hidden {checkboxClass[s]}"
             />
             <label
-                for="{s.title}-check"
-                class="daisy-btn daisy-btn-active daisy-btn-ghost {s.class[1]}"
+                for="{s}-check"
+                class="daisy-btn daisy-btn-active daisy-btn-ghost {labelClass[
+                    s
+                ]}"
             >
-                {s.title}
+                {getSeriesTitle(s)}
             </label>
         {:else}
             <p>Nothing</p>
