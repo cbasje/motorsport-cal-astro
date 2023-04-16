@@ -62,7 +62,7 @@
                 <td>
                     {getDateString(race.startDate)}
                 </td>
-                {#if getDaysDiff(race.startDate) >= 1}
+                {#if getDaysDiff(race.startDate) <= -1}
                     <td>🏁</td>
                 {:else if getDaysDiff(race.startDate) === 0}
                     <td>🏎️</td>
