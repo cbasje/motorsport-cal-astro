@@ -9,8 +9,16 @@
     export let rounds: MappedRound[];
     $: includedSports = ["F1" as SportId, "INDY" as SportId];
 
+    const timeFormatter = new Intl.RelativeTimeFormat("en", {
+        numeric: "auto",
+        style: "short",
+    });
+
     const getDateString = (date: Date) => {
-        return Intl.DateTimeFormat().format(date);
+        const oneDay = 24 * 60 * 60 * 1000;
+
+        const diffDays = Math.round((date.valueOf() - Date.now()) / oneDay);
+        return timeFormatter.format(diffDays, "days");
     };
 </script>
 
