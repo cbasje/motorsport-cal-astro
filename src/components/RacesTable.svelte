@@ -6,21 +6,23 @@
 
     type Race = Pick<Session, "id" | "startDate"> & {
         round: Pick<Round, "title" | "series">;
-        isFinished: string;
     };
 
     $: races = [] as Race[];
     $: includedSeries = [] as SeriesId[];
 
+    const oneDay = 24 * 60 * 60 * 1000;
     const timeFormatter = new Intl.RelativeTimeFormat("en", {
         numeric: "auto",
         style: "short",
     });
 
-    const getDateString = (date: Date) => {
+    const getDaysDiff = (date: Date) => {
         const oneDay = 24 * 60 * 60 * 1000;
-
-        const diffDays = Math.round((date.valueOf() - Date.now()) / oneDay);
+        return Math.round((date.valueOf() - Date.now()) / oneDay);
+    };
+    const getDateString = (date: Date) => {
+        const diffDays = getDaysDiff(date);
         return timeFormatter.format(diffDays, "days");
     };
 
@@ -59,7 +61,13 @@
                 <td>
                     {getDateString(new Date(race.startDate ?? ""))}
                 </td>
-                <td>{race.isFinished}</td>
+                {#if getDaysDiff(race.startDate) === 1}
+                    <td>🏁</td>
+                {:else if getDaysDiff(race.startDate) === 0}
+                    <td>🏎️</td>
+                {:else}
+                    <td>-</td>
+                {/if}
                 <td>{race.round.series}</td>
             </tr>
         {:else}
