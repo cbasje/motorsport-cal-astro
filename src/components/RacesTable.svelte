@@ -18,8 +18,9 @@
     });
 
     const getDaysDiff = (date: Date) => {
+        const dateDate = new Date(date);
         const oneDay = 24 * 60 * 60 * 1000;
-        return Math.round((date.valueOf() - Date.now()) / oneDay);
+        return Math.round((dateDate.valueOf() - Date.now()) / oneDay);
     };
     const getDateString = (date: Date) => {
         const diffDays = getDaysDiff(date);
@@ -59,9 +60,9 @@
             >
                 <td>{race.round.title}</td>
                 <td>
-                    {getDateString(new Date(race.startDate ?? ""))}
+                    {getDateString(race.startDate)}
                 </td>
-                {#if getDaysDiff(race.startDate) === 1}
+                {#if getDaysDiff(race.startDate) >= 1}
                     <td>🏁</td>
                 {:else if getDaysDiff(race.startDate) === 0}
                     <td>🏎️</td>
