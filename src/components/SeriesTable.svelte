@@ -36,8 +36,8 @@
     <tbody>
         {#each rounds as round}
             <tr
-                class:collapse={includedSeries &&
-                    !includedSeries.includes(round.series)}
+                class:collapse={includedSeries.length > 0 &&
+                    !includedSeries?.includes(round.series)}
             >
                 <td>{round.title}</td>
                 <td>
