@@ -1,5 +1,5 @@
 import type { APIRoute } from "astro";
-import prisma from "../../../lib/prisma-client";
+import prisma from "@/lib/prisma-client";
 
 export const get: APIRoute = async () => {
     try {

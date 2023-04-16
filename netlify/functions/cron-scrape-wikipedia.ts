@@ -4,7 +4,7 @@ import {
     HandlerContext,
     schedule,
 } from "@netlify/functions";
-import { main } from "../../lib/wikipedia";
+import { main } from "@/lib/wikipedia";
 
 const scrapeHandler: Handler = async (
     event: HandlerEvent,

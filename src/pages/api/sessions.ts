@@ -1,6 +1,6 @@
 import type { APIRoute } from "astro";
-import prisma from "../../../lib/prisma-client";
-import type { NewSession } from "../../../lib/types";
+import prisma from "@/lib/prisma-client";
+import type { NewSession } from "@/lib/types";
 
 export const get: APIRoute = async ({ params, request }) => {
     const sessions = await prisma.session.findMany({

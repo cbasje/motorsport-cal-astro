@@ -1,6 +1,6 @@
 <script lang="ts">
     import type { Round, Session } from "@prisma/client";
-    import { SeriesId, seriesIds } from "../../lib/types";
+    import { SeriesId, seriesIds } from "@/lib/types";
     import SeriesMultiSelect from "./SeriesMultiSelect.svelte";
 
     type MappedRound = Pick<Round, "id" | "title" | "series"> &
