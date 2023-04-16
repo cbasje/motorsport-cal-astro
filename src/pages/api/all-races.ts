@@ -11,6 +11,7 @@ export const get: APIRoute = async () => {
             select: {
                 id: true,
                 startDate: true,
+                endDate: true,
                 round: {
                     select: {
                         title: true,

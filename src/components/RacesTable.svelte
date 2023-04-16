@@ -3,8 +3,14 @@
     import { onMount } from "svelte";
     import type { SeriesId } from "../../lib/types";
     import SeriesMultiSelect from "./SeriesMultiSelect.svelte";
+    import {
+        getSeriesColour,
+        getSeriesIcon,
+        getSeriesTitle,
+    } from "../../lib/utils";
+    import Icon from "@iconify/svelte";
 
-    type Race = Pick<Session, "id" | "startDate"> & {
+    type Race = Pick<Session, "id" | "startDate" | "endDate"> & {
         round: Pick<Round, "title" | "series">;
     };
 
@@ -19,7 +25,6 @@
 
     const getDaysDiff = (date: Date) => {
         const dateDate = new Date(date);
-        const oneDay = 24 * 60 * 60 * 1000;
         return Math.round((dateDate.valueOf() - Date.now()) / oneDay);
     };
     const getDateString = (date: Date) => {
@@ -62,14 +67,23 @@
                 <td>
                     {getDateString(race.startDate)}
                 </td>
-                {#if getDaysDiff(race.startDate) <= -1}
+                {#if new Date(race.endDate).valueOf() < Date.now()}
                     <td>🏁</td>
-                {:else if getDaysDiff(race.startDate) === 0}
-                    <td>🏎️</td>
+                {:else if Date.now() >= new Date(race.startDate).valueOf() && Date.now() <= new Date(race.endDate).valueOf()}
+                    <td>...</td>
                 {:else}
                     <td>-</td>
                 {/if}
-                <td>{race.round.series}</td>
+                <td>
+                    <span title={getSeriesTitle(race.round.series)}>
+                        <Icon
+                            icon="fluent-emoji-high-contrast:{getSeriesIcon(
+                                race.round.series
+                            )}"
+                            color={getSeriesColour(race.round.series)}
+                        />
+                    </span>
+                </td>
             </tr>
         {:else}
             <tr>

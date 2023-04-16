@@ -7,12 +7,13 @@ export const get: APIRoute = async () => {
             orderBy: { startDate: "asc" },
             where: {
                 type: "RACE",
-                startDate: {
+                endDate: {
                     gte: new Date(),
                 },
             },
             select: {
                 startDate: true,
+                endDate: true,
                 round: {
                     select: {
                         title: true,

@@ -1,9 +1,10 @@
 <script lang="ts">
     import Icon from "@iconify/svelte";
     import { onMount } from "svelte";
-    import { SeriesId, seriesIds } from "../../lib/types";
-    import { getSeriesTitle } from "../../lib/utils";
+    import { seriesIds } from "../../lib/types";
+    import { getSeriesIcon, getSeriesTitle } from "../../lib/utils";
 
+    type SeriesId = "F1" | "FE" | "XE" | "INDY" | "W" | "WEC";
     export let series: SeriesId[];
     let seriesCopy: SeriesId[];
 
@@ -57,7 +58,9 @@
                 class="daisy-btn daisy-btn-active daisy-btn-ghost {labelClass[
                     s
                 ]}"
+                title={getSeriesTitle(s)}
             >
+                <Icon icon="fluent-emoji-high-contrast:{getSeriesIcon(s)}" />
                 {getSeriesTitle(s)}
             </label>
         {:else}
