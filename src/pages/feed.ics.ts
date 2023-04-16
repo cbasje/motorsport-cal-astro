@@ -1,6 +1,6 @@
 import type { Circuit, Round, Session } from "@prisma/client";
 import type { APIRoute } from "astro";
-import { DateArray, EventAttributes, createEvents } from "ics";
+import { DateArray, EventAttributes, GeoCoordinates, createEvents } from "ics";
 import prisma from "../../lib/prisma-client";
 
 const TITLE = "Motorsport Calendar";
@@ -28,12 +28,10 @@ export const getFeed = async (
     let events: EventAttributes[] = [];
 
     for (const session of items) {
-        if (
-            !session.startDate ||
-            !session.endDate ||
-            !session.round ||
-            !session.round.circuit
-        ) {
+        const { round } = session;
+        const { circuit } = round;
+
+        if (!session.startDate || !session.endDate || !round || !circuit) {
             continue;
         }
 
@@ -49,17 +47,17 @@ export const getFeed = async (
             start: getCalDate(session.startDate),
             end: getCalDate(session.endDate),
             description: `It is time for the ${title}!${
-                session.round.link &&
-                ` Watch this race and its sessions via this link: ${session.round.link}`
+                round.link &&
+                ` Watch this race and its sessions via this link: ${round.link}`
             }`,
             // htmlContent:
             // 	'<!DOCTYPE html><html><body><p>This is<br>test<br>html code.</p></body></html>',
-            location: session.round.circuit.title,
-            url: session.round.link ?? "",
-            // geo:
-            //     session.round.circuit.lon && session.round.circuit.lat
-            //         ? session.round.circuit
-            //         : null,
+            location: round.circuit.title,
+            url: round.link ?? "",
+            geo:
+                circuit.lon && circuit.lat
+                    ? { lon: circuit.lon, lat: circuit.lat }
+                    : undefined,
         });
     }
 
