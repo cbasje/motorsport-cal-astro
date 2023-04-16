@@ -7,7 +7,7 @@ import MainLayout from "../../layouts/main.astro";
         <h1 class="text-2xl font-medium">Motorsport Calendar REST API</h1>
         <h2 class="text-lg">Available Routes</h2>
 
-        <table class="table table-zebra w-full">
+        <table class="daisy-table daisy-table-zebra w-full">
             <thead>
                 <tr>
                     <th>Protocol</th>
@@ -26,6 +26,18 @@ import MainLayout from "../../layouts/main.astro";
                 <tr>
                     <td>GET, POST, DELETE</td>
                     <td><a href="/api/sessions">/api/sessions</a></td>
+                </tr>
+                <tr>
+                    <td>GET</td>
+                    <td><a href="/api/next-race">/api/next-race</a></td>
+                </tr>
+                <tr>
+                    <td>GET</td>
+                    <td><a href="/api/delete-season">/api/delete-season</a></td>
+                </tr>
+                <tr>
+                    <td>GET</td>
+                    <td><a href="/api/scrape">/api/scrape</a></td>
                 </tr>
             </tbody>
         </table>
