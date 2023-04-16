@@ -14,7 +14,14 @@
         round: Pick<Round, "title" | "series">;
     };
 
-    $: races = [] as Race[];
+    let races = [] as Race[];
+    $: filteredRaces = races.filter(
+        (r) =>
+            !(
+                includedSeries.length > 0 &&
+                !includedSeries?.includes(r.round.series)
+            )
+    );
     $: includedSeries = [] as SeriesId[];
 
     const oneDay = 24 * 60 * 60 * 1000;
@@ -48,7 +55,7 @@
 
 <SeriesMultiSelect bind:series={includedSeries} />
 
-<table class="daisy-table w-full">
+<table class="daisy-table daisy-table-zebra w-full">
     <thead>
         <tr>
             <th>Title</th>
@@ -58,11 +65,8 @@
         </tr>
     </thead>
     <tbody>
-        {#each races as race (race.id)}
-            <tr
-                class:collapse={includedSeries.length > 0 &&
-                    !includedSeries?.includes(race.round.series)}
-            >
+        {#each filteredRaces as race (race.id)}
+            <tr>
                 <td>{race.round.title}</td>
                 <td>
                     {getDateString(race.startDate)}
