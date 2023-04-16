@@ -1,7 +1,7 @@
 import type { Circuit, Round, Session } from "@prisma/client";
 import type { APIRoute } from "astro";
 import { DateArray, EventAttributes, GeoCoordinates, createEvents } from "ics";
-import prisma from "@/lib/prisma-client";
+import prisma from "../../lib/prisma-client";
 
 const TITLE = "Motorsport Calendar";
 const PRODUCT = "benjamiin..";

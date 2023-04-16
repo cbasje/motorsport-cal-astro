@@ -1,7 +1,7 @@
 import type { Circuit } from "@prisma/client";
 import type { APIRoute } from "astro";
-import prisma from "@/lib/prisma-client";
-import type { NewCircuit } from "@/lib/types";
+import prisma from "../../../lib/prisma-client";
+import type { NewCircuit } from "../../../lib/types";
 
 export const get: APIRoute = async ({ params, request }) => {
     const circuits = await prisma.circuit.findMany({

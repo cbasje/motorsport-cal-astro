@@ -1,7 +1,7 @@
 ---
 import { Round, Session, SessionType } from "@prisma/client";
-import SeriesTable from "@/components/SeriesTable.svelte";
-import MainLayout from "@/layouts/main.astro";
+import SeriesTable from "../components/SeriesTable.svelte";
+import MainLayout from "../layouts/main.astro";
 
 type RoundWithSession = Round & { sessions: Session[] };
 const res = await fetch(new URL("/api/rounds", import.meta.env.SITE));

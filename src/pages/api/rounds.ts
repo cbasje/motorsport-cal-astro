@@ -1,6 +1,6 @@
 import type { APIRoute } from "astro";
-import prisma from "@/lib/prisma-client";
-import type { NewRound } from "@/lib/types";
+import prisma from "../../../lib/prisma-client";
+import type { NewRound } from "../../../lib/types";
 
 export const get: APIRoute = async ({ params, request }) => {
     const rounds = await prisma.round.findMany({

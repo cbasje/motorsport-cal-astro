@@ -1,5 +1,5 @@
 import type { APIRoute } from "astro";
-import { main } from "@/lib/wikipedia";
+import { main } from "../../../lib/wikipedia";
 
 export const get: APIRoute = async () => {
     try {
