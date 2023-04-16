@@ -82,4 +82,21 @@ export const saveSessions = async (sessions: NewSession[]) => {
     );
 };
 
-export const saveWikipediaData = async (data: CircuitWikipedia[]) => {};
+export const saveWikipediaData = async (data: CircuitWikipedia[]) => {
+    console.info("Saving Wikipedia data for %d sessions...", data.length);
+
+    return await Promise.all(
+        data.map(async (row: CircuitWikipedia) => {
+            await prisma.circuit.update({
+                data: {
+                    lat: row.lat,
+                    lon: row.lon,
+                    wikipediaPageId: row.wikipediaPageId,
+                },
+                where: {
+                    id: row.id,
+                },
+            });
+        })
+    );
+};
