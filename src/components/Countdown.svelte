@@ -2,25 +2,14 @@
     import type { Round, Session } from "@prisma/client";
     import { onMount } from "svelte";
 
+    type NextRaceData = Pick<Session, "startDate"> & {
+        round: Pick<Round, "title" | "series">;
+    };
+
     $: nextRace = {
         date: new Date(),
         title: "",
         series: "",
-    };
-
-    const loadDate = async () => {
-        type NextRaceData = Pick<Session, "startDate"> & {
-            round: Pick<Round, "title" | "series">;
-        };
-
-        const res = await fetch("/api/next-race").then(
-            async (r) => await r.json()
-        );
-
-        const data: NextRaceData = res.data;
-        nextRace.date = data.startDate;
-        nextRace.title = data.round.title;
-        nextRace.series = data.round.series;
     };
 
     let currentDate = new Date();
@@ -55,8 +44,19 @@
         ).getSeconds();
     }
 
+    const loadNextRace = async () => {
+        const res = await fetch("/api/next-race").then(
+            async (r) => await r.json()
+        );
+
+        const data: NextRaceData = res.data;
+        nextRace.date = data.startDate;
+        nextRace.title = data.round.title;
+        nextRace.series = data.round.series;
+    };
+
     onMount(() => {
-        loadDate();
+        loadNextRace();
     });
 </script>
 

@@ -1,12 +1,15 @@
 <script lang="ts">
     import type { Round, Session } from "@prisma/client";
+    import { onMount } from "svelte";
     import type { SeriesId } from "../../lib/types";
     import SeriesMultiSelect from "./SeriesMultiSelect.svelte";
 
-    type MappedRound = Pick<Round, "id" | "title" | "series"> &
-        Partial<Pick<Session, "startDate">> & { isFinished: string };
+    type Race = Pick<Session, "id" | "startDate"> & {
+        round: Pick<Round, "title" | "series">;
+        isFinished: string;
+    };
 
-    export let rounds: MappedRound[];
+    $: races = [] as Race[];
     $: includedSeries = [] as SeriesId[];
 
     const timeFormatter = new Intl.RelativeTimeFormat("en", {
@@ -20,6 +23,19 @@
         const diffDays = Math.round((date.valueOf() - Date.now()) / oneDay);
         return timeFormatter.format(diffDays, "days");
     };
+
+    const loadRaces = async () => {
+        const res = await fetch("/api/all-races").then(
+            async (r) => await r.json()
+        );
+
+        const data: Race[] = res.data;
+        races = data;
+    };
+
+    onMount(() => {
+        loadRaces();
+    });
 </script>
 
 <SeriesMultiSelect bind:series={includedSeries} />
@@ -34,17 +50,17 @@
         </tr>
     </thead>
     <tbody>
-        {#each rounds as round}
+        {#each races as race (race.id)}
             <tr
                 class:collapse={includedSeries.length > 0 &&
-                    !includedSeries?.includes(round.series)}
+                    !includedSeries?.includes(race.round.series)}
             >
-                <td>{round.title}</td>
+                <td>{race.round.title}</td>
                 <td>
-                    {getDateString(new Date(round.startDate ?? ""))}
+                    {getDateString(new Date(race.startDate ?? ""))}
                 </td>
-                <td>{round.isFinished}</td>
-                <td>{round.series}</td>
+                <td>{race.isFinished}</td>
+                <td>{race.round.series}</td>
             </tr>
         {:else}
             <tr>

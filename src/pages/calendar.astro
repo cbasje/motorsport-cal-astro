@@ -1,40 +1,10 @@
 ---
-import { Round, Session, SessionType } from "@prisma/client";
-import SeriesTable from "../components/SeriesTable.svelte";
+import RacesTable from "../components/RacesTable.svelte";
 import MainLayout from "../layouts/main.astro";
-
-type RoundWithSession = Round & { sessions: Session[] };
-const res = await fetch(new URL("/api/rounds", import.meta.env.SITE));
-const rounds: RoundWithSession[] = await res.json();
-
-const mappedRounds = rounds
-    .filter((r) => r.sessions.some((s) => s.type === SessionType.RACE))
-    .map((r) => {
-        const race = r.sessions.find((s) => s.type === SessionType.RACE);
-
-        return {
-            id: r.id,
-            title: r.title,
-            startDate: race?.startDate,
-            series: r.series,
-            isFinished:
-                new Date(race?.startDate!) < new Date() &&
-                new Date() < new Date(race?.endDate!)
-                    ? "🏎️"
-                    : new Date(race?.endDate!) < new Date()
-                    ? "🏁"
-                    : "-",
-        };
-    })
-    .sort((a, b) => {
-        return a.startDate !== undefined && b.startDate !== undefined
-            ? new Date(a.startDate).getTime() - new Date(b.startDate).getTime()
-            : 0;
-    });
 ---
 
 <MainLayout>
     <div class="w-full flex flex-col gap-3">
-        <SeriesTable client:load rounds={mappedRounds} />
+        <RacesTable client:load />
     </div>
 </MainLayout>
