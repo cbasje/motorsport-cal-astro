@@ -1,18 +1,26 @@
 <script lang="ts">
+    import type { Round, Session } from "@prisma/client";
     import { onMount } from "svelte";
 
     $: nextRace = {
-        date: "",
+        date: new Date(),
         title: "",
         sport: "",
     };
 
     const loadDate = async () => {
-        const res = await fetch("/api/next-race");
-        const data = await res.json();
-        nextRace.date = data.date;
-        nextRace.title = data.title;
-        nextRace.sport = data.sport;
+        type NextRaceData = Pick<Session, "startDate"> & {
+            round: Pick<Round, "title" | "sport">;
+        };
+
+        const res = await fetch("/api/next-race").then(
+            async (r) => await r.json()
+        );
+
+        const data: NextRaceData = res.data;
+        nextRace.date = data.startDate;
+        nextRace.title = data.round.title;
+        nextRace.sport = data.round.sport;
     };
 
     let currentDate = new Date();
