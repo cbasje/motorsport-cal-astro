@@ -33,14 +33,16 @@
 </script>
 
 <div class="flex w-full">
-    <button
-        class="daisy-btn daisy-btn-square daisy-btn-active daisy-btn-ghost"
-        on:click={reset}
-        aria-label="Reset filter"
-    >
-        <Icon icon="ph:arrow-counter-clockwise-bold" />
-    </button>
-    <div class="daisy-divider daisy-divider-horizontal" aria-hidden />
+    {#if series.length > 0}
+        <button
+            class="daisy-btn daisy-btn-square daisy-btn-active daisy-btn-ghost"
+            on:click={reset}
+            aria-label="Reset filter"
+        >
+            <Icon icon="ph:arrow-counter-clockwise-bold" />
+        </button>
+        <div class="daisy-divider daisy-divider-horizontal" aria-hidden />
+    {/if}
     <div class="flex overflow-x-scroll overflow-y-hidden" aria-label="Filters">
         {#each seriesIds as s}
             <input
