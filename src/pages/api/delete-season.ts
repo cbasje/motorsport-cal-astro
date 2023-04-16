@@ -50,7 +50,6 @@ export const get: APIRoute = async ({ request }) => {
         return new Response(
             JSON.stringify({
                 success: true,
-                data: { year, includeCurrent },
             })
         );
     } catch (error) {
