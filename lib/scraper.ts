@@ -135,14 +135,6 @@ const scrape = async () => {
                 const linkString = $(el)
                     .find(sport.redirectURLItem)
                     .attr("href");
-                console.log("🚀 ----------------------🚀");
-                console.log(
-                    "🚀 ~ scrape ~ url:",
-                    linkString,
-                    sport.redirectURLExtension,
-                    sport.baseURL
-                );
-                console.log("🚀 ----------------------🚀");
                 const link = new URL(
                     linkString ?? "" + sport.redirectURLExtension,
                     sport.baseURL
@@ -163,6 +155,7 @@ const scrape = async () => {
             }
 
             await saveSessions(sessions);
+            console.log(`🤖 saved ${sessions.length} new sessions`);
         } catch (error: any) {
             console.error("scrape: ", error.message);
             break;
