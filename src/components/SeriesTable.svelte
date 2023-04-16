@@ -1,13 +1,13 @@
 <script lang="ts">
     import type { Round, Session } from "@prisma/client";
-    import { SeriesId, seriesIds } from "../../lib/types";
+    import type { SeriesId } from "../../lib/types";
     import SeriesMultiSelect from "./SeriesMultiSelect.svelte";
 
     type MappedRound = Pick<Round, "id" | "title" | "series"> &
         Partial<Pick<Session, "startDate">> & { isFinished: string };
 
     export let rounds: MappedRound[];
-    $: includedSeries = seriesIds as unknown as SeriesId[];
+    $: includedSeries = [] as SeriesId[];
 
     const timeFormatter = new Intl.RelativeTimeFormat("en", {
         numeric: "auto",
