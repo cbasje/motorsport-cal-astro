@@ -1,10 +1,9 @@
 <script lang="ts">
     import Icon from "@iconify/svelte";
     import { onMount } from "svelte";
-    import { seriesIds } from "../../lib/types";
+    import { SeriesId, seriesIds } from "../../lib/types";
     import { getSeriesIcon, getSeriesTitle } from "../../lib/utils";
 
-    type SeriesId = "F1" | "FE" | "XE" | "INDY" | "W" | "WEC";
     export let series: SeriesId[];
     let seriesCopy: SeriesId[];
 
