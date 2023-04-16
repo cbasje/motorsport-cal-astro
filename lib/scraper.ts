@@ -334,7 +334,7 @@ const scrapeItem = async (
 
         return sessions;
     } catch (error: any) {
-        console.error("scrapeItem: ", error.message);
+        console.error("🚨 Error scraping '%s':", link, error.message);
         return null;
     }
 };
