@@ -7,7 +7,9 @@ export const get: APIRoute = async () => {
     try {
         let res = [];
 
-        console.log(process.cwd());
+        const t = await fs.readdir(".");
+        console.log(process.cwd(), t);
+        // console.log(process.cwd(), path.relative(".", "./lib/scraper-data"));
 
         const fileNames = await fs.readdir("./lib/scraper-data");
         for (const f of fileNames) {
