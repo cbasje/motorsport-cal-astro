@@ -1,37 +1,14 @@
 import type { APIRoute } from "astro";
-import fs from "node:fs/promises";
-import path from "path";
-import yaml from "js-yaml";
+import scraperData from "lib/scraper-data";
 
 export const get: APIRoute = async () => {
     try {
-        let res = [];
-
-        const t = await fs.readdir(".");
-        console.log(process.cwd(), t);
-        // console.log(process.cwd(), path.relative(".", "./lib/scraper-data"));
-
-        const fileNames = await fs.readdir(
-            new URL("../../../lib/scraper-data", import.meta.url)
-        );
-        for (const f of fileNames) {
-            const fileContents = await fs.readFile(
-                path.resolve("./lib/scraper-data", f),
-                "utf-8"
-            );
-            const data = yaml.load(fileContents, {
-                onWarning: (error) => {
-                    throw error;
-                },
-            });
-
-            res.push(data);
-        }
+        let data = scraperData;
 
         return new Response(
             JSON.stringify({
                 success: true,
-                data: res,
+                data,
             })
         );
     } catch (error) {
