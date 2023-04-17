@@ -11,7 +11,9 @@ export const get: APIRoute = async () => {
         console.log(process.cwd(), t);
         // console.log(process.cwd(), path.relative(".", "./lib/scraper-data"));
 
-        const fileNames = await fs.readdir("./lib/scraper-data");
+        const fileNames = await fs.readdir(
+            new URL("../../../lib/scraper-data", import.meta.url)
+        );
         for (const f of fileNames) {
             const fileContents = await fs.readFile(
                 path.resolve("./lib/scraper-data", f),
