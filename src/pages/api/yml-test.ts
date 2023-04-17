@@ -1,5 +1,5 @@
 import type { APIRoute } from "astro";
-import fs from "fs";
+import fs from "fs/promises";
 import path from "path";
 import yaml from "js-yaml";
 
@@ -9,19 +9,10 @@ export const get: APIRoute = async () => {
 
         console.log(process.cwd());
 
-        const fileNames = await new Promise<string[]>((res, rej) => {
-            fs.readdir("./lib/scraper-data", (err, files) => {
-                if (err) {
-                    rej(err);
-                    return;
-                }
-                res(files);
-            });
-        });
-
+        const fileNames = await fs.readdir("@/lib/scraper-data");
         for (const f of fileNames) {
-            const fileContents = fs.readFileSync(
-                path.resolve("lib/scraper-data", f),
+            const fileContents = await fs.readFile(
+                path.resolve("@/lib/scraper-data", f),
                 "utf-8"
             );
             const data = yaml.load(fileContents, {
