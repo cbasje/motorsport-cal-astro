@@ -7,8 +7,10 @@ export const get: APIRoute = async () => {
     try {
         let res = [];
 
+        console.log(process.cwd());
+
         const fileNames = await new Promise<string[]>((res, rej) => {
-            fs.readdir("lib/scraper-data", (err, files) => {
+            fs.readdir("./lib/scraper-data", (err, files) => {
                 if (err) {
                     rej(err);
                     return;
