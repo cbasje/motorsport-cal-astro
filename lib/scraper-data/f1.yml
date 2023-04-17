@@ -1,0 +1,19 @@
+id: "F1"
+baseURL: "https://www.formula1.com/en/racing/2023.html"
+season: 2023
+
+items:
+    link:
+        attr: "a"
+        extension: "a"
+
+    actions:
+        - link:
+              attr: "a"
+              extension: "a"
+
+        - type: get-text
+          selector: "#asdasd"
+
+        - type: get-attr
+          selector: "#asdasd"
