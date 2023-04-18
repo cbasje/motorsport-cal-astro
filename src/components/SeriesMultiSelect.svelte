@@ -1,7 +1,8 @@
 <script lang="ts">
     import Icon from "@iconify/svelte";
     import { onMount } from "svelte";
-    import { SeriesId, seriesIds } from "../../lib/types";
+    import type { SeriesId } from "../../lib/types";
+    import { seriesIds } from "../../lib/types";
     import { getSeriesIcon, getSeriesTitle } from "../../lib/utils";
 
     export let series: SeriesId[];
