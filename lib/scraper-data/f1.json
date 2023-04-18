@@ -1,27 +1,55 @@
 {
     "id": "F1",
-    "baseURL": "https://www.formula1.com/en/racing/2023.html",
+    "baseUrl": "https://www.formula1.com",
+    "url": "en/racing/2023.html",
     "season": 2023,
-    "items": {
+
+    "rounds": {
+        "selector": ".completed-events > div:not(.seo-wrapper)",
         "link": {
-            "attr": "a",
-            "extension": "a"
+            "type": "attr",
+            "attr": "href",
+            "selector": "a.event-item-link"
         },
         "actions": [
             {
-                "link": {
-                    "attr": "a",
-                    "extension": "a"
-                }
+                "param": "round-title",
+                "type": "text",
+                "selector": "title",
+                "regex": "(\\b[\\w ]+ Grand Prix)|(Pre-Season Testing)"
             },
             {
-                "type": "get-text",
-                "selector": "#asdasd"
-            },
-            {
-                "type": "get-attr",
-                "selector": "#asdasd"
+                "param": "round-circuit",
+                "type": "text",
+                "selector": ".f1-race-hub--timetable-links-wrapper p"
             }
-        ]
+        ],
+        "sessions": {
+            "selector": "div.f1-race-hub--timetable-listings > div.row",
+            "actions": [
+                {
+                    "param": "session-title",
+                    "type": "text",
+                    "selector": "div.f1-timetable--details > p.f1-timetable--title"
+                },
+                {
+                    "param": "session-day",
+                    "type": "text",
+                    "selector": ".f1-timetable--date"
+                },
+                {
+                    "param": "session-start-time",
+                    "type": "attr",
+                    "attr": "data-start-time",
+                    "selector": ""
+                },
+                {
+                    "param": "session-end-time",
+                    "type": "attr",
+                    "attr": "data-end-time",
+                    "selector": ""
+                }
+            ]
+        }
     }
 }

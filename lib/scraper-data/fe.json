@@ -1,0 +1,53 @@
+{
+    "id": "FE",
+    "baseUrl": "https://www.fiaformulae.com",
+    "url": "en/races",
+    "season": 2023,
+
+    "rounds": {
+        "selector": "#main-content ul.race-calendar__list > li.race-card__list-item",
+        "link": {
+            "type": "attr",
+            "attr": "href",
+            "selector": "div.race-card__item > a.race-card__item-link > div.race-card__button-container > a.race-card__button"
+        },
+        "actions": [
+            {
+                "param": "round-title",
+                "type": "text",
+                "selector": ".race-event-hero__race-name",
+                "regex": "20\\d\\d (\\b[\\w ]+ E-Prix)"
+            },
+            {
+                "param": "round-circuit",
+                "type": "text",
+                "selector": ".race-event-hero__race-city"
+            }
+        ],
+        "sessions": {
+            "selector": ".race-info__session-content > div",
+            "actions": [
+                {
+                    "param": "session-title",
+                    "type": "text",
+                    "selector": "div.race-info__cell--name"
+                },
+                {
+                    "param": "session-day",
+                    "type": "text",
+                    "selector": "div.race-info__cell--date > span"
+                },
+                {
+                    "param": "session-start-time",
+                    "type": "text",
+                    "selector": "div.race-info__cell--time > span:nth-child(1)"
+                },
+                {
+                    "param": "session-end-time",
+                    "type": "text",
+                    "selector": "div.race-info__cell--time > span:nth-child(2)"
+                }
+            ]
+        }
+    }
+}

@@ -65,50 +65,51 @@ export enum CircuitTitle {
     Fuji = "Fuji Speedway",
 }
 
-export interface Series {
+// MARK: Scraper
+export interface ScraperSeries {
     id: SeriesId;
-    baseURL: string;
+    baseUrl: string;
     url: string;
-    excludedURLs?: string[];
-    season: string;
-
-    list: string;
-    redirectURLItem: string;
-    redirectURLExtension: string;
-    roundItems: {
-        title?: string;
-        titleRegex: string;
-        titleAttr?: {
-            main: string;
-            title: string;
-        };
-        circuit?: string;
-        circuitAttr?: {
-            main: string;
-            circuit: string;
-        };
-        circuitRegex?: string;
-    };
-    sessionList: string;
-    sessionItems: {
-        title?: string;
-        titleAttr?: {
-            main: string;
-            title: string;
-        };
-        dateAttr?: {
-            main: string;
-            startDate: string;
-            endDate?: string;
-            gmtOffset?: string;
-        };
-        dateText?: {
-            date: string;
-            time: string;
-        };
-    };
+    season: number | string;
+    rounds: ScraperRounds;
 }
 
+export interface ScraperRounds {
+    selector: string;
+    link: ScraperLink;
+    actions: ScraperAction[];
+    sessions: ScraperSessions;
+}
+
+type ScraperParam =
+    | "round-title"
+    | "round-circuit"
+    | "session-title"
+    | "session-date"
+    | "session-day"
+    | "session-start-time"
+    | "session-end-time";
+type ScraperType = "attr" | "text";
+export interface ScraperAction {
+    param: ScraperParam;
+    type: ScraperType;
+    attr?: string;
+    selector: string;
+    regex?: string;
+}
+
+export interface ScraperLink {
+    type: ScraperType;
+    attr?: string;
+    selector: string;
+}
+
+export interface ScraperSessions {
+    selector: string;
+    actions: ScraperAction[];
+}
+
+// MARK: API
 export type NewRound = Omit<Round, "circuitId" | "id" | "created_at"> & {
     circuitTitle: string;
 };
