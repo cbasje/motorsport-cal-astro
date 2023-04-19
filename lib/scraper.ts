@@ -117,23 +117,36 @@ const getText = (
 };
 const getDate = (
     sessionDate: string | null,
+    sessionTime: string | null = null,
     sessionStartTime: string | null,
     sessionEndTime: string | null
 ) => {
+    let startTime: string | null, endTime: string | null;
+
+    if (sessionTime !== null) {
+        const time = sessionTime.split(" - ");
+        startTime = time[0];
+        endTime = time[1];
+    } else {
+        startTime = sessionStartTime;
+        endTime = sessionEndTime;
+    }
+
     if (sessionEndTime === null) {
         const twoHours = 2 * 60 * 60 * 1000;
-        const start = new Date(`${sessionDate} ${sessionStartTime}`);
+        const start = new Date(`${sessionDate} ${startTime}`);
 
         return [start, new Date(start.valueOf() + twoHours)];
+    } else {
+        return [
+            new Date(`${sessionDate} ${startTime}`),
+            new Date(`${sessionDate} ${endTime}`),
+        ];
     }
-    return [
-        new Date(`${sessionDate} ${sessionStartTime}`),
-        new Date(`${sessionDate} ${sessionEndTime}`),
-    ];
 };
 
 const scrape = async () => {
-    let includedSeries: SeriesId[] = ["F1", "FE"];
+    let includedSeries: SeriesId[] = ["INDY"];
 
     for (const s of scraperData) {
         if (includedSeries.length && !includedSeries.includes(s.id)) continue;
@@ -162,7 +175,7 @@ const scrape = async () => {
                             sessions.push(...newSessions);
                         }
 
-                        console.log(i++, s.id);
+                        i++;
                     }
                     break;
                 case "attr":
@@ -187,7 +200,7 @@ const scrape = async () => {
                             sessions.push(...newSessions);
                         }
 
-                        console.log(i++, s.id);
+                        i++;
                     }
                     break;
             }
@@ -289,6 +302,7 @@ const scrapeRound = async (
                 sessionNumber = 0,
                 sessionDate: string | null = null,
                 sessionDay: string | null = null,
+                sessionTime: string | null = null,
                 sessionStartTime: string | null = null,
                 sessionEndTime: string | null = null;
 
@@ -352,6 +366,9 @@ const scrapeRound = async (
                     case "session-day":
                         sessionDay = actionResult;
                         break;
+                    case "session-time":
+                        sessionTime = actionResult;
+                        break;
                     case "session-start-time":
                         sessionStartTime = actionResult;
                         break;
@@ -368,6 +385,7 @@ const scrapeRound = async (
             } else {
                 [startDate, endDate] = getDate(
                     sessionDay,
+                    sessionTime,
                     sessionStartTime,
                     sessionEndTime
                 );
@@ -474,6 +492,7 @@ const scrapeRoundAPI = async (
                 sessionNumber = 0,
                 sessionDate: string | null = null,
                 sessionDay: string | null = null,
+                sessionTime: string | null = null,
                 sessionStartTime: string | null = null,
                 sessionEndTime: string | null = null;
 
@@ -517,6 +536,9 @@ const scrapeRoundAPI = async (
                     case "session-day":
                         sessionDay = actionResult;
                         break;
+                    case "session-time":
+                        sessionTime = actionResult;
+                        break;
                     case "session-start-time":
                         sessionStartTime = actionResult;
                         break;
@@ -533,6 +555,7 @@ const scrapeRoundAPI = async (
             } else {
                 [startDate, endDate] = getDate(
                     sessionDay,
+                    sessionTime,
                     sessionStartTime,
                     sessionEndTime
                 );

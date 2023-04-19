@@ -1,5 +1,52 @@
 {
     "id": "INDY",
-    "baseURL": "https://www.formula1.com/en/racing/2023.html",
-    "season": 2023
+    "baseUrl": "https://www.indycar.com/",
+    "season": 2023,
+
+    "rounds": {
+        "url": "Schedule",
+        "selector": ".schedule-list ul > .schedule-list__item",
+        "link": {
+            "type": "attr",
+            "attr": "href",
+            "selector": ".schedule-list__links > a:last-child"
+        },
+        "actions": [
+            {
+                "param": "round-title",
+                "type": "text",
+                "selector": "title"
+            },
+            {
+                "param": "round-circuit",
+                "type": "attr",
+                "attr": "content",
+                "selector": "meta[property='og:url']",
+                "regex": "IndyCar-Series/([\\w-]+)\\b"
+            }
+        ],
+        "sessions": {
+            "items": {
+                "type": "contents",
+                "selector": "#schedule .race-list > .race-list__item"
+            },
+            "actions": [
+                {
+                    "param": "session-title",
+                    "type": "text",
+                    "selector": "div.race-list__race"
+                },
+                {
+                    "param": "session-day",
+                    "type": "text",
+                    "selector": ".race-list__date"
+                },
+                {
+                    "param": "session-time",
+                    "type": "text",
+                    "selector": ".race-list__time"
+                }
+            ]
+        }
+    }
 }

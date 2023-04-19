@@ -15,10 +15,10 @@ export const getCircuits = async (): Promise<CircuitTitle[]> => {
 export const saveRound = async (row: NewRound): Promise<Round> => {
     console.info(
         "Adding round:",
-        row.title,
-        row.number,
+        row.series,
         row.season,
-        row.series
+        row.title,
+        row.number
     );
 
     return await prisma.round.upsert({

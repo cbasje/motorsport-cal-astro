@@ -89,6 +89,7 @@ type ScraperParam =
     | "session-title"
     | "session-date"
     | "session-day"
+    | "session-time"
     | "session-start-time"
     | "session-end-time";
 type ScraperLinkType = "api" | "attr";

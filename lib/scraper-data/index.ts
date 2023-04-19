@@ -9,4 +9,4 @@ import wec from "./wec.json";
 import xe from "./xe.json";
 
 // export default [f1, f1a, f2, fe, indy, w, wec, xe] as ScraperSeries[];
-export default [f1, fe] as ScraperSeries[];
+export default [f1, fe, indy] as ScraperSeries[];
