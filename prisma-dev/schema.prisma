@@ -3,8 +3,8 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider = "sqlite"
+  url      = env("DATABASE_DEV_URL")
 }
 
 model Circuit {
@@ -20,16 +20,15 @@ model Circuit {
 model Round {
   id         String    @id @default(uuid())
   created_at DateTime  @default(now())
-  number     Int       @default(0)
   title      String
   season     String
   link       String?
   circuitId  String
-  series     SeriesId
+  series     String
   circuit    Circuit   @relation(fields: [circuitId], references: [id])
   sessions   Session[]
 
-  @@unique([title, number, series, season], name: "uniqueRoundPerSeriesSeason")
+  @@unique([title, series, season], name: "uniqueRoundPerSeriesSeason")
 }
 
 model Session {
@@ -39,27 +38,8 @@ model Session {
   startDate  DateTime
   endDate    DateTime
   roundId    String
-  type       SessionType
+  type       String
   round      Round    @relation(fields: [roundId], references: [id])
 
   @@unique([type, number, roundId], name: "uniqueSessionPerRoundId")
-}
-
-enum SeriesId {
-  F1
-  F2
-  FE
-  XE
-  INDY
-  W
-  WEC
-  F1A
-}
-
-enum SessionType {
-  PRACTICE
-  QUALIFYING
-  RACE
-  SHAKEDOWN
-  SPRINT
 }
