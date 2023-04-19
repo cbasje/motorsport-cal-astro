@@ -5,16 +5,11 @@ import {
     load as loadCheerio,
 } from "cheerio";
 import fetch from "node-fetch";
-import {
-    CircuitTitle,
-    NewSession,
-    ScraperSeries,
-    SeriesId,
-    SessionType,
-} from "./types";
-
 import { saveRound, saveSessions } from "./api";
 import scraperData from "./scraper-data";
+import { CircuitTitle, SeriesId, SessionType } from "./types";
+import type { NewSession } from "./types/api";
+import type { Format, Param, ScraperSeries } from "./types/scraper";
 
 const sessionAliases: Record<SessionType, string> = {
     SHAKEDOWN: "((?:Pre-Season Testing|Session|Day)( \\d)?)",
@@ -76,11 +71,59 @@ export const main = async () => {
         console.time("Scraping...");
         await scrape();
         console.timeEnd("Scraping...");
-    } catch (error: any) {
-        console.error("main: ", error.message);
+    } catch (error) {
+        console.error("main: ", error);
     }
 };
 
+const formatHour = (time: string) => {
+    // const hourRegex = /[\\b\\D](\\d{1,2}):\\d{1,2}/gi;
+    // const match = hourRegex.exec(time);
+
+    // if (!match) throw new Error("Invalid 'hour'");
+
+    // const hour = Number(match[0]);
+
+    return time;
+};
+const formatDate = (
+    format: string,
+    dateInfo: Record<string, string | null>
+) => {
+    let returnValue = format;
+
+    const regex = /{([a-z\-]+)}/gi;
+    const matches = format.matchAll(regex);
+
+    // For each key, replace with value
+    for (const m of matches) {
+        const keyInc = m[0];
+        const key = m[1] as Param;
+
+        let value = "";
+        switch (key) {
+            case "session-day":
+                value = dateInfo.day!;
+                break;
+            case "session-start-time":
+                value = formatHour(dateInfo.startTime!);
+                break;
+            case "session-end-time":
+                value = formatHour(dateInfo.endTime!);
+                break;
+            case "session-gmt-offset":
+                value = dateInfo.gmtOffset!;
+                break;
+            case "session-time-zone":
+                value = dateInfo.timeZone!;
+                break;
+        }
+
+        returnValue = returnValue.replace(keyInc, value);
+    }
+
+    return returnValue.replaceAll(" ET", " EST");
+};
 const getAttr = (
     $: CheerioAPI,
     context: BasicAcceptedElems<AnyNode> | null,
@@ -116,37 +159,42 @@ const getText = (
     return t;
 };
 const getDate = (
-    sessionDate: string | null,
-    sessionTime: string | null = null,
+    format: Format,
+    sessionDay: string | null,
     sessionStartTime: string | null,
-    sessionEndTime: string | null
+    sessionEndTime: string | null,
+    sessionGmtOffset: string | null,
+    sessionTimeZone: string | null
 ) => {
-    let startTime: string | null, endTime: string | null;
+    // 🚀 --------------------------------🚀
+    // 🚀 ~ X; sessionDate; sessionDay; sessionTime; sessionStartTime; sessionEndTime
+    // 🚀 --------------------------------🚀
+    // 🚀 ~ F1; null; ; null; 2023-03-05T18:00:00; 2023-03-05T20:00:00;
+    // 🚀 --------------------------------🚀
+    // 🚀 ~ FE; null; 2023-01-13; null; 16:25; 17:15;
+    // 🚀 --------------------------------🚀
+    // 🚀 ~ INDY; null; Friday, Mar 3; 3:00 PM - 4:15 PM ET; null; null; ----- "Thu, 01 Jan 1970 00:00:00 GMT-0400"
+    // 🚀 --------------------------------🚀
 
-    if (sessionTime !== null) {
-        const time = sessionTime.split(" - ");
-        startTime = time[0];
-        endTime = time[1];
-    } else {
-        startTime = sessionStartTime;
-        endTime = sessionEndTime;
-    }
+    const dateInfo = {
+        day: sessionDay,
+        startTime: sessionStartTime,
+        endTime: sessionEndTime,
+        gmtOffset: sessionGmtOffset,
+        timeZone: sessionTimeZone,
+    };
 
-    if (sessionEndTime === null) {
-        const twoHours = 2 * 60 * 60 * 1000;
-        const start = new Date(`${sessionDate} ${startTime}`);
+    const startDateString = formatDate(format.start, dateInfo);
+    const endDateString = formatDate(format.end, dateInfo);
+    console.log("🚀 ---------------------------------🚀");
+    console.log("🚀 ~ endDateString:", endDateString, new Date(endDateString));
+    console.log("🚀 ---------------------------------🚀");
 
-        return [start, new Date(start.valueOf() + twoHours)];
-    } else {
-        return [
-            new Date(`${sessionDate} ${startTime}`),
-            new Date(`${sessionDate} ${endTime}`),
-        ];
-    }
+    return [new Date(startDateString), new Date(endDateString)];
 };
 
 const scrape = async () => {
-    let includedSeries: SeriesId[] = ["INDY"];
+    let includedSeries: SeriesId[] = ["F1", "FE", "INDY"];
 
     for (const s of scraperData) {
         if (includedSeries.length && !includedSeries.includes(s.id)) continue;
@@ -179,7 +227,7 @@ const scrape = async () => {
                     }
                     break;
                 case "attr":
-                    url = new URL(s.rounds.url, s.baseUrl);
+                    url = new URL(s.rounds.url!, s.baseUrl);
 
                     res = await fetch(url);
                     const html = await res.text();
@@ -207,8 +255,8 @@ const scrape = async () => {
 
             await saveSessions(sessions);
             console.log(`🤖 saved ${sessions.length} new sessions`);
-        } catch (error: any) {
-            console.error("scrape: ", error.message);
+        } catch (error) {
+            console.error("scrape: ", error);
             break;
         }
     }
@@ -300,11 +348,11 @@ const scrapeRound = async (
         for await (const s of sessions) {
             let sessionType: SessionType = "PRACTICE",
                 sessionNumber = 0,
-                sessionDate: string | null = null,
                 sessionDay: string | null = null,
-                sessionTime: string | null = null,
                 sessionStartTime: string | null = null,
-                sessionEndTime: string | null = null;
+                sessionEndTime: string | null = null,
+                sessionGmtOffset: string | null = null,
+                sessionTimeZone: string | null = null;
 
             for (const act of series.rounds.sessions.actions) {
                 let actionResult: string;
@@ -360,14 +408,8 @@ const scrapeRound = async (
 
                         if (!titleAliasFound) continue;
                         break;
-                    case "session-date":
-                        sessionDate = actionResult;
-                        break;
                     case "session-day":
                         sessionDay = actionResult;
-                        break;
-                    case "session-time":
-                        sessionTime = actionResult;
                         break;
                     case "session-start-time":
                         sessionStartTime = actionResult;
@@ -375,22 +417,28 @@ const scrapeRound = async (
                     case "session-end-time":
                         sessionEndTime = actionResult;
                         break;
+                    case "session-gmt-offset":
+                        sessionGmtOffset = `${
+                            !actionResult.includes("+") &&
+                            !actionResult.includes("-")
+                                ? "+"
+                                : ""
+                        }${actionResult}`;
+                        break;
+                    case "session-time-zone":
+                        sessionTimeZone = actionResult;
+                        break;
                 }
             }
 
-            let startDate, endDate;
-            if (!sessionDay && sessionStartTime && sessionEndTime) {
-                startDate = new Date(sessionStartTime);
-                endDate = new Date(sessionEndTime);
-            } else {
-                [startDate, endDate] = getDate(
-                    sessionDay,
-                    sessionTime,
-                    sessionStartTime,
-                    sessionEndTime
-                );
-            }
-
+            let [startDate, endDate] = getDate(
+                series.rounds.sessions.date,
+                sessionDay,
+                sessionStartTime,
+                sessionEndTime,
+                sessionGmtOffset,
+                sessionTimeZone
+            );
             if (!startDate || !endDate)
                 throw new Error("Invalid 'startDate' or 'endDate'");
 
@@ -404,8 +452,8 @@ const scrapeRound = async (
         }
 
         return newSessions;
-    } catch (error: any) {
-        console.error("🚨 Error scraping '%s':", link, error.message);
+    } catch (error) {
+        console.error("🚨 Error scraping '%s':", link, error);
         return null;
     }
 };
@@ -470,7 +518,7 @@ const scrapeRoundAPI = async (
 
         let newSessions: NewSession[] = [];
 
-        const regex = /{(\w+)}/gi;
+        const regex = /{([a-z\-]+)}/gi;
         const key = regex.exec(series.rounds.sessions.items.apiUrl!);
         const sessionUrlString = series.rounds.sessions.items.apiUrl!.replace(
             /{\w+}/gi,
@@ -490,11 +538,11 @@ const scrapeRoundAPI = async (
         for await (const s of sessions) {
             let sessionType: SessionType = "PRACTICE",
                 sessionNumber = 0,
-                sessionDate: string | null = null,
                 sessionDay: string | null = null,
-                sessionTime: string | null = null,
                 sessionStartTime: string | null = null,
-                sessionEndTime: string | null = null;
+                sessionEndTime: string | null = null,
+                sessionGmtOffset: string | null = null,
+                sessionTimeZone: string | null = null;
 
             for (const act of series.rounds.sessions.actions) {
                 let actionResult: string;
@@ -530,14 +578,8 @@ const scrapeRoundAPI = async (
 
                         if (!titleAliasFound) continue;
                         break;
-                    case "session-date":
-                        sessionDate = actionResult;
-                        break;
                     case "session-day":
                         sessionDay = actionResult;
-                        break;
-                    case "session-time":
-                        sessionTime = actionResult;
                         break;
                     case "session-start-time":
                         sessionStartTime = actionResult;
@@ -545,22 +587,34 @@ const scrapeRoundAPI = async (
                     case "session-end-time":
                         sessionEndTime = actionResult;
                         break;
+                    case "session-gmt-offset":
+                        if (
+                            !actionResult.includes("+") &&
+                            !actionResult.includes("-")
+                        ) {
+                            sessionGmtOffset = `+${actionResult}`;
+                        } else {
+                            sessionGmtOffset = actionResult;
+                        }
+                        // FIXME
+                        if (sessionGmtOffset.length === 5) {
+                            sessionGmtOffset = `-0${sessionGmtOffset.slice(1)}`;
+                        }
+                        break;
+                    case "session-time-zone":
+                        sessionTimeZone = actionResult;
+                        break;
                 }
             }
 
-            let startDate, endDate;
-            if (!sessionDay && sessionStartTime && sessionEndTime) {
-                startDate = new Date(sessionStartTime);
-                endDate = new Date(sessionEndTime);
-            } else {
-                [startDate, endDate] = getDate(
-                    sessionDay,
-                    sessionTime,
-                    sessionStartTime,
-                    sessionEndTime
-                );
-            }
-
+            let [startDate, endDate] = getDate(
+                series.rounds.sessions.date,
+                sessionDay,
+                sessionStartTime,
+                sessionEndTime,
+                sessionGmtOffset,
+                sessionTimeZone
+            );
             if (!startDate || !endDate)
                 throw new Error("Invalid 'startDate' or 'endDate'");
 
@@ -587,8 +641,8 @@ const scrapeRoundAPI = async (
         //     }
         //     return [...prevArr, curr];
         // }, [] as NewSession[]);
-    } catch (error: any) {
-        console.error("🚨 Error scraping '%s':", round, error.message);
+    } catch (error) {
+        console.error("🚨 Error scraping '%s':", round, error);
         return null;
     }
 };

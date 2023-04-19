@@ -1,6 +1,6 @@
 import type { Round } from "@prisma/client";
 import prisma from "./prisma-client";
-import type { NewRound, NewSession } from "./types";
+import type { NewRound, NewSession } from "./types/api";
 import type { CircuitTitle, CircuitWikipedia } from "./wikipedia";
 
 export const getCircuits = async (): Promise<CircuitTitle[]> => {

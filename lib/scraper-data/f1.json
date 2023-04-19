@@ -29,6 +29,10 @@
                 "type": "contents",
                 "selector": "div.f1-race-hub--timetable-listings > div.row"
             },
+            "date": {
+                "start": "{session-start-time}{session-gmt-offset}",
+                "end": "{session-end-time}{session-gmt-offset}"
+            },
             "actions": [
                 {
                     "param": "session-title",
@@ -36,27 +40,19 @@
                     "selector": "div.f1-timetable--details > p.f1-timetable--title"
                 },
                 {
-                    "param": "session-day",
-                    "type": "text",
-                    "selector": ".f1-timetable--date"
-                },
-                {
                     "param": "session-start-time",
                     "type": "attr",
-                    "attr": "data-start-time",
-                    "selector": ""
+                    "attr": "data-start-time"
                 },
                 {
                     "param": "session-end-time",
                     "type": "attr",
-                    "attr": "data-end-time",
-                    "selector": ""
+                    "attr": "data-end-time"
                 },
                 {
                     "param": "session-gmt-offset",
                     "type": "attr",
-                    "attr": "data-gmt-offset",
-                    "selector": ""
+                    "attr": "data-gmt-offset"
                 }
             ]
         }

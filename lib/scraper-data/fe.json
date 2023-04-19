@@ -40,6 +40,10 @@
                 "apiParams": "?groupQualifyings=true&onlyActualEvents=true",
                 "key": "sessions"
             },
+            "date": {
+                "start": "{session-day}T{session-start-time}:00{session-gmt-offset}",
+                "end": "{session-day}T{session-end-time}:00{session-gmt-offset}"
+            },
             "actions": [
                 {
                     "param": "session-title",
