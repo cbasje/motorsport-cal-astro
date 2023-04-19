@@ -9,7 +9,7 @@ datasource db {
 
 model Circuit {
   id              String   @id @default(uuid())
-  created_at      DateTime @default(now())
+  created_at      DateTime @default(now()) @db.Timestamptz(6)
   title           String   @unique
   wikipediaPageId Int?
   lon             Float?
@@ -19,7 +19,7 @@ model Circuit {
 
 model Round {
   id         String    @id @default(uuid())
-  created_at DateTime  @default(now())
+  created_at DateTime  @default(now()) @db.Timestamptz(6)
   number     Int       @default(0)
   title      String
   season     String
@@ -34,7 +34,7 @@ model Round {
 
 model Session {
   id         String   @id @default(uuid())
-  created_at DateTime @default(now())
+  created_at DateTime @default(now()) @db.Timestamptz(6)
   number     Int      @default(0)
   startDate  DateTime
   endDate    DateTime
