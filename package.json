@@ -9,7 +9,7 @@
     "scripts": {
         "dev": "astro dev",
         "start": "astro dev",
-        "build": "astro build && prisma migrate deploy",
+        "build": "prisma migrate dev && astro build && prisma migrate deploy",
         "preview": "astro preview",
         "astro": "astro"
     },
