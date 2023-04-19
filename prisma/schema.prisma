@@ -19,9 +19,9 @@ model Circuit {
 
 model Round {
   id         String    @id @default(uuid())
-  created_at DateTime  @default(now()) 
+  created_at DateTime  @default(now())
   title      String
-  season     String    
+  season     String
   link       String?
   circuitId  String
   series     String
@@ -32,14 +32,14 @@ model Round {
 }
 
 model Session {
-  id         String      @id @default(uuid())
-  created_at DateTime    @default(now())
-  number     Int         @default(0)
-  startDate  DateTime   
-  endDate    DateTime   
+  id         String   @id @default(uuid())
+  created_at DateTime @default(now())
+  number     Int      @default(0)
+  startDate  DateTime
+  endDate    DateTime
   roundId    String
   type       String
-  round      Round       @relation(fields: [roundId], references: [id])
+  round      Round    @relation(fields: [roundId], references: [id])
 
   @@unique([type, number, roundId], name: "uniqueSessionPerRoundId")
 }
