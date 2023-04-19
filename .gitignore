@@ -26,4 +26,5 @@ pnpm-debug.log*
 .vercel
 
 # Development database
-prisma/dev.db
+prisma-dev/dev.db
+prisma-dev/dev.db-journal
