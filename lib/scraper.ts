@@ -4,15 +4,13 @@ import {
     CheerioAPI,
     load as loadCheerio,
 } from "cheerio";
-import { DateTime } from "luxon";
 import fetch from "node-fetch";
 import {
     CircuitTitle,
     NewSession,
-    SessionType,
     ScraperSeries,
-    ScraperAction,
     SeriesId,
+    SessionType,
 } from "./types";
 
 import { saveRound, saveSessions } from "./api";
@@ -140,32 +138,58 @@ const scrape = async () => {
     for (const s of scraperData) {
         if (includedSeries.length && !includedSeries.includes(s.id)) continue;
 
-        const url = new URL(s.url, s.baseUrl);
-
         try {
-            const res = await fetch(url);
-            const html = await res.text();
-
-            const $ = loadCheerio(html);
-
+            let i = 0;
+            let url: URL;
+            let res: Awaited<ReturnType<typeof fetch>>;
+            let rounds;
             let sessions: NewSession[] = [];
 
-            let i = 0;
-            const rounds = $(s.rounds.selector, html);
-            for await (const r of rounds) {
-                // console.log(i++, s.id);
+            switch (s.rounds.link.type) {
+                case "api":
+                    url = new URL(
+                        s.rounds.link.apiUrl! + s.rounds.link.apiParams,
+                        s.baseUrl
+                    );
+                    res = await fetch(url);
 
-                const linkString = $(r)
-                    .find(s.rounds.link.selector)
-                    .attr(s.rounds.link.attr ?? "href");
+                    const data = (await res.json()) as Record<string, any>;
+                    rounds = data[s.rounds.link.key!];
 
-                if (!linkString) continue;
-                const link = new URL(linkString, s.baseUrl);
+                    for await (const r of rounds) {
+                        let newSessions = await scrapeRoundAPI(s, r, i);
+                        if (newSessions) {
+                            sessions.push(...newSessions);
+                        }
 
-                let newSessions = await scrapeItem(s, link);
-                if (newSessions) {
-                    sessions.push(...newSessions);
-                }
+                        console.log(i++, s.id);
+                    }
+                    break;
+                case "attr":
+                    url = new URL(s.rounds.url, s.baseUrl);
+
+                    res = await fetch(url);
+                    const html = await res.text();
+
+                    const $ = loadCheerio(html);
+                    rounds = $(s.rounds.selector, html);
+
+                    for await (const r of rounds) {
+                        const roundUrlString = $(r)
+                            .find(s.rounds.link.selector)
+                            .attr(s.rounds.link.attr ?? "href");
+
+                        if (!roundUrlString) continue;
+                        const roundUrl = new URL(roundUrlString, s.baseUrl);
+
+                        let newSessions = await scrapeRound(s, roundUrl, i);
+                        if (newSessions) {
+                            sessions.push(...newSessions);
+                        }
+
+                        console.log(i++, s.id);
+                    }
+                    break;
             }
 
             await saveSessions(sessions);
@@ -177,9 +201,10 @@ const scrape = async () => {
     }
 };
 
-const scrapeItem = async (
+const scrapeRound = async (
     series: ScraperSeries,
-    link: URL
+    link: URL,
+    index: number
 ): Promise<NewSession[] | null> => {
     try {
         const res = await fetch(link);
@@ -188,7 +213,8 @@ const scrapeItem = async (
         const sub$ = loadCheerio(subHtml);
 
         let roundTitle = "",
-            roundCircuit = "";
+            roundCircuit = "",
+            roundNumber = 0;
 
         for (const act of series.rounds.actions) {
             let actionResult: string;
@@ -236,6 +262,9 @@ const scrapeItem = async (
                     // }
                     roundCircuit = actionResult;
                     break;
+                case "round-number":
+                    roundNumber = Number(actionResult);
+                    break;
             }
         }
 
@@ -244,6 +273,7 @@ const scrapeItem = async (
 
         const { id: roundId } = await saveRound({
             title: roundTitle,
+            number: roundNumber === 0 ? index + 1 : roundNumber,
             circuitTitle: roundCircuit,
             series: series.id,
             link: link.toString(),
@@ -253,7 +283,7 @@ const scrapeItem = async (
 
         let newSessions: NewSession[] = [];
 
-        const sessions = sub$(series.rounds.sessions.selector, subHtml);
+        const sessions = sub$(series.rounds.sessions.items.selector, subHtml);
         for await (const s of sessions) {
             let sessionType: SessionType = "PRACTICE",
                 sessionNumber = 0,
@@ -358,6 +388,184 @@ const scrapeItem = async (
         return newSessions;
     } catch (error: any) {
         console.error("🚨 Error scraping '%s':", link, error.message);
+        return null;
+    }
+};
+
+const scrapeRoundAPI = async (
+    series: ScraperSeries,
+    round: any,
+    index: number
+): Promise<NewSession[] | null> => {
+    try {
+        let roundTitle = "",
+            roundNumber = 0,
+            roundCircuit = "",
+            roundLink = "";
+
+        for (const act of series.rounds.actions) {
+            let actionResult: string;
+
+            if (act.key === undefined) throw new Error("Undefined 'act.key'");
+            actionResult = round[act.key];
+
+            switch (act.param) {
+                case "round-title":
+                    roundTitle = actionResult;
+                    break;
+                case "round-circuit":
+                    // for (const alias in circuitAliases) {
+                    //     const regexString =
+                    //         circuitAliases[alias as CircuitTitle];
+                    //     const regex = new RegExp(regexString, "gi");
+
+                    //     if (regex.test(actionResult)) {
+                    //         roundCircuit = alias;
+                    //         break;
+                    //     } else {
+                    //         throw new Error("No suitable 'CircuitTitle' found");
+                    //     }
+                    // }
+                    roundCircuit = actionResult;
+                    break;
+                case "round-link":
+                    roundLink = actionResult;
+                    break;
+                case "round-number":
+                    roundNumber = Number(actionResult);
+                    break;
+            }
+        }
+
+        if (!roundTitle || !roundCircuit)
+            throw new Error("No 'roundTitle' or 'roundCircuit' found");
+
+        const { id: roundId } = await saveRound({
+            title: roundTitle,
+            number: roundNumber === 0 ? index + 1 : roundNumber,
+            circuitTitle: roundCircuit,
+            series: series.id,
+            link: roundLink,
+            season: String(series.season),
+        });
+        if (!roundId) throw new Error("No 'roundId' found");
+
+        let newSessions: NewSession[] = [];
+
+        const regex = /{(\w+)}/gi;
+        const key = regex.exec(series.rounds.sessions.items.apiUrl!);
+        const sessionUrlString = series.rounds.sessions.items.apiUrl!.replace(
+            /{\w+}/gi,
+            round[key![1]]
+        );
+        if (!sessionUrlString) throw new Error("");
+
+        const sessionUrl = new URL(
+            sessionUrlString + series.rounds.sessions.items.apiParams,
+            series.baseUrl
+        );
+
+        const res = await fetch(sessionUrl);
+        const data = (await res.json()) as Record<string, any>;
+
+        const sessions = data[series.rounds.sessions.items.key!];
+        for await (const s of sessions) {
+            let sessionType: SessionType = "PRACTICE",
+                sessionNumber = 0,
+                sessionDate: string | null = null,
+                sessionDay: string | null = null,
+                sessionStartTime: string | null = null,
+                sessionEndTime: string | null = null;
+
+            for (const act of series.rounds.sessions.actions) {
+                let actionResult: string;
+
+                if (act.key === undefined)
+                    throw new Error("Undefined 'act.key'");
+                actionResult = s[act.key];
+
+                switch (act.param) {
+                    case "session-title":
+                        let titleAliasFound = false;
+
+                        for (const alias in sessionAliases) {
+                            const regexString =
+                                sessionAliases[alias as SessionType];
+                            const regex = new RegExp(regexString, "gi");
+
+                            if (regex.test(actionResult)) {
+                                const numbers = actionResult.match(/\b\d?\b/gi);
+                                const filteredNumbers = numbers?.filter(
+                                    (n) => n != ""
+                                );
+                                sessionNumber =
+                                    filteredNumbers && filteredNumbers[0]
+                                        ? Number(filteredNumbers[0])
+                                        : 0;
+
+                                titleAliasFound = true;
+                                sessionType = alias as SessionType;
+                                break;
+                            }
+                        }
+
+                        if (!titleAliasFound) continue;
+                        break;
+                    case "session-date":
+                        sessionDate = actionResult;
+                        break;
+                    case "session-day":
+                        sessionDay = actionResult;
+                        break;
+                    case "session-start-time":
+                        sessionStartTime = actionResult;
+                        break;
+                    case "session-end-time":
+                        sessionEndTime = actionResult;
+                        break;
+                }
+            }
+
+            let startDate, endDate;
+            if (!sessionDay && sessionStartTime && sessionEndTime) {
+                startDate = new Date(sessionStartTime);
+                endDate = new Date(sessionEndTime);
+            } else {
+                [startDate, endDate] = getDate(
+                    sessionDay,
+                    sessionStartTime,
+                    sessionEndTime
+                );
+            }
+
+            if (!startDate || !endDate)
+                throw new Error("Invalid 'startDate' or 'endDate'");
+
+            newSessions.push({
+                type: sessionType,
+                number: sessionNumber,
+                startDate,
+                endDate,
+                roundId,
+            });
+        }
+
+        return newSessions;
+        // .sort((a, b) => a.startDate.valueOf() - b.startDate.valueOf())
+        // .reduce((prevArr, curr, i, arr) => {
+        //     if (prevArr.length > 1) {
+        //         const currType = curr.type;
+        //         const last = prevArr.findIndex((s) => s.type === currType);
+        //         if (last !== -1) {
+        //             let lastNum = prevArr[last].number;
+        //             prevArr[last].number = lastNum === 0 ? 1 : lastNum;
+        //             curr.number = lastNum === 0 ? 2 : lastNum++;
+        //         }
+        //     }
+        //     return [...prevArr, curr];
+        // }, [] as NewSession[]);
+    } catch (error: any) {
+        console.error("🚨 Error scraping '%s':", round, error.message);
         return null;
     }
 };

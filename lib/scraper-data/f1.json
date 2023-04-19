@@ -1,10 +1,10 @@
 {
     "id": "F1",
     "baseUrl": "https://www.formula1.com",
-    "url": "en/racing/2023.html",
     "season": 2023,
 
     "rounds": {
+        "url": "en/racing/2023.html",
         "selector": ".completed-events > div:not(.seo-wrapper)",
         "link": {
             "type": "attr",
@@ -25,7 +25,10 @@
             }
         ],
         "sessions": {
-            "selector": "div.f1-race-hub--timetable-listings > div.row",
+            "items": {
+                "type": "contents",
+                "selector": "div.f1-race-hub--timetable-listings > div.row"
+            },
             "actions": [
                 {
                     "param": "session-title",
@@ -47,6 +50,12 @@
                     "param": "session-end-time",
                     "type": "attr",
                     "attr": "data-end-time",
+                    "selector": ""
+                },
+                {
+                    "param": "session-gmt-offset",
+                    "type": "attr",
+                    "attr": "data-gmt-offset",
                     "selector": ""
                 }
             ]

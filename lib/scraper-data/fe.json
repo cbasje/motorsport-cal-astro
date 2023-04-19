@@ -1,51 +1,70 @@
 {
     "id": "FE",
-    "baseUrl": "https://www.fiaformulae.com",
-    "url": "en/races",
+    "baseUrl": "https://api.formula-e.pulselive.com/formula-e/v1/",
     "season": 2023,
 
     "rounds": {
-        "selector": "#main-content ul.race-calendar__list > li.race-card__list-item",
         "link": {
-            "type": "attr",
-            "attr": "href",
-            "selector": "div.race-card__item > a.race-card__item-link > div.race-card__button-container > a.race-card__button"
+            "type": "api",
+            "apiUrl": "races",
+            "apiParams": "?championshipId=bc4a0209-f233-46c8-afce-842d1c48358f",
+            "key": "races"
         },
         "actions": [
             {
                 "param": "round-title",
-                "type": "text",
-                "selector": ".race-event-hero__race-name",
+                "type": "key",
+                "key": "name",
                 "regex": "20\\d\\d (\\b[\\w ]+ E-Prix)"
             },
             {
+                "param": "round-number",
+                "type": "key",
+                "key": "sequence"
+            },
+            {
                 "param": "round-circuit",
-                "type": "text",
-                "selector": ".race-event-hero__race-city"
+                "type": "key",
+                "key": "city"
+            },
+            {
+                "param": "round-link",
+                "type": "key",
+                "key": "metadata.racePath"
             }
         ],
         "sessions": {
-            "selector": ".race-info__session-content > div",
+            "items": {
+                "type": "api",
+                "apiUrl": "races/{id}/sessions",
+                "apiParams": "?groupQualifyings=true&onlyActualEvents=true",
+                "key": "sessions"
+            },
             "actions": [
                 {
                     "param": "session-title",
-                    "type": "text",
-                    "selector": "div.race-info__cell--name"
+                    "type": "key",
+                    "key": "sessionName"
                 },
                 {
                     "param": "session-day",
-                    "type": "text",
-                    "selector": "div.race-info__cell--date > span"
+                    "type": "key",
+                    "key": "sessionDate"
                 },
                 {
                     "param": "session-start-time",
-                    "type": "text",
-                    "selector": "div.race-info__cell--time > span:nth-child(1)"
+                    "type": "key",
+                    "key": "startTime"
                 },
                 {
                     "param": "session-end-time",
-                    "type": "text",
-                    "selector": "div.race-info__cell--time > span:nth-child(2)"
+                    "type": "key",
+                    "key": "finishTime"
+                },
+                {
+                    "param": "session-gmt-offset",
+                    "type": "key",
+                    "key": "offsetGMT"
                 }
             ]
         }

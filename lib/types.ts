@@ -69,12 +69,12 @@ export enum CircuitTitle {
 export interface ScraperSeries {
     id: SeriesId;
     baseUrl: string;
-    url: string;
     season: number | string;
     rounds: ScraperRounds;
 }
 
 export interface ScraperRounds {
+    url: string;
     selector: string;
     link: ScraperLink;
     actions: ScraperAction[];
@@ -83,29 +83,44 @@ export interface ScraperRounds {
 
 type ScraperParam =
     | "round-title"
+    | "round-number"
     | "round-circuit"
+    | "round-link"
     | "session-title"
     | "session-date"
     | "session-day"
     | "session-start-time"
     | "session-end-time";
+type ScraperLinkType = "api" | "attr";
 type ScraperType = "attr" | "text";
 export interface ScraperAction {
     param: ScraperParam;
     type: ScraperType;
     attr?: string;
+    key?: string;
     selector: string;
     regex?: string;
 }
 
 export interface ScraperLink {
-    type: ScraperType;
+    type: ScraperLinkType;
     attr?: string;
-    selector: string;
+    key?: string;
+    selector?: string;
+    apiUrl?: string;
+    apiParams?: string;
+}
+
+export interface ScraperSessionsItems {
+    type: string;
+    selector?: string;
+    apiUrl?: string;
+    apiParams?: string;
+    key?: string;
 }
 
 export interface ScraperSessions {
-    selector: string;
+    items: ScraperSessionsItems;
     actions: ScraperAction[];
 }
 

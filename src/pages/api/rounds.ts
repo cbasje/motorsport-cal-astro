@@ -49,6 +49,7 @@ export const post: APIRoute = async ({ request }) => {
         const round = await prisma.round.upsert({
             create: {
                 title: data.title,
+                number: data.number,
                 season: data.season,
                 series: data.series,
                 link: data.link,
@@ -67,6 +68,7 @@ export const post: APIRoute = async ({ request }) => {
             },
             update: {
                 title: data.title,
+                number: data.number,
                 season: data.season,
                 series: data.series,
                 link: data.link,
@@ -74,6 +76,7 @@ export const post: APIRoute = async ({ request }) => {
             where: {
                 uniqueRoundPerSeriesSeason: {
                     title: data.title,
+                    number: data.number,
                     season: data.season,
                     series: data.series,
                 },
