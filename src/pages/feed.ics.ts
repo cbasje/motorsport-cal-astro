@@ -49,7 +49,9 @@ export const getFeed = async (
             startInputType: "utc",
             start: getCalDate(session.startDate),
             end: getCalDate(session.endDate),
-            description: `It is time for the ${title}!${
+            description: `It is time for the ${session.round.series} ${
+                session.round.title
+            }!${
                 round.link &&
                 ` Watch this race and its sessions via this link: ${round.link}`
             }`,
