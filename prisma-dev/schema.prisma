@@ -20,6 +20,7 @@ model Circuit {
 model Round {
   id         String    @id @default(uuid())
   created_at DateTime  @default(now())
+  number     Int       @default(0)
   title      String
   season     String
   link       String?
@@ -28,7 +29,7 @@ model Round {
   circuit    Circuit   @relation(fields: [circuitId], references: [id])
   sessions   Session[]
 
-  @@unique([title, series, season], name: "uniqueRoundPerSeriesSeason")
+  @@unique([title, number, series, season], name: "uniqueRoundPerSeriesSeason")
 }
 
 model Session {
