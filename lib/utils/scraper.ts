@@ -186,3 +186,7 @@ export const getDate = (
 
     return [new Date(startDateString), new Date(endDateString)];
 };
+
+export const getCircuitTitle = (t: string) => {
+    return t;
+};

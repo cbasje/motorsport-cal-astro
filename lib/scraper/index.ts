@@ -1,13 +1,13 @@
 import { load as loadCheerio } from "cheerio";
 import fetch from "node-fetch";
 import { saveRound, saveSessions } from "../api";
-import type { CircuitTitle, SeriesId, SessionType } from "../types";
+import type { SeriesId, SessionType } from "../types";
 import type { NewSession } from "../types/api";
 import type { ScraperSeries } from "../types/scraper";
 import { flattenObject } from "../utils";
 import {
-    circuitAliases,
     getAttr,
+    getCircuitTitle,
     getDate,
     getKey,
     getText,
@@ -147,19 +147,7 @@ const scrapeRound = async (
                     roundTitle = actionResult;
                     break;
                 case "round-circuit":
-                    for (const alias in circuitAliases) {
-                        const regexString =
-                            circuitAliases[alias as CircuitTitle];
-                        const regex = new RegExp(regexString, "gi");
-
-                        if (regex.test(actionResult)) {
-                            roundCircuit = alias;
-                            break;
-                        } else {
-                            throw new Error("No suitable 'CircuitTitle' found");
-                        }
-                    }
-                    roundCircuit = actionResult;
+                    roundCircuit = getCircuitTitle(actionResult);
                     break;
                 case "round-number":
                     roundNumber = Number(actionResult);
@@ -318,18 +306,7 @@ const scrapeRoundAPI = async (
                     roundTitle = actionResult;
                     break;
                 case "round-circuit":
-                    for (const alias in circuitAliases) {
-                        const regexString =
-                            circuitAliases[alias as CircuitTitle];
-                        const regex = new RegExp(regexString, "gi");
-
-                        if (regex.test(actionResult)) {
-                            roundCircuit = alias;
-                            break;
-                        } else {
-                            throw new Error("No suitable 'CircuitTitle' found");
-                        }
-                    }
+                    roundCircuit = getCircuitTitle(actionResult);
                     break;
                 case "round-link":
                     roundLink = new URL(
