@@ -45,7 +45,13 @@ export interface Link {
     selector?: string;
     apiUrl?: string;
     apiParams?: string;
+    apiKey?: ApiKey;
     key?: string;
+}
+
+export interface ApiKey {
+    headerKey: string;
+    envVariable: string;
 }
 
 export interface Sessions {

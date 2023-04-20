@@ -60,7 +60,7 @@ export const circuitAliases: Record<CircuitTitle, string> = {
 export const formatDate = (
     format: string,
     dateInfo: Record<string, string | null>
-) => {
+): string | null => {
     let returnValue = format;
 
     const regex = /{([a-z\-]+)}/gi;
@@ -71,26 +71,26 @@ export const formatDate = (
         const keyInc = m[0];
         const key = m[1] as Param;
 
-        let value = "";
+        let value: string | undefined;
         switch (key) {
             case "session-day":
-                value = dateInfo.day!;
+                value = dateInfo.day ?? undefined;
                 break;
             case "session-start-time":
-                value = dateInfo.startTime!;
+                value = dateInfo.startTime ?? undefined;
                 break;
             case "session-end-time":
-                value = dateInfo.endTime!;
+                value = dateInfo.endTime ?? undefined;
                 break;
             case "session-gmt-offset":
-                value = dateInfo.gmtOffset!;
+                value = dateInfo.gmtOffset ?? undefined;
                 break;
             case "session-time-zone":
-                value = dateInfo.timeZone!;
+                value = dateInfo.timeZone ?? undefined;
                 break;
         }
 
-        returnValue = returnValue.replace(keyInc, value);
+        returnValue = returnValue.replace(keyInc, !value ? "" : value);
     }
 
     // FIXME
@@ -184,7 +184,15 @@ export const getDate = (
     const startDateString = formatDate(format.start, dateInfo);
     const endDateString = formatDate(format.end, dateInfo);
 
-    return [new Date(startDateString), new Date(endDateString)];
+    if (startDateString && endDateString) {
+        return [new Date(startDateString), new Date(endDateString)];
+    } else if (startDateString) {
+        const twoHours = 2 * 60 * 60 * 1000;
+        const start = Date.parse(startDateString);
+        return [new Date(startDateString), new Date(start + twoHours)];
+    } else {
+        return [null, null];
+    }
 };
 
 export const getTitle = (title: string, sponsors?: string[]) => {

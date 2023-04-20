@@ -47,17 +47,22 @@ const scrape = async () => {
                         s.rounds.link.apiUrl! + s.rounds.link.apiParams,
                         s.baseApiUrl
                     );
-                    res = await fetch(url);
+                    const headers = s.rounds.link.apiKey
+                        ? {
+                              // FIXME
+                              [s.rounds.link.apiKey.headerKey]: import.meta.env
+                                  .F1A_API_KEY,
+                          }
+                        : undefined;
+                    res = await fetch(url, {
+                        headers,
+                    });
 
                     const data = (await res.json()) as Record<string, any>;
                     rounds = data[s.rounds.link.key!];
 
                     for await (const r of rounds) {
-                        let newSessions = await scrapeRoundAPI(
-                            s,
-                            flattenObject(r),
-                            i
-                        );
+                        let newSessions = await scrapeRoundAPI(s, r, i);
                         if (newSessions) {
                             sessions.push(...newSessions);
                         }
@@ -300,7 +305,7 @@ const scrapeRoundAPI = async (
             let actionResult: string;
 
             if (act.key === undefined) throw new Error("Undefined 'act.key'");
-            actionResult = getKey(round, act.key, act.regex);
+            actionResult = getKey(flattenObject(round), act.key, act.regex);
 
             switch (act.param) {
                 case "round-title":
@@ -335,22 +340,29 @@ const scrapeRoundAPI = async (
         if (!roundId) throw new Error("No 'roundId' found");
 
         let newSessions: NewSession[] = [];
+        let data: Record<string, any>;
 
-        const regex = /{([a-z\-]+)}/gi;
-        const key = regex.exec(series.rounds.sessions.items.apiUrl!);
-        const sessionUrlString = series.rounds.sessions.items.apiUrl!.replace(
-            /{\w+}/gi,
-            round[key![1]]
-        );
-        if (!sessionUrlString) throw new Error("");
+        // If not another call is needed, use the round JSON as data
+        if (series.rounds.sessions.items.apiUrl) {
+            const regex = /{([a-z\-]+)}/gi;
+            const key = regex.exec(series.rounds.sessions.items.apiUrl);
+            const sessionUrlString =
+                series.rounds.sessions.items.apiUrl!.replace(
+                    /{\w+}/gi,
+                    round[key![1]]
+                );
+            if (!sessionUrlString) throw new Error("");
 
-        const sessionUrl = new URL(
-            sessionUrlString + series.rounds.sessions.items.apiParams,
-            series.baseApiUrl
-        );
+            const sessionUrl = new URL(
+                sessionUrlString + series.rounds.sessions.items.apiParams,
+                series.baseApiUrl
+            );
 
-        const res = await fetch(sessionUrl);
-        const data = (await res.json()) as Record<string, any>;
+            const res = await fetch(sessionUrl);
+            data = (await res.json()) as Record<string, any>;
+        } else {
+            data = round;
+        }
 
         const sessions = data[series.rounds.sessions.items.key!];
         for await (const s of sessions) {
