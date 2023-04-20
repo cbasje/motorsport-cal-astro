@@ -18,11 +18,11 @@ import scraperData from "./data";
 
 export const main = async () => {
     try {
-        console.time("Scraping...");
+        console.time("⏱️ Scraping total");
         await scrape();
-        console.timeEnd("Scraping...");
+        console.timeEnd("⏱️ Scraping total");
     } catch (error) {
-        console.error("main: ", error);
+        console.error("🚨 main()", error);
     }
 };
 
@@ -32,6 +32,7 @@ const scrape = async () => {
     ) as SeriesId[];
 
     for (const s of scraperData) {
+        console.time(`⏱️ Scraping '${s.id}'`);
         if (includedSeries.length && !includedSeries.includes(s.id)) continue;
 
         try {
@@ -65,9 +66,6 @@ const scrape = async () => {
                             headers = undefined;
                             break;
                     }
-                    console.log("🚀 ------------------------------🚀");
-                    console.log("🚀 ~ scrape ~ headers:", { ...headers });
-                    console.log("🚀 ------------------------------🚀");
 
                     res = await fetch(url, {
                         headers,
@@ -115,9 +113,10 @@ const scrape = async () => {
             await saveSessions(sessions);
             console.log(`🤖 saved ${sessions.length} new sessions`);
         } catch (error) {
-            console.error("scrape: ", error);
+            console.error(`🚨 scrape() '%s'`, s.id, error);
             break;
         }
+        console.timeEnd(`⏱️ Scraping '${s.id}'`);
     }
 };
 
@@ -300,7 +299,7 @@ const scrapeRound = async (
 
         return newSessions;
     } catch (error) {
-        console.error("🚨 Error scraping '%s':", link, error);
+        console.error("🚨 scrapeRound '%s'", link, error);
         return null;
     }
 };
@@ -474,7 +473,7 @@ const scrapeRoundAPI = async (
 
         return newSessions;
     } catch (error) {
-        console.error("🚨 Error scraping '%s':", round, error);
+        console.error("🚨 scrapeRoundAPI '%s'", round, error);
         return null;
     }
 };

@@ -1,6 +1,6 @@
 import type { Circuit } from "@prisma/client";
 import { getCircuits, saveWikipediaData } from "./api";
-import type { WikipediaData } from "./types";
+import type { WikipediaData } from "./types/wikipedia";
 
 export const main = async () => {
     try {
@@ -9,8 +9,8 @@ export const main = async () => {
         console.timeEnd("scrape");
 
         await saveWikipediaData(res);
-    } catch (error: any) {
-        console.error("main: ", error.message);
+    } catch (error) {
+        console.error("🚨 main()", error);
     }
 };
 
@@ -60,8 +60,8 @@ const scrape = async (): Promise<CircuitWikipedia[]> => {
                     lon: coordinates?.lon ?? null,
                 });
             }
-        } catch (error: any) {
-            console.error("🚨 Error scraping '%s':", t, error.message);
+        } catch (error) {
+            console.error("🚨 scrape() '%s':", t, error);
         }
     }
 
