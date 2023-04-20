@@ -1,6 +1,7 @@
 import type { Circuit, Round, Session } from "@prisma/client";
 import type { APIRoute } from "astro";
-import { DateArray, EventAttributes, GeoCoordinates, createEvents } from "ics";
+import { DateArray, EventAttributes, createEvents } from "ics";
+import { getSeriesEmoji } from "lib/utils";
 import prisma from "../../lib/prisma-client";
 
 const TITLE = "Motorsport Calendar";
@@ -37,7 +38,9 @@ export const getFeed = async (
 
         const type = session.type ? ` - ${session.type}` : "";
         const number = session.number !== 0 ? ` ${session.number}` : "";
-        const title = `${session.round.series} ${session.round.title}${type}${number}`;
+        const title = `${getSeriesEmoji(session.round.series)} ${
+            session.round.series
+        } ${session.round.title}${type}${number}`;
 
         events.push({
             calName: TITLE,

@@ -14,6 +14,20 @@ export const getSeriesIcon = (s: SeriesId) => {
     return titles[s];
 };
 
+export const getSeriesEmoji = (s: SeriesId) => {
+    const titles: Record<SeriesId, string> = {
+        F1: "💨",
+        F2: "👦🏻",
+        FE: "🔋",
+        XE: "🪫",
+        INDY: "🦅",
+        W: "👩🏻",
+        WEC: "⏱️",
+        F1A: "👧🏻",
+    };
+    return titles[s];
+};
+
 export const getSeriesTitle = (s: SeriesId) => {
     const titles: Record<SeriesId, string> = {
         F1: "Formula 1",
