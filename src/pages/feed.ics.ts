@@ -56,7 +56,7 @@ export const getFeed = async (
             // htmlContent:
             // 	'<!DOCTYPE html><html><body><p>This is<br>test<br>html code.</p></body></html>',
             location: round.circuit.title,
-            url: round.link ?? "",
+            url: round.link ?? undefined,
             geo:
                 circuit.lon && circuit.lat
                     ? { lon: circuit.lon, lat: circuit.lat }

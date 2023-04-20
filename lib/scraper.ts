@@ -10,6 +10,7 @@ import scraperData from "./scraper-data";
 import { CircuitTitle, SeriesId, SessionType } from "./types";
 import type { NewSession } from "./types/api";
 import type { Format, Param, ScraperSeries } from "./types/scraper";
+import { flattenObject } from "./utils";
 
 const sessionAliases: Record<SessionType, string> = {
     SHAKEDOWN: "((?:Pre-Season Testing|Session|Day)( \\d)?)",
@@ -211,7 +212,11 @@ const scrape = async () => {
                     rounds = data[s.rounds.link.key!];
 
                     for await (const r of rounds) {
-                        let newSessions = await scrapeRoundAPI(s, r, i);
+                        let newSessions = await scrapeRoundAPI(
+                            s,
+                            flattenObject(r),
+                            i
+                        );
                         if (newSessions) {
                             sessions.push(...newSessions);
                         }
@@ -453,7 +458,7 @@ const scrapeRound = async (
 
 const scrapeRoundAPI = async (
     series: ScraperSeries,
-    round: any,
+    round: Record<string, any>,
     index: number
 ): Promise<NewSession[] | null> => {
     try {
@@ -542,7 +547,7 @@ const scrapeRoundAPI = async (
 
                 if (act.key === undefined)
                     throw new Error("Undefined 'act.key'");
-                actionResult = s[act.key];
+                actionResult = flattenObject(s)[act.key];
 
                 switch (act.param) {
                     case "session-title":
