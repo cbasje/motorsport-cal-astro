@@ -1,6 +1,7 @@
 {
     "id": "FE",
-    "baseUrl": "https://api.formula-e.pulselive.com/formula-e/v1/",
+    "baseUrl": "https://www.fiaformulae.com/en/",
+    "baseApiUrl": "https://api.formula-e.pulselive.com/formula-e/v1/",
     "season": 2023,
 
     "rounds": {

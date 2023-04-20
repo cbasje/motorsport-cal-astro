@@ -202,7 +202,7 @@ const scrape = async () => {
                 case "api":
                     url = new URL(
                         s.rounds.link.apiUrl! + s.rounds.link.apiParams,
-                        s.baseUrl
+                        s.baseApiUrl
                     );
                     res = await fetch(url);
 
@@ -527,7 +527,7 @@ const scrapeRoundAPI = async (
 
         const sessionUrl = new URL(
             sessionUrlString + series.rounds.sessions.items.apiParams,
-            series.baseUrl
+            series.baseApiUrl
         );
 
         const res = await fetch(sessionUrl);

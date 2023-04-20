@@ -16,6 +16,7 @@ export type Type = "attr" | "key" | "text" | "api" | "contents";
 export interface ScraperSeries {
     id: SeriesId;
     baseUrl: string;
+    baseApiUrl?: string;
     season: number | string;
     rounds: Rounds;
 }
