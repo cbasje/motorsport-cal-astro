@@ -16,7 +16,7 @@
                 "param": "round-title",
                 "type": "key",
                 "key": "name",
-                "regex": "20\\d\\d (\\b[\\w ]+ E-Prix)"
+                "regex": "20\\d\\d (\\b[\\D ]+ E-Prix)"
             },
             {
                 "param": "round-number",
