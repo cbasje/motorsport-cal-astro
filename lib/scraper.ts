@@ -1,19 +1,18 @@
-import { load as loadCheerio } from "cheerio";
-import { DateTime } from "luxon";
-import fetch from "node-fetch";
 import {
-    CircuitTitle,
-    NewSession,
-    SessionType,
-    Series,
-    SeriesId,
-} from "./types";
-
+    AnyNode,
+    BasicAcceptedElems,
+    CheerioAPI,
+    load as loadCheerio,
+} from "cheerio";
+import fetch from "node-fetch";
 import { saveRound, saveSessions } from "./api";
-import series from "./series";
+import scraperData from "./scraper-data";
+import { CircuitTitle, SeriesId, SessionType } from "./types";
+import type { NewSession } from "./types/api";
+import type { Format, Param, ScraperSeries } from "./types/scraper";
 
 const sessionAliases: Record<SessionType, string> = {
-    SHAKEDOWN: "((?:Pre-Season|Session|Day)( \\d)?)",
+    SHAKEDOWN: "((?:Pre-Season Testing|Session|Day)( \\d)?)",
     PRACTICE: "(Practice( \\d)?)",
     QUALIFYING: "((?:Qualifying|Qualifications|Hyperpole)( \\d)?)",
     RACE: "(Race|Round)",
@@ -72,103 +71,194 @@ export const main = async () => {
         console.time("Scraping...");
         await scrape();
         console.timeEnd("Scraping...");
-    } catch (error: any) {
-        console.error("main: ", error.message);
+    } catch (error) {
+        console.error("main: ", error);
     }
 };
 
-const getDate = (
-    source: string | undefined,
-    gmtOffset: string | undefined,
-    plusHours = 0
-): Date | undefined => {
-    return source && source != "TBC"
-        ? DateTime.fromISO(source + gmtOffset, { zone: "utc" })
-              .plus({ hours: plusHours })
-              .toJSDate()
-        : undefined;
+const formatDate = (
+    format: string,
+    dateInfo: Record<string, string | null>
+) => {
+    let returnValue = format;
+
+    const regex = /{([a-z\-]+)}/gi;
+    const matches = format.matchAll(regex);
+
+    // For each key, replace with value
+    for (const m of matches) {
+        const keyInc = m[0];
+        const key = m[1] as Param;
+
+        let value = "";
+        switch (key) {
+            case "session-day":
+                value = dateInfo.day!;
+                break;
+            case "session-start-time":
+                value = dateInfo.startTime!;
+                break;
+            case "session-end-time":
+                value = dateInfo.endTime!;
+                break;
+            case "session-gmt-offset":
+                value = dateInfo.gmtOffset!;
+                break;
+            case "session-time-zone":
+                value = dateInfo.timeZone!;
+                break;
+        }
+
+        returnValue = returnValue.replace(keyInc, value);
+    }
+
+    // FIXME
+    return returnValue.replaceAll(" ET", " EST");
 };
-const getDatesFromString = (source: string, season: string) => {
-    const string = source.trim();
+const getAttr = (
+    $: CheerioAPI,
+    context: BasicAcceptedElems<AnyNode> | null,
+    selector: string | undefined,
+    attr: string,
+    regex?: string
+) => {
+    let t = "";
+    if (!selector && context != null) {
+        t = $(context).attr(attr)!.trim();
+    } else {
+        t = $(selector, context).first().attr(attr)!.trim();
+    }
 
-    const regexTimes = /(\d{1,2}:\d{1,2} \w+)/g;
-    const times = [...string.matchAll(regexTimes)];
+    if (regex) {
+        const matches = t.match(new RegExp(regex, "i"));
+        t = matches && matches[1] ? matches[1].trim() : "";
+    }
+    return t;
+};
+const getText = (
+    $: CheerioAPI,
+    context: BasicAcceptedElems<AnyNode> | null,
+    selector: string | undefined,
+    regex?: string
+) => {
+    let t = $(selector, context).first().text().trim();
 
-    const startTime = times[0][0];
-    const endTime = times[1][0];
+    if (regex) {
+        const matches = t.match(new RegExp(regex, "i"));
+        t = matches && matches[1] ? matches[1].trim() : "";
+    }
+    return t;
+};
+const getDate = (
+    format: Format,
+    sessionDay: string | null,
+    sessionStartTime: string | null,
+    sessionEndTime: string | null,
+    sessionGmtOffset: string | null,
+    sessionTimeZone: string | null
+) => {
+    // 🚀 --------------------------------🚀
+    // 🚀 ~ X; sessionDate; sessionDay; sessionTime; sessionStartTime; sessionEndTime
+    // 🚀 --------------------------------🚀
+    // 🚀 ~ F1; null; ; null; 2023-03-05T18:00:00; 2023-03-05T20:00:00;
+    // 🚀 --------------------------------🚀
+    // 🚀 ~ FE; null; 2023-01-13; null; 16:25; 17:15;
+    // 🚀 --------------------------------🚀
+    // 🚀 ~ INDY; null; Friday, Mar 3; 3:00 PM - 4:15 PM ET; null; null; ----- "Thu, 01 Jan 1970 00:00:00 GMT-0400"
+    // 🚀 --------------------------------🚀
 
-    const regexDate = /(\w{3} \d{1,2})/g;
-    const date = string.match(regexDate)![0];
+    const dateInfo = {
+        day: sessionDay,
+        startTime: sessionStartTime,
+        endTime: sessionEndTime,
+        gmtOffset: sessionGmtOffset,
+        timeZone: sessionTimeZone,
+    };
 
-    const regexTimeZone = /(\w+)$/g;
-    const timeZone = string.match(regexTimeZone)![0];
+    const startDateString = formatDate(format.start, dateInfo);
+    const endDateString = formatDate(format.end, dateInfo);
+    console.log("🚀 ---------------------------------🚀");
+    console.log("🚀 ~ endDateString:", endDateString, new Date(endDateString));
+    console.log("🚀 ---------------------------------🚀");
 
-    const startDate = `${date}, ${season}, ${startTime}`;
-    const endDate = `${date}, ${season}, ${endTime}`;
-
-    return [
-        DateTime.fromFormat(startDate, "ff", {
-            zone: "America/New_York",
-        }).toJSDate(),
-        DateTime.fromFormat(endDate, "ff", {
-            zone: "America/New_York",
-        }).toJSDate(),
-    ];
+    return [new Date(startDateString), new Date(endDateString)];
 };
 
 const scrape = async () => {
-    let includedSeries: SeriesId[] = ["F1", "INDY"];
+    let includedSeries = import.meta.env.INCLUDED_SERIES.split(
+        ","
+    ) as SeriesId[];
 
-    for (const s of series) {
+    for (const s of scraperData) {
         if (includedSeries.length && !includedSeries.includes(s.id)) continue;
 
-        const url = new URL(s.url, s.baseURL);
-
         try {
-            const res = await fetch(url);
-            const html = await res.text();
-
-            const $ = loadCheerio(html);
-
+            let i = 0;
+            let url: URL;
+            let res: Awaited<ReturnType<typeof fetch>>;
+            let rounds;
             let sessions: NewSession[] = [];
 
-            let i = 0;
-            const elements = $(s.list, html);
-            for await (const el of elements) {
-                // console.log(i++, s.id);
+            switch (s.rounds.link.type) {
+                case "api":
+                    url = new URL(
+                        s.rounds.link.apiUrl! + s.rounds.link.apiParams,
+                        s.baseUrl
+                    );
+                    res = await fetch(url);
 
-                const linkString = $(el).find(s.redirectURLItem).attr("href");
-                const link = new URL(
-                    linkString ?? "" + s.redirectURLExtension,
-                    s.baseURL
-                );
+                    const data = (await res.json()) as Record<string, any>;
+                    rounds = data[s.rounds.link.key!];
 
-                if (
-                    s.excludedURLs &&
-                    s.excludedURLs.some((url: string) =>
-                        link.toString().includes(url)
-                    )
-                )
-                    continue;
+                    for await (const r of rounds) {
+                        let newSessions = await scrapeRoundAPI(s, r, i);
+                        if (newSessions) {
+                            sessions.push(...newSessions);
+                        }
 
-                let newSessions = await scrapeItem(s, link);
-                if (newSessions) {
-                    sessions.push(...newSessions);
-                }
+                        i++;
+                    }
+                    break;
+                case "attr":
+                    url = new URL(s.rounds.url!, s.baseUrl);
+
+                    res = await fetch(url);
+                    const html = await res.text();
+
+                    const $ = loadCheerio(html);
+                    rounds = $(s.rounds.selector, html);
+
+                    for await (const r of rounds) {
+                        const roundUrlString = $(r)
+                            .find(s.rounds.link.selector)
+                            .attr(s.rounds.link.attr ?? "href");
+
+                        if (!roundUrlString) continue;
+                        const roundUrl = new URL(roundUrlString, s.baseUrl);
+
+                        let newSessions = await scrapeRound(s, roundUrl, i);
+                        if (newSessions) {
+                            sessions.push(...newSessions);
+                        }
+
+                        i++;
+                    }
+                    break;
             }
 
             await saveSessions(sessions);
             console.log(`🤖 saved ${sessions.length} new sessions`);
-        } catch (error: any) {
-            console.error("scrape: ", error.message);
+        } catch (error) {
+            console.error("scrape: ", error);
             break;
         }
     }
 };
 
-const scrapeItem = async (
-    s: Series,
-    link: URL
+const scrapeRound = async (
+    series: ScraperSeries,
+    link: URL,
+    index: number
 ): Promise<NewSession[] | null> => {
     try {
         const res = await fetch(link);
@@ -176,163 +266,376 @@ const scrapeItem = async (
 
         const sub$ = loadCheerio(subHtml);
 
-        let roundTitle = "";
-        if (s.roundItems.title) {
-            roundTitle = sub$(s.roundItems.title, subHtml).first().text();
-        } else if (s.roundItems.titleAttr) {
-            // @ts-ignore
-            roundTitle = sub$(s.roundItems.titleAttr.main, subHtml)
-                .attr(s.roundItems.titleAttr.title)
-                .trim();
-        }
-        if (s.roundItems.titleRegex) {
-            const matches = roundTitle.match(
-                new RegExp(s.roundItems.titleRegex, "i")
-            );
-            roundTitle = matches && matches[1] ? matches[1].trim() : "";
-        }
+        let roundTitle = "",
+            roundCircuit = "",
+            roundNumber = 0;
 
-        let roundCircuit = "";
-        if (s.roundItems.circuit) {
-            roundCircuit = sub$(s.roundItems.circuit, subHtml).first().text();
-        } else if (s.roundItems.circuitAttr) {
-            // @ts-ignore
-            roundCircuit = sub$(s.roundItems.circuitAttr.main, subHtml)
-                .attr(s.roundItems.circuitAttr.circuit)
-                .trim();
-        }
-        if (s.roundItems.circuitRegex) {
-            const matches = roundCircuit.match(
-                new RegExp(s.roundItems.circuitRegex, "i")
-            );
-            roundCircuit = matches && matches[1] ? matches[1].trim() : "";
-        }
+        for (const act of series.rounds.actions) {
+            let actionResult: string;
 
-        if (!roundTitle || !roundCircuit) return null;
+            switch (act.type) {
+                case "attr":
+                    if (act.attr === undefined)
+                        throw new Error("Undefined 'act.attr'");
+                    actionResult = getAttr(
+                        sub$,
+                        null,
+                        act.selector === "" ? undefined : act.selector,
+                        act.attr,
+                        act.regex
+                    );
+                    break;
+                case "text":
+                    actionResult = getText(
+                        sub$,
+                        null,
+                        act.selector === "" ? undefined : act.selector,
+                        act.regex
+                    );
+                    break;
+                default:
+                    throw new Error("Unexpected 'act.type'");
+            }
 
-        for (const alias in circuitAliases) {
-            const regexString = circuitAliases[alias as CircuitTitle];
-            const regex = new RegExp(regexString, "gi");
+            switch (act.param) {
+                case "round-title":
+                    roundTitle = actionResult;
+                    break;
+                case "round-circuit":
+                    // for (const alias in circuitAliases) {
+                    //     const regexString =
+                    //         circuitAliases[alias as CircuitTitle];
+                    //     const regex = new RegExp(regexString, "gi");
 
-            if (regex.test(roundCircuit)) {
-                roundCircuit = alias;
-                break;
+                    //     if (regex.test(actionResult)) {
+                    //         roundCircuit = alias;
+                    //         break;
+                    //     } else {
+                    //         throw new Error("No suitable 'CircuitTitle' found");
+                    //     }
+                    // }
+                    roundCircuit = actionResult;
+                    break;
+                case "round-number":
+                    roundNumber = Number(actionResult);
+                    break;
             }
         }
+
+        if (!roundTitle || !roundCircuit)
+            throw new Error("No 'roundTitle' or 'roundCircuit' found");
 
         const { id: roundId } = await saveRound({
             title: roundTitle,
+            number: roundNumber === 0 ? index + 1 : roundNumber,
             circuitTitle: roundCircuit,
-            series: s.id,
+            series: series.id,
             link: link.toString(),
-            season: s.season,
+            season: String(series.season),
         });
-        if (!roundId) return null;
+        if (!roundId) throw new Error("No 'roundId' found");
 
-        let sessions: NewSession[] = [];
+        let newSessions: NewSession[] = [];
 
-        const subElements = sub$(s.sessionList, subHtml);
-        for await (const el of subElements) {
-            let titleAliasFound = false;
+        const sessions = sub$(series.rounds.sessions.items.selector, subHtml);
+        for await (const s of sessions) {
+            let sessionType: SessionType = "PRACTICE",
+                sessionNumber = 0,
+                sessionDay: string | null = null,
+                sessionStartTime: string | null = null,
+                sessionEndTime: string | null = null,
+                sessionGmtOffset: string | null = null,
+                sessionTimeZone: string | null = null;
 
-            let sessionType = "";
-            let sessionNumber = 0;
-            if (s.sessionItems.title) {
-                sessionType = sub$(el)
-                    .find(s.sessionItems.title)
-                    .first()
-                    .text();
-            } else if (s.sessionItems.titleAttr) {
-                // @ts-ignore
-                sessionType = sub$(el)
-                    .find(s.sessionItems.titleAttr.main)
-                    .attr(s.sessionItems.titleAttr.title)
-                    .trim();
-            }
+            for (const act of series.rounds.sessions.actions) {
+                let actionResult: string;
 
-            for (const alias in sessionAliases) {
-                const regexString = sessionAliases[alias as SessionType];
-                const regex = new RegExp(regexString, "gi");
+                switch (act.type) {
+                    case "attr":
+                        if (act.attr === undefined)
+                            throw new Error("Undefined 'act.attr'");
+                        actionResult = getAttr(
+                            sub$,
+                            s,
+                            act.selector === "" ? undefined : act.selector,
+                            act.attr,
+                            act.regex
+                        );
+                        break;
+                    case "text":
+                        actionResult = getText(
+                            sub$,
+                            s,
+                            act.selector === "" ? undefined : act.selector,
+                            act.regex
+                        );
+                        break;
+                    default:
+                        throw new Error("Unexpected 'act.type'");
+                }
 
-                if (regex.test(sessionType)) {
-                    const numbers = sessionType.match(/\b\d?\b/gi);
-                    const filteredNumbers = numbers?.filter((n) => n != "");
-                    sessionNumber =
-                        filteredNumbers && filteredNumbers[0]
-                            ? Number(filteredNumbers[0])
-                            : 0;
+                switch (act.param) {
+                    case "session-title":
+                        let titleAliasFound = false;
 
-                    titleAliasFound = true;
-                    sessionType = alias;
-                    break;
+                        for (const alias in sessionAliases) {
+                            const regexString =
+                                sessionAliases[alias as SessionType];
+                            const regex = new RegExp(regexString, "gi");
+
+                            if (regex.test(actionResult)) {
+                                const numbers = actionResult.match(/\b\d?\b/gi);
+                                const filteredNumbers = numbers?.filter(
+                                    (n) => n != ""
+                                );
+                                sessionNumber =
+                                    filteredNumbers && filteredNumbers[0]
+                                        ? Number(filteredNumbers[0])
+                                        : 0;
+
+                                titleAliasFound = true;
+                                sessionType = alias as SessionType;
+                                break;
+                            }
+                        }
+
+                        if (!titleAliasFound) continue;
+                        break;
+                    case "session-day":
+                        sessionDay = actionResult;
+                        break;
+                    case "session-start-time":
+                        sessionStartTime = actionResult;
+                        break;
+                    case "session-end-time":
+                        sessionEndTime = actionResult;
+                        break;
+                    case "session-gmt-offset":
+                        sessionGmtOffset = `${
+                            !actionResult.includes("+") &&
+                            !actionResult.includes("-")
+                                ? "+"
+                                : ""
+                        }${actionResult}`;
+                        break;
+                    case "session-time-zone":
+                        sessionTimeZone = actionResult;
+                        break;
                 }
             }
-            if (!titleAliasFound) continue;
 
-            let startDateString: string | undefined = "",
-                endDateString: string | undefined = "",
-                gmtOffsetString: string | undefined = "",
-                startDate: Date | undefined,
-                endDate: Date | undefined;
-            if (s.sessionItems.dateAttr && s.sessionItems.dateAttr.main) {
-                startDateString = sub$(el)
-                    .find(s.sessionItems.dateAttr.main)
-                    .attr(s.sessionItems.dateAttr.startDate);
-                endDateString = s.sessionItems.dateAttr.endDate
-                    ? sub$(el)
-                          .find(s.sessionItems.dateAttr.main)
-                          .attr(s.sessionItems.dateAttr.endDate)
-                    : "";
-                gmtOffsetString = s.sessionItems.dateAttr.gmtOffset
-                    ? sub$(el)
-                          .find(s.sessionItems.dateAttr.main)
-                          .attr(s.sessionItems.dateAttr.gmtOffset)
-                    : "";
+            let [startDate, endDate] = getDate(
+                series.rounds.sessions.date,
+                sessionDay,
+                sessionStartTime,
+                sessionEndTime,
+                sessionGmtOffset,
+                sessionTimeZone
+            );
+            if (!startDate || !endDate)
+                throw new Error("Invalid 'startDate' or 'endDate'");
 
-                startDate = getDate(startDateString, gmtOffsetString);
-                endDate = endDateString
-                    ? getDate(endDateString, gmtOffsetString)
-                    : getDate(startDateString, gmtOffsetString, 2);
-            } else if (s.sessionItems.dateAttr) {
-                startDateString = sub$(el).attr(
-                    s.sessionItems.dateAttr.startDate
-                );
-                endDateString = s.sessionItems.dateAttr.endDate
-                    ? sub$(el).attr(s.sessionItems.dateAttr.endDate)
-                    : "";
-                gmtOffsetString = s.sessionItems.dateAttr.gmtOffset
-                    ? sub$(el).attr(s.sessionItems.dateAttr.gmtOffset)
-                    : "";
+            newSessions.push({
+                type: sessionType,
+                number: sessionNumber,
+                startDate,
+                endDate,
+                roundId,
+            });
+        }
 
-                startDate = getDate(startDateString, gmtOffsetString);
-                endDate = endDateString
-                    ? getDate(endDateString, gmtOffsetString)
-                    : getDate(startDateString, gmtOffsetString, 2);
-            } else if (s.sessionItems.dateText) {
-                const dates = getDatesFromString(
-                    sub$(el).find(s.sessionItems.dateText.date).text() +
-                        " " +
-                        sub$(el).find(s.sessionItems.dateText.time).text(),
-                    s.season
-                );
-                startDate = dates[0];
-                endDate = dates[1];
-            }
+        return newSessions;
+    } catch (error) {
+        console.error("🚨 Error scraping '%s':", link, error);
+        return null;
+    }
+};
 
-            if (startDate && endDate) {
-                sessions.push({
-                    type: sessionType as SessionType,
-                    number: sessionNumber,
-                    startDate,
-                    endDate,
-                    roundId,
-                });
+const scrapeRoundAPI = async (
+    series: ScraperSeries,
+    round: any,
+    index: number
+): Promise<NewSession[] | null> => {
+    try {
+        let roundTitle = "",
+            roundNumber = 0,
+            roundCircuit = "",
+            roundLink = "";
+
+        for (const act of series.rounds.actions) {
+            let actionResult: string;
+
+            if (act.key === undefined) throw new Error("Undefined 'act.key'");
+            actionResult = round[act.key];
+
+            switch (act.param) {
+                case "round-title":
+                    roundTitle = actionResult;
+                    break;
+                case "round-circuit":
+                    // for (const alias in circuitAliases) {
+                    //     const regexString =
+                    //         circuitAliases[alias as CircuitTitle];
+                    //     const regex = new RegExp(regexString, "gi");
+
+                    //     if (regex.test(actionResult)) {
+                    //         roundCircuit = alias;
+                    //         break;
+                    //     } else {
+                    //         throw new Error("No suitable 'CircuitTitle' found");
+                    //     }
+                    // }
+                    roundCircuit = actionResult;
+                    break;
+                case "round-link":
+                    roundLink = actionResult;
+                    break;
+                case "round-number":
+                    roundNumber = Number(actionResult);
+                    break;
             }
         }
 
-        return sessions;
-    } catch (error: any) {
-        console.error("🚨 Error scraping '%s':", link, error.message);
+        if (!roundTitle || !roundCircuit)
+            throw new Error("No 'roundTitle' or 'roundCircuit' found");
+
+        const { id: roundId } = await saveRound({
+            title: roundTitle,
+            number: roundNumber === 0 ? index + 1 : roundNumber,
+            circuitTitle: roundCircuit,
+            series: series.id,
+            link: roundLink,
+            season: String(series.season),
+        });
+        if (!roundId) throw new Error("No 'roundId' found");
+
+        let newSessions: NewSession[] = [];
+
+        const regex = /{([a-z\-]+)}/gi;
+        const key = regex.exec(series.rounds.sessions.items.apiUrl!);
+        const sessionUrlString = series.rounds.sessions.items.apiUrl!.replace(
+            /{\w+}/gi,
+            round[key![1]]
+        );
+        if (!sessionUrlString) throw new Error("");
+
+        const sessionUrl = new URL(
+            sessionUrlString + series.rounds.sessions.items.apiParams,
+            series.baseUrl
+        );
+
+        const res = await fetch(sessionUrl);
+        const data = (await res.json()) as Record<string, any>;
+
+        const sessions = data[series.rounds.sessions.items.key!];
+        for await (const s of sessions) {
+            let sessionType: SessionType = "PRACTICE",
+                sessionNumber = 0,
+                sessionDay: string | null = null,
+                sessionStartTime: string | null = null,
+                sessionEndTime: string | null = null,
+                sessionGmtOffset: string | null = null,
+                sessionTimeZone: string | null = null;
+
+            for (const act of series.rounds.sessions.actions) {
+                let actionResult: string;
+
+                if (act.key === undefined)
+                    throw new Error("Undefined 'act.key'");
+                actionResult = s[act.key];
+
+                switch (act.param) {
+                    case "session-title":
+                        let titleAliasFound = false;
+
+                        for (const alias in sessionAliases) {
+                            const regexString =
+                                sessionAliases[alias as SessionType];
+                            const regex = new RegExp(regexString, "gi");
+
+                            if (regex.test(actionResult)) {
+                                const numbers = actionResult.match(/\b\d?\b/gi);
+                                const filteredNumbers = numbers?.filter(
+                                    (n) => n != ""
+                                );
+                                sessionNumber =
+                                    filteredNumbers && filteredNumbers[0]
+                                        ? Number(filteredNumbers[0])
+                                        : 0;
+
+                                titleAliasFound = true;
+                                sessionType = alias as SessionType;
+                                break;
+                            }
+                        }
+
+                        if (!titleAliasFound) continue;
+                        break;
+                    case "session-day":
+                        sessionDay = actionResult;
+                        break;
+                    case "session-start-time":
+                        sessionStartTime = actionResult;
+                        break;
+                    case "session-end-time":
+                        sessionEndTime = actionResult;
+                        break;
+                    case "session-gmt-offset":
+                        if (
+                            !actionResult.includes("+") &&
+                            !actionResult.includes("-")
+                        ) {
+                            sessionGmtOffset = `+${actionResult}`;
+                        } else {
+                            sessionGmtOffset = actionResult;
+                        }
+                        // FIXME
+                        if (sessionGmtOffset.length === 5) {
+                            sessionGmtOffset = `-0${sessionGmtOffset.slice(1)}`;
+                        }
+                        break;
+                    case "session-time-zone":
+                        sessionTimeZone = actionResult;
+                        break;
+                }
+            }
+
+            let [startDate, endDate] = getDate(
+                series.rounds.sessions.date,
+                sessionDay,
+                sessionStartTime,
+                sessionEndTime,
+                sessionGmtOffset,
+                sessionTimeZone
+            );
+            if (!startDate || !endDate)
+                throw new Error("Invalid 'startDate' or 'endDate'");
+
+            newSessions.push({
+                type: sessionType,
+                number: sessionNumber,
+                startDate,
+                endDate,
+                roundId,
+            });
+        }
+
+        return newSessions;
+        // .sort((a, b) => a.startDate.valueOf() - b.startDate.valueOf())
+        // .reduce((prevArr, curr, i, arr) => {
+        //     if (prevArr.length > 1) {
+        //         const currType = curr.type;
+        //         const last = prevArr.findIndex((s) => s.type === currType);
+        //         if (last !== -1) {
+        //             let lastNum = prevArr[last].number;
+        //             prevArr[last].number = lastNum === 0 ? 1 : lastNum;
+        //             curr.number = lastNum === 0 ? 2 : lastNum++;
+        //         }
+        //     }
+        //     return [...prevArr, curr];
+        // }, [] as NewSession[]);
+    } catch (error) {
+        console.error("🚨 Error scraping '%s':", round, error);
         return null;
     }
 };

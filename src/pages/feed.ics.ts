@@ -95,8 +95,11 @@ export const get: APIRoute = async ({ params, request }) => {
         });
     } catch (error) {
         console.error(error);
-        return new Response(JSON.stringify({ success: false, reason: error }), {
-            status: 500,
+        return new Response(null, {
+            status: 200,
+            headers: {
+                "Content-Type": "text/calendar",
+            },
         });
     }
 };

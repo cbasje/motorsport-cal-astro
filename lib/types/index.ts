@@ -1,5 +1,3 @@
-import type { Circuit, Round, Session } from "@prisma/client";
-
 export const seriesIds = [
     "F1",
     "F2",
@@ -63,79 +61,4 @@ export enum CircuitTitle {
     Seoul = "Seoul ePrix",
     LeMans = "Circuit de la Sarthe",
     Fuji = "Fuji Speedway",
-}
-
-export interface Series {
-    id: SeriesId;
-    baseURL: string;
-    url: string;
-    excludedURLs?: string[];
-    season: string;
-
-    list: string;
-    redirectURLItem: string;
-    redirectURLExtension: string;
-    roundItems: {
-        title?: string;
-        titleRegex: string;
-        titleAttr?: {
-            main: string;
-            title: string;
-        };
-        circuit?: string;
-        circuitAttr?: {
-            main: string;
-            circuit: string;
-        };
-        circuitRegex?: string;
-    };
-    sessionList: string;
-    sessionItems: {
-        title?: string;
-        titleAttr?: {
-            main: string;
-            title: string;
-        };
-        dateAttr?: {
-            main: string;
-            startDate: string;
-            endDate?: string;
-            gmtOffset?: string;
-        };
-        dateText?: {
-            date: string;
-            time: string;
-        };
-    };
-}
-
-export type NewRound = Omit<Round, "circuitId" | "id" | "created_at"> & {
-    circuitTitle: string;
-};
-export type NewSession = Omit<Session, "id" | "created_at">;
-export type NewCircuit = Omit<Circuit, "id" | "created_at">;
-
-// MARK: WIKIPEDIA
-export interface WikipediaData {
-    batchcomplete: boolean;
-    query: Query;
-}
-
-export interface Query {
-    pages?: Page[];
-}
-
-export interface Page {
-    pageid: number;
-    ns: number;
-    title: string;
-    index: number;
-    coordinates?: Coordinate[];
-}
-
-export interface Coordinate {
-    lat: number;
-    lon: number;
-    primary: boolean;
-    globe: string;
 }

@@ -1,6 +1,6 @@
 import type { Round } from "@prisma/client";
 import prisma from "./prisma-client";
-import type { NewRound, NewSession } from "./types";
+import type { NewRound, NewSession } from "./types/api";
 import type { CircuitTitle, CircuitWikipedia } from "./wikipedia";
 
 export const getCircuits = async (): Promise<CircuitTitle[]> => {
@@ -13,11 +13,18 @@ export const getCircuits = async (): Promise<CircuitTitle[]> => {
 };
 
 export const saveRound = async (row: NewRound): Promise<Round> => {
-    console.info("Adding round:", row.title);
+    console.info(
+        "Adding round:",
+        row.series,
+        row.season,
+        row.title,
+        row.number
+    );
 
     return await prisma.round.upsert({
         create: {
             title: row.title,
+            number: row.number,
             season: row.season,
             series: row.series,
             link: row.link,
@@ -36,6 +43,7 @@ export const saveRound = async (row: NewRound): Promise<Round> => {
         },
         update: {
             title: row.title,
+            number: row.number,
             season: row.season,
             series: row.series,
             link: row.link,
@@ -43,6 +51,7 @@ export const saveRound = async (row: NewRound): Promise<Round> => {
         where: {
             uniqueRoundPerSeriesSeason: {
                 title: row.title,
+                number: row.number,
                 season: row.season,
                 series: row.series,
             },
