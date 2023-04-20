@@ -10,6 +10,7 @@
         "dev": "astro dev",
         "start": "astro dev",
         "build": "astro build && prisma migrate deploy",
+        "postinstall": "prisma generate",
         "preview": "astro preview",
         "astro": "astro"
     },
