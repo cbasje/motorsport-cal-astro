@@ -178,9 +178,6 @@ const getDate = (
 
     const startDateString = formatDate(format.start, dateInfo);
     const endDateString = formatDate(format.end, dateInfo);
-    console.log("🚀 ---------------------------------🚀");
-    console.log("🚀 ~ endDateString:", endDateString, new Date(endDateString));
-    console.log("🚀 ---------------------------------🚀");
 
     return [new Date(startDateString), new Date(endDateString)];
 };
@@ -493,7 +490,10 @@ const scrapeRoundAPI = async (
                     roundCircuit = actionResult;
                     break;
                 case "round-link":
-                    roundLink = actionResult;
+                    roundLink = new URL(
+                        actionResult,
+                        series.baseUrl
+                    ).toString();
                     break;
                 case "round-number":
                     roundNumber = Number(actionResult);
