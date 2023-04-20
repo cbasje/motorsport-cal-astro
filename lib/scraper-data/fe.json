@@ -41,8 +41,8 @@
                 "key": "sessions"
             },
             "date": {
-                "start": "{session-day}T{session-start-time}:00{session-gmt-offset}",
-                "end": "{session-day}T{session-end-time}:00{session-gmt-offset}"
+                "start": "{session-day}T{session-start-time}{session-gmt-offset}",
+                "end": "{session-day}T{session-end-time}{session-gmt-offset}"
             },
             "actions": [
                 {

@@ -76,16 +76,6 @@ export const main = async () => {
     }
 };
 
-const formatHour = (time: string) => {
-    // const hourRegex = /[\\b\\D](\\d{1,2}):\\d{1,2}/gi;
-    // const match = hourRegex.exec(time);
-
-    // if (!match) throw new Error("Invalid 'hour'");
-
-    // const hour = Number(match[0]);
-
-    return time;
-};
 const formatDate = (
     format: string,
     dateInfo: Record<string, string | null>
@@ -106,10 +96,10 @@ const formatDate = (
                 value = dateInfo.day!;
                 break;
             case "session-start-time":
-                value = formatHour(dateInfo.startTime!);
+                value = dateInfo.startTime!;
                 break;
             case "session-end-time":
-                value = formatHour(dateInfo.endTime!);
+                value = dateInfo.endTime!;
                 break;
             case "session-gmt-offset":
                 value = dateInfo.gmtOffset!;
@@ -122,6 +112,7 @@ const formatDate = (
         returnValue = returnValue.replace(keyInc, value);
     }
 
+    // FIXME
     return returnValue.replaceAll(" ET", " EST");
 };
 const getAttr = (

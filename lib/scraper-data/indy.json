@@ -31,8 +31,8 @@
                 "selector": "#schedule .race-list > .race-list__item"
             },
             "date": {
-                "start": "{session-day} 2023 {session-start-time}:00 {session-time-zone}",
-                "end": "{session-day} 2023 {session-end-time}:00 {session-time-zone}"
+                "start": "{session-day} 2023 {session-start-time} {session-time-zone}",
+                "end": "{session-day} 2023 {session-end-time} {session-time-zone}"
             },
             "actions": [
                 {
@@ -49,13 +49,13 @@
                     "param": "session-start-time",
                     "type": "text",
                     "selector": ".race-list__time",
-                    "regex": "(\\d{1,2}:\\d{1,2})\\s?[PM|AM]{2}\\s?-\\s?"
+                    "regex": "(\\d{1,2}:\\d{1,2}\\s?[PM|AM]{2})\\s?-\\s?"
                 },
                 {
                     "param": "session-end-time",
                     "type": "text",
                     "selector": ".race-list__time",
-                    "regex": "\\s?-\\s?(\\d{1,2}:\\d{1,2})\\s?[PM|AM]{2}"
+                    "regex": "\\s?-\\s?(\\d{1,2}:\\d{1,2}\\s?[PM|AM]{2})"
                 },
                 {
                     "param": "session-time-zone",
