@@ -169,16 +169,6 @@ const getDate = (
     sessionGmtOffset: string | null,
     sessionTimeZone: string | null
 ) => {
-    // 🚀 --------------------------------🚀
-    // 🚀 ~ X; sessionDate; sessionDay; sessionTime; sessionStartTime; sessionEndTime
-    // 🚀 --------------------------------🚀
-    // 🚀 ~ F1; null; ; null; 2023-03-05T18:00:00; 2023-03-05T20:00:00;
-    // 🚀 --------------------------------🚀
-    // 🚀 ~ FE; null; 2023-01-13; null; 16:25; 17:15;
-    // 🚀 --------------------------------🚀
-    // 🚀 ~ INDY; null; Friday, Mar 3; 3:00 PM - 4:15 PM ET; null; null; ----- "Thu, 01 Jan 1970 00:00:00 GMT-0400"
-    // 🚀 --------------------------------🚀
-
     const dateInfo = {
         day: sessionDay,
         startTime: sessionStartTime,
