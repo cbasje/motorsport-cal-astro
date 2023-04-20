@@ -116,6 +116,30 @@ export const getAttr = (
     }
     return t;
 };
+export const getKey = (
+    obj: Record<string, any>,
+    key: string,
+    regex?: string
+) => {
+    let t = obj[key];
+
+    if (regex) {
+        const matches = t.match(new RegExp(regex, "i"));
+        if (!matches) return t;
+
+        // TODO: Make cleaner
+        if (matches[1] !== undefined) {
+            t = matches[1].trim();
+        } else if (matches[2] !== undefined) {
+            t = matches[2].trim();
+        } else if (matches[0] !== undefined) {
+            t = matches[0];
+        } else {
+            return t;
+        }
+    }
+    return t;
+};
 export const getText = (
     $: CheerioAPI,
     context: BasicAcceptedElems<AnyNode> | null,

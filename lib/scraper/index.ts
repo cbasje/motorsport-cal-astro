@@ -1,11 +1,18 @@
 import { load as loadCheerio } from "cheerio";
 import fetch from "node-fetch";
 import { saveRound, saveSessions } from "../api";
-import type { SeriesId, SessionType } from "../types";
+import type { CircuitTitle, SeriesId, SessionType } from "../types";
 import type { NewSession } from "../types/api";
 import type { ScraperSeries } from "../types/scraper";
 import { flattenObject } from "../utils";
-import { getAttr, getDate, getText, sessionAliases } from "../utils/scraper";
+import {
+    circuitAliases,
+    getAttr,
+    getDate,
+    getKey,
+    getText,
+    sessionAliases,
+} from "../utils/scraper";
 import scraperData from "./data";
 
 export const main = async () => {
@@ -140,18 +147,18 @@ const scrapeRound = async (
                     roundTitle = actionResult;
                     break;
                 case "round-circuit":
-                    // for (const alias in circuitAliases) {
-                    //     const regexString =
-                    //         circuitAliases[alias as CircuitTitle];
-                    //     const regex = new RegExp(regexString, "gi");
+                    for (const alias in circuitAliases) {
+                        const regexString =
+                            circuitAliases[alias as CircuitTitle];
+                        const regex = new RegExp(regexString, "gi");
 
-                    //     if (regex.test(actionResult)) {
-                    //         roundCircuit = alias;
-                    //         break;
-                    //     } else {
-                    //         throw new Error("No suitable 'CircuitTitle' found");
-                    //     }
-                    // }
+                        if (regex.test(actionResult)) {
+                            roundCircuit = alias;
+                            break;
+                        } else {
+                            throw new Error("No suitable 'CircuitTitle' found");
+                        }
+                    }
                     roundCircuit = actionResult;
                     break;
                 case "round-number":
@@ -304,26 +311,25 @@ const scrapeRoundAPI = async (
             let actionResult: string;
 
             if (act.key === undefined) throw new Error("Undefined 'act.key'");
-            actionResult = round[act.key];
+            actionResult = getKey(round, act.key, act.regex);
 
             switch (act.param) {
                 case "round-title":
                     roundTitle = actionResult;
                     break;
                 case "round-circuit":
-                    // for (const alias in circuitAliases) {
-                    //     const regexString =
-                    //         circuitAliases[alias as CircuitTitle];
-                    //     const regex = new RegExp(regexString, "gi");
+                    for (const alias in circuitAliases) {
+                        const regexString =
+                            circuitAliases[alias as CircuitTitle];
+                        const regex = new RegExp(regexString, "gi");
 
-                    //     if (regex.test(actionResult)) {
-                    //         roundCircuit = alias;
-                    //         break;
-                    //     } else {
-                    //         throw new Error("No suitable 'CircuitTitle' found");
-                    //     }
-                    // }
-                    roundCircuit = actionResult;
+                        if (regex.test(actionResult)) {
+                            roundCircuit = alias;
+                            break;
+                        } else {
+                            throw new Error("No suitable 'CircuitTitle' found");
+                        }
+                    }
                     break;
                 case "round-link":
                     roundLink = new URL(
@@ -383,7 +389,7 @@ const scrapeRoundAPI = async (
 
                 if (act.key === undefined)
                     throw new Error("Undefined 'act.key'");
-                actionResult = flattenObject(s)[act.key];
+                actionResult = getKey(flattenObject(s), act.key, act.regex);
 
                 switch (act.param) {
                     case "session-title":
@@ -462,19 +468,6 @@ const scrapeRoundAPI = async (
         }
 
         return newSessions;
-        // .sort((a, b) => a.startDate.valueOf() - b.startDate.valueOf())
-        // .reduce((prevArr, curr, i, arr) => {
-        //     if (prevArr.length > 1) {
-        //         const currType = curr.type;
-        //         const last = prevArr.findIndex((s) => s.type === currType);
-        //         if (last !== -1) {
-        //             let lastNum = prevArr[last].number;
-        //             prevArr[last].number = lastNum === 0 ? 1 : lastNum;
-        //             curr.number = lastNum === 0 ? 2 : lastNum++;
-        //         }
-        //     }
-        //     return [...prevArr, curr];
-        // }, [] as NewSession[]);
     } catch (error) {
         console.error("🚨 Error scraping '%s':", round, error);
         return null;
