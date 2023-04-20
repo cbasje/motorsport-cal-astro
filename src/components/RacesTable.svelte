@@ -1,14 +1,14 @@
 <script lang="ts">
+    import Icon from "@iconify/svelte";
     import type { Round, Session } from "@prisma/client";
     import { onMount } from "svelte";
     import type { SeriesId } from "../../lib/types";
-    import SeriesMultiSelect from "./SeriesMultiSelect.svelte";
     import {
         getSeriesColour,
         getSeriesIcon,
         getSeriesTitle,
-    } from "../../lib/utils";
-    import Icon from "@iconify/svelte";
+    } from "../../lib/utils/series";
+    import SeriesMultiSelect from "./SeriesMultiSelect.svelte";
 
     type Race = Pick<Session, "id" | "startDate" | "endDate"> & {
         round: Pick<Round, "title" | "series">;

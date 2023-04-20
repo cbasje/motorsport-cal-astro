@@ -3,7 +3,7 @@
     import { onMount } from "svelte";
     import type { SeriesId } from "../../lib/types";
     import { seriesIds } from "../../lib/types";
-    import { getSeriesIcon, getSeriesTitle } from "../../lib/utils";
+    import { getSeriesIcon, getSeriesTitle } from "../../lib/utils/series";
 
     export let series: SeriesId[];
     let seriesCopy: SeriesId[];

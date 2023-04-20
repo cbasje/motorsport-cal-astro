@@ -1,8 +1,8 @@
 import type { Circuit, Round, Session } from "@prisma/client";
 import type { APIRoute } from "astro";
 import { DateArray, EventAttributes, createEvents } from "ics";
-import { getSeriesEmoji } from "lib/utils";
 import prisma from "../../lib/prisma-client";
+import { getSeriesEmoji } from "../../lib/utils/series";
 
 const TITLE = "Motorsport Calendar";
 const PRODUCT = "benjamiin..";

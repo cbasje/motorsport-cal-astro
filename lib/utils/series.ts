@@ -1,4 +1,4 @@
-import type { SeriesId } from "./types";
+import type { SeriesId } from "../types";
 
 export const getSeriesIcon = (s: SeriesId) => {
     const titles: Record<SeriesId, string> = {
@@ -54,18 +54,4 @@ export const getSeriesColour = (s: SeriesId) => {
         F1A: "#BE107E",
     };
     return titles[s];
-};
-
-export const flattenObject = (obj: Record<string, any>) => {
-    return Object.keys(obj).reduce((acc, key) => {
-        if (typeof obj[key] === "object" && obj[key] !== null) {
-            const flatObject = flattenObject(obj[key]);
-            for (const flatKey in flatObject) {
-                acc[`${key}.${flatKey}`] = flatObject[flatKey];
-            }
-        } else {
-            acc[key] = obj[key];
-        }
-        return acc;
-    }, {} as Record<string, any>);
 };
