@@ -185,7 +185,9 @@ const getDate = (
 };
 
 const scrape = async () => {
-    let includedSeries: SeriesId[] = ["F1", "FE", "INDY"];
+    let includedSeries = import.meta.env.INCLUDED_SERIES.split(
+        ","
+    ) as SeriesId[];
 
     for (const s of scraperData) {
         if (includedSeries.length && !includedSeries.includes(s.id)) continue;
