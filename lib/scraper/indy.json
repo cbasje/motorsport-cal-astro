@@ -11,6 +11,17 @@
             "attr": "href",
             "selector": ".schedule-list__links > a:last-child"
         },
+        "sponsors": [
+            "Firestone",
+            "Acura",
+            "Children's of",
+            "Chevrolet",
+            "Sonsio",
+            "Southwire",
+            "Honda",
+            "Hy-Vee",
+            "Big Machine"
+        ],
         "actions": [
             {
                 "param": "round-title",

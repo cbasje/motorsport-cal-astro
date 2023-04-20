@@ -11,6 +11,7 @@ import {
     getDate,
     getKey,
     getText,
+    getTitle,
     sessionAliases,
 } from "../utils/scraper";
 import scraperData from "./data";
@@ -144,7 +145,7 @@ const scrapeRound = async (
 
             switch (act.param) {
                 case "round-title":
-                    roundTitle = actionResult;
+                    roundTitle = getTitle(actionResult, series.rounds.sponsors);
                     break;
                 case "round-circuit":
                     roundCircuit = getCircuitTitle(actionResult);
@@ -303,7 +304,7 @@ const scrapeRoundAPI = async (
 
             switch (act.param) {
                 case "round-title":
-                    roundTitle = actionResult;
+                    roundTitle = getTitle(actionResult, series.rounds.sponsors);
                     break;
                 case "round-circuit":
                     roundCircuit = getCircuitTitle(actionResult);

@@ -12,7 +12,9 @@
         "build": "astro build && prisma migrate deploy",
         "postinstall": "prisma generate",
         "preview": "astro preview",
-        "astro": "astro"
+        "astro": "astro",
+        "migrate:dev": "yarn prisma migrate dev --schema prisma-dev/schema.prisma",
+        "migrate:prod": "yarn prisma migrate dev"
     },
     "dependencies": {
         "@astrojs/netlify": "^2.2.2",

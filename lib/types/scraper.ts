@@ -25,6 +25,7 @@ export interface Rounds {
     url?: string;
     selector?: string;
     link: Link;
+    sponsors?: string[];
     actions: RoundAction[];
     sessions: Sessions;
 }

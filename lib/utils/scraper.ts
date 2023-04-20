@@ -187,6 +187,16 @@ export const getDate = (
     return [new Date(startDateString), new Date(endDateString)];
 };
 
+export const getTitle = (title: string, sponsors?: string[]) => {
+    if (sponsors === undefined) return title;
+
+    let t = title;
+    for (const s of sponsors) {
+        const regex = new RegExp(s, "gi");
+        t = t.replace(regex, "");
+    }
+    return t.trim();
+};
 export const getCircuitTitle = (t: string) => {
     return t;
 };

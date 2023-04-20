@@ -11,6 +11,14 @@
             "apiParams": "?championshipId=bc4a0209-f233-46c8-afce-842d1c48358f",
             "key": "races"
         },
+        "sponsors": [
+            "Hankook",
+            "CORE",
+            "Greenko",
+            "Julius Baer",
+            "SABIC",
+            "Southwire"
+        ],
         "actions": [
             {
                 "param": "round-title",
