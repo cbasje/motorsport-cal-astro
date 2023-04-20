@@ -11,6 +11,7 @@
     const checkboxClass: Record<SeriesId, string> = {
         F1: "peer/f1",
         F2: "peer/f2",
+        F3: "peer/f3",
         FE: "peer/fe",
         XE: "peer/xe",
         INDY: "peer/indy",
@@ -21,6 +22,7 @@
     const labelClass: Record<SeriesId, string> = {
         F1: "peer-checked/f1:daisy-btn-primary",
         F2: "peer-checked/f2:daisy-btn-primary",
+        F3: "peer-checked/f3:daisy-btn-primary",
         FE: "peer-checked/fe:daisy-btn-primary",
         XE: "peer-checked/xe:daisy-btn-primary",
         INDY: "peer-checked/indy:daisy-btn-primary",

@@ -47,13 +47,28 @@ const scrape = async () => {
                         s.rounds.link.apiUrl! + s.rounds.link.apiParams,
                         s.baseApiUrl
                     );
-                    const headers = s.rounds.link.apiKey
-                        ? {
-                              // FIXME
-                              [s.rounds.link.apiKey.headerKey]: import.meta.env
-                                  .F1A_API_KEY,
-                          }
-                        : undefined;
+                    let headers: Record<string, string> | undefined = {};
+                    switch (s.rounds.link.apiKey?.envVariable) {
+                        case "F1A_API_KEY":
+                            headers[s.rounds.link.apiKey.headerKey] =
+                                import.meta.env.F1A_API_KEY;
+                            break;
+                        case "F2_API_KEY":
+                            headers[s.rounds.link.apiKey.headerKey] =
+                                import.meta.env.F2_API_KEY;
+                            break;
+                        case "F3_API_KEY":
+                            headers[s.rounds.link.apiKey.headerKey] =
+                                import.meta.env.F3_API_KEY;
+                            break;
+                        default:
+                            headers = undefined;
+                            break;
+                    }
+                    console.log("🚀 ------------------------------🚀");
+                    console.log("🚀 ~ scrape ~ headers:", { ...headers });
+                    console.log("🚀 ------------------------------🚀");
+
                     res = await fetch(url, {
                         headers,
                     });

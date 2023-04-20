@@ -1,0 +1,63 @@
+{
+    "id": "F2",
+    "baseUrl": "https://www.fiaformula2.com/",
+    "baseApiUrl": "https://api.formula1.com/v1/f2f3-fom-results/",
+    "season": 2023,
+
+    "rounds": {
+        "link": {
+            "type": "api",
+            "apiUrl": "races",
+            "apiParams": "?website=f2",
+            "apiKey": {
+                "headerKey": "apikey",
+                "envVariable": "F2_API_KEY"
+            },
+            "key": "Races"
+        },
+        "actions": [
+            {
+                "param": "round-title",
+                "type": "key",
+                "key": "CircuitShortName"
+            },
+            {
+                "param": "round-number",
+                "type": "key",
+                "key": "RoundNumber"
+            },
+            {
+                "param": "round-circuit",
+                "type": "key",
+                "key": "CircuitName"
+            }
+        ],
+        "sessions": {
+            "items": {
+                "type": "api",
+                "key": "Sessions"
+            },
+            "date": {
+                "start": "{session-start-time}",
+                "end": "{session-end-time}"
+            },
+            "actions": [
+                {
+                    "param": "session-title",
+                    "type": "key",
+                    "key": "SessionName"
+                },
+                {
+                    "param": "session-start-time",
+                    "type": "key",
+                    "key": "SessionStartTime"
+                },
+                {
+                    "param": "session-end-time",
+                    "type": "key",
+                    "key": "SessionEndTime"
+                }
+            ]
+        }
+    }
+}

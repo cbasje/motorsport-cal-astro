@@ -12,6 +12,7 @@ export type Param =
     | "session-gmt-offset"
     | "session-time-zone";
 export type Type = "attr" | "key" | "text" | "api" | "contents";
+export type EnvVariable = "F1A_API_KEY" | "F2_API_KEY" | "F3_API_KEY";
 
 export interface ScraperSeries {
     id: SeriesId;
@@ -51,7 +52,7 @@ export interface Link {
 
 export interface ApiKey {
     headerKey: string;
-    envVariable: string;
+    envVariable: EnvVariable;
 }
 
 export interface Sessions {
