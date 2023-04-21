@@ -22,6 +22,14 @@
                 !includedSeries?.includes(r.round.series)
             )
     );
+    $: nextRace = races
+        .slice(0)
+        .sort(
+            (a, b) =>
+                Math.abs(Date.now() - new Date(a.startDate).valueOf()) -
+                Math.abs(Date.now() - new Date(b.startDate).valueOf())
+        )[0];
+
     $: includedSeries = [] as SeriesId[];
 
     const oneDay = 24 * 60 * 60 * 1000;
@@ -48,8 +56,14 @@
         races = data;
     };
 
-    onMount(() => {
-        loadRaces();
+    let tableRow: HTMLTableRowElement;
+    onMount(async () => {
+        await loadRaces();
+
+        // tableRow.scrollIntoView();
+        document
+            .querySelector(`tr[data-id='${nextRace.id}']`)
+            ?.scrollIntoView();
     });
 </script>
 
@@ -66,7 +80,7 @@
     </thead>
     <tbody>
         {#each filteredRaces as race (race.id)}
-            <tr>
+            <tr data-id={race.id} class="scroll-mt-12">
                 <td>{race.round.title}</td>
                 <td>
                     {getDateString(race.startDate)}

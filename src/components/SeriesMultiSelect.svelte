@@ -39,7 +39,7 @@
     });
 </script>
 
-<div class="flex w-full">
+<div class="flex w-full sticky top-0 z-10">
     {#if series.length > 0}
         <button
             class="daisy-btn daisy-btn-square daisy-btn-active daisy-btn-ghost"
