@@ -1,10 +1,6 @@
 <script lang="ts">
-    import type { Round, Session } from "@prisma/client";
+    import { trpc } from "src/pages/client";
     import { onMount } from "svelte";
-
-    type NextRaceData = Pick<Session, "startDate"> & {
-        round: Pick<Round, "title" | "series">;
-    };
 
     $: nextRace = {
         date: new Date(),
@@ -30,29 +26,28 @@
     $: {
         days =
             new Date(
-                new Date(nextRace.date).valueOf() - currentDate.valueOf()
+                nextRace.date.valueOf() - currentDate.valueOf()
             ).getDate() - 1;
         hours =
             new Date(
-                new Date(nextRace.date).valueOf() - currentDate.valueOf()
+                nextRace.date.valueOf() - currentDate.valueOf()
             ).getHours() - 1;
         mins = new Date(
-            new Date(nextRace.date).valueOf() - currentDate.valueOf()
+            nextRace.date.valueOf() - currentDate.valueOf()
         ).getMinutes();
         secs = new Date(
-            new Date(nextRace.date).valueOf() - currentDate.valueOf()
+            nextRace.date.valueOf() - currentDate.valueOf()
         ).getSeconds();
     }
 
     const loadNextRace = async () => {
-        const res = await fetch("/api/next-race").then(
-            async (r) => await r.json()
-        );
+        // type H = Awaited<ReturnType<typeof trpc.getUserById.query>>;
+        const data = await trpc.rounds.getNextRace.query();
 
-        const data: NextRaceData = res.data;
-        nextRace.date = data.startDate;
-        nextRace.title = data.round.title;
-        nextRace.series = data.round.series;
+        nextRace.date = new Date(data?.startDate ?? "");
+        nextRace.title = data?.round.title ?? "";
+        nextRace.series = data?.round.series ?? "";
+        // const data = await trpc.getUserById.query("Seb");
     };
 
     onMount(() => {

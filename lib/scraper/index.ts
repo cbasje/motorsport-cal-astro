@@ -1,8 +1,6 @@
 import { load as loadCheerio } from "cheerio";
 import fetch from "node-fetch";
-import { saveRound, saveSessions } from "../api";
 import type { SeriesId, SessionType } from "../types";
-import type { NewSession } from "../types/api";
 import type { ScraperSeries } from "../types/scraper";
 import { flattenObject } from "../utils";
 import {
@@ -15,6 +13,9 @@ import {
     sessionAliases,
 } from "../utils/scraper";
 import scraperData from "./data";
+import type { NewSession } from "lib/types/api";
+import { trpc } from "src/pages/client";
+import { z } from "zod";
 
 export const main = async () => {
     try {
@@ -110,7 +111,7 @@ const scrape = async () => {
                     break;
             }
 
-            await saveSessions(sessions);
+            await trpc.scraper.saveSessions.mutate(sessions);
             console.log(`🤖 saved ${sessions.length} new sessions`);
         } catch (error) {
             console.error(`🚨 scrape() '%s'`, s.id, error);
@@ -178,7 +179,7 @@ const scrapeRound = async (
         if (!roundTitle || !roundCircuit)
             throw new Error("No 'roundTitle' or 'roundCircuit' found");
 
-        const { id: roundId } = await saveRound({
+        const { id: roundId } = await trpc.scraper.saveRound.mutate({
             title: roundTitle,
             number: roundNumber === 0 ? index + 1 : roundNumber,
             circuitTitle: roundCircuit,
@@ -343,7 +344,7 @@ const scrapeRoundAPI = async (
         if (!roundTitle || !roundCircuit)
             throw new Error("No 'roundTitle' or 'roundCircuit' found");
 
-        const { id: roundId } = await saveRound({
+        const { id: roundId } = await trpc.scraper.saveRound.mutate({
             title: roundTitle,
             number: roundNumber === 0 ? index + 1 : roundNumber,
             circuitTitle: roundCircuit,

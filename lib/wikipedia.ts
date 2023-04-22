@@ -1,6 +1,9 @@
-import type { Circuit } from "@prisma/client";
-import { getCircuits, saveWikipediaData } from "./api";
-import type { WikipediaData } from "./types/wikipedia";
+import { trpc } from "src/pages/client";
+import type {
+    CircuitTitle,
+    CircuitWikipedia,
+    WikipediaData,
+} from "./types/wikipedia";
 
 export const main = async () => {
     try {
@@ -8,17 +11,14 @@ export const main = async () => {
         const res = await scrape();
         console.timeEnd("scrape");
 
-        await saveWikipediaData(res);
+        await trpc.scraper.saveWikipediaData.mutate(res);
     } catch (error) {
         console.error("🚨 main()", error);
     }
 };
 
-type CircuitWithId = Omit<Circuit, "created_at">;
-export type CircuitTitle = Pick<CircuitWithId, "id" | "title">;
-export type CircuitWikipedia = Omit<CircuitWithId, "title">;
 const scrape = async (): Promise<CircuitWikipedia[]> => {
-    const titles: CircuitTitle[] = await getCircuits();
+    const titles: CircuitTitle[] = await trpc.scraper.getAllCircuits.query();
 
     let response: CircuitWikipedia[] = [];
     for await (const t of titles) {

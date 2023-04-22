@@ -1,7 +1,7 @@
 import * as z from "zod"
-import { CompleteRound, RelatedRound } from "./index"
+import { CompleteRound, RelatedRoundZ } from "./index"
 
-export const Circuit = z.object({
+export const CircuitZ = z.object({
   id: z.string(),
   created_at: z.date(),
   title: z.string(),
@@ -10,15 +10,15 @@ export const Circuit = z.object({
   lat: z.number().nullish(),
 })
 
-export interface CompleteCircuit extends z.infer<typeof Circuit> {
+export interface CompleteCircuit extends z.infer<typeof CircuitZ> {
   rounds: CompleteRound[]
 }
 
 /**
- * RelatedCircuit contains all relations on your model in addition to the scalars
+ * RelatedCircuitZ contains all relations on your model in addition to the scalars
  *
  * NOTE: Lazy required in case of potential circular dependencies within schema
  */
-export const RelatedCircuit: z.ZodSchema<CompleteCircuit> = z.lazy(() => Circuit.extend({
-  rounds: RelatedRound.array(),
+export const RelatedCircuitZ: z.ZodSchema<CompleteCircuit> = z.lazy(() => CircuitZ.extend({
+  rounds: RelatedRoundZ.array(),
 }))

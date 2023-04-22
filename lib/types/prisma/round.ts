@@ -1,8 +1,8 @@
 import * as z from "zod"
 import { SeriesId } from "@prisma/client"
-import { CompleteCircuit, RelatedCircuit, CompleteSession, RelatedSession } from "./index"
+import { CompleteCircuit, RelatedCircuitZ, CompleteSession, RelatedSessionZ } from "./index"
 
-export const Round = z.object({
+export const RoundZ = z.object({
   id: z.string(),
   created_at: z.date(),
   number: z.number().int(),
@@ -13,17 +13,17 @@ export const Round = z.object({
   series: z.nativeEnum(SeriesId),
 })
 
-export interface CompleteRound extends z.infer<typeof Round> {
+export interface CompleteRound extends z.infer<typeof RoundZ> {
   circuit: CompleteCircuit
   sessions: CompleteSession[]
 }
 
 /**
- * RelatedRound contains all relations on your model in addition to the scalars
+ * RelatedRoundZ contains all relations on your model in addition to the scalars
  *
  * NOTE: Lazy required in case of potential circular dependencies within schema
  */
-export const RelatedRound: z.ZodSchema<CompleteRound> = z.lazy(() => Round.extend({
-  circuit: RelatedCircuit,
-  sessions: RelatedSession.array(),
+export const RelatedRoundZ: z.ZodSchema<CompleteRound> = z.lazy(() => RoundZ.extend({
+  circuit: RelatedCircuitZ,
+  sessions: RelatedSessionZ.array(),
 }))

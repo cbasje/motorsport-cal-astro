@@ -1,7 +1,15 @@
-import type { Circuit, Round, Session } from "@prisma/client";
+import { z } from "zod";
+import { CircuitZ, RoundZ, SessionZ } from "./prisma";
 
-export type NewRound = Omit<Round, "circuitId" | "id" | "created_at"> & {
-    circuitTitle: string;
-};
-export type NewSession = Omit<Session, "id" | "created_at">;
-export type NewCircuit = Omit<Circuit, "id" | "created_at">;
+export const NewRoundZ = RoundZ.omit({
+    id: true,
+    created_at: true,
+    circuitId: true,
+}).merge(z.object({ circuitTitle: z.string() }));
+export type NewRound = z.infer<typeof NewRoundZ>;
+
+export const NewSessionZ = SessionZ.omit({ id: true, created_at: true });
+export type NewSession = z.infer<typeof NewSessionZ>;
+
+export const NewCircuitZ = CircuitZ.omit({ id: true, created_at: true });
+export type NewCircuit = z.infer<typeof NewCircuitZ>;

@@ -1,4 +1,5 @@
 import { createTRPCProxyClient, httpBatchLink } from "@trpc/client";
+import superjson from "superjson";
 import type { AppRouter } from "../server/router";
 
 export function getTrpcUrl() {
@@ -9,7 +10,8 @@ export function getTrpcUrl() {
     return `${import.meta.env.SITE}/api/trpc`;
 }
 
-const trpcAstro = createTRPCProxyClient<AppRouter>({
+const trpc = createTRPCProxyClient<AppRouter>({
+    transformer: superjson,
     links: [
         httpBatchLink({
             url: getTrpcUrl(),
@@ -17,4 +19,4 @@ const trpcAstro = createTRPCProxyClient<AppRouter>({
     ],
 });
 
-export { trpcAstro };
+export { trpc };
