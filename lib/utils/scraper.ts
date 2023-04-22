@@ -57,7 +57,7 @@ export const circuitAliases: Record<CircuitTitle, string> = {
     [CircuitTitle.Fuji]: "(Fuji)",
 };
 
-export const formatDate = (
+export const parseDate = (
     format: string,
     dateInfo: Record<string, string | null>
 ): string | null => {
@@ -181,8 +181,8 @@ export const getDate = (
         timeZone: sessionTimeZone,
     };
 
-    const startDateString = formatDate(format.start, dateInfo);
-    const endDateString = formatDate(format.end, dateInfo);
+    const startDateString = parseDate(format.start, dateInfo);
+    const endDateString = parseDate(format.end, dateInfo);
 
     if (startDateString && endDateString) {
         return [new Date(startDateString), new Date(endDateString)];
