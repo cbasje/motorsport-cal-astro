@@ -1,7 +1,8 @@
 import type { APIRoute } from "astro";
 import { DateArray, EventAttributes, createEvents } from "ics";
 import { getSeriesEmoji } from "../../lib/utils/series";
-import { trpc } from "./client";
+import type { trpc } from "./client";
+import { appRouter } from "./server/router";
 
 const TITLE = "Motorsport Calendar";
 const PRODUCT = "benjamiin..";
@@ -71,9 +72,13 @@ export const getFeed = async (
     return events;
 };
 
-export const get: APIRoute = async ({ params, request }) => {
+export const get: APIRoute = async ({ request }) => {
     try {
-        const sessions = await trpc.feed.getAllSessions.query();
+        const caller = appRouter.createCaller({
+            req: request,
+            resHeaders: request.headers,
+        });
+        const sessions = await caller.feed.getAllSessions();
 
         const events = await getFeed(sessions);
         const feed = await new Promise<string>((resolve, reject) => {
