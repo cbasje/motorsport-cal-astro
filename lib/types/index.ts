@@ -5,7 +5,6 @@ export const seriesIds = [
     "F2",
     "F3",
     "FE",
-    "XE",
     "INDY",
     "W",
     "WEC",
