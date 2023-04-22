@@ -2,6 +2,13 @@ generator client {
   provider = "prisma-client-js"
 }
 
+generator zod {
+  provider = "zod-prisma"
+  output   = "../lib/types/prisma"
+
+  modelSuffix = ""
+}
+
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
@@ -33,14 +40,14 @@ model Round {
 }
 
 model Session {
-  id         String   @id @default(uuid())
-  created_at DateTime @default(now()) @db.Timestamptz(6)
-  number     Int      @default(0)
+  id         String      @id @default(uuid())
+  created_at DateTime    @default(now()) @db.Timestamptz(6)
+  number     Int         @default(0)
   startDate  DateTime
   endDate    DateTime
   roundId    String
   type       SessionType
-  round      Round    @relation(fields: [roundId], references: [id])
+  round      Round       @relation(fields: [roundId], references: [id])
 
   @@unique([type, number, roundId], name: "uniqueSessionPerRoundId")
 }
