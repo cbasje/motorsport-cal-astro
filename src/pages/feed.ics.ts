@@ -1,14 +1,13 @@
-import type { Circuit, Round, Session } from "@prisma/client";
 import type { APIRoute } from "astro";
 import { DateArray, EventAttributes, createEvents } from "ics";
-import prisma from "../../lib/prisma-client";
 import { getSeriesEmoji } from "../../lib/utils/series";
+import type { trpc } from "./client";
+import { appRouter } from "./server/router";
 
 const TITLE = "Motorsport Calendar";
 const PRODUCT = "benjamiin..";
 
 const getCalDate = (date: Date): DateArray => {
-    // const date = new Date(dateString);
     // const arr = DateTime.fromJSDate(date, { zone: "utc" })
     //     .toFormat("yyyy-M-d-H-m")
     //     .split("-")
@@ -22,9 +21,10 @@ const getCalDate = (date: Date): DateArray => {
     ];
 };
 
-export type FeedSession = Session & { round: Round & { circuit: Circuit } };
+type AllSessions = Awaited<ReturnType<typeof trpc.feed.getAllSessions.query>>;
+
 export const getFeed = async (
-    items: FeedSession[]
+    items: AllSessions
 ): Promise<EventAttributes[]> => {
     let events: EventAttributes[] = [];
 
@@ -58,7 +58,10 @@ export const getFeed = async (
             // htmlContent:
             // 	'<!DOCTYPE html><html><body><p>This is<br>test<br>html code.</p></body></html>',
             location: round.circuit.title,
-            url: round.link ?? undefined,
+            url:
+                round.link !== "" && round.link !== null
+                    ? round.link
+                    : undefined,
             geo:
                 circuit.lon && circuit.lat
                     ? { lon: circuit.lon, lat: circuit.lat }
@@ -69,17 +72,13 @@ export const getFeed = async (
     return events;
 };
 
-export const get: APIRoute = async ({ params, request }) => {
+export const get: APIRoute = async ({ request }) => {
     try {
-        const sessions = await prisma.session.findMany({
-            include: {
-                round: {
-                    include: {
-                        circuit: true,
-                    },
-                },
-            },
+        const caller = appRouter.createCaller({
+            req: request,
+            resHeaders: request.headers,
         });
+        const sessions = await caller.feed.getAllSessions();
 
         const events = await getFeed(sessions);
         const feed = await new Promise<string>((resolve, reject) => {

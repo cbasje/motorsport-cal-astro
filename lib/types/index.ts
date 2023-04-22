@@ -1,21 +1,27 @@
+import { z } from "zod";
+
 export const seriesIds = [
     "F1",
     "F2",
     "F3",
     "FE",
-    "XE",
     "INDY",
     "W",
     "WEC",
     "F1A",
 ] as const;
-export type SeriesId = (typeof seriesIds)[number];
-export type SessionType =
-    | "PRACTICE"
-    | "QUALIFYING"
-    | "RACE"
-    | "SPRINT"
-    | "SHAKEDOWN";
+export const SeriesIdZ = z.enum(seriesIds);
+export type SeriesId = z.infer<typeof SeriesIdZ>;
+
+export const SessionTypeZ = z.enum([
+    "PRACTICE",
+    "QUALIFYING",
+    "RACE",
+    "SPRINT",
+    "SHAKEDOWN",
+]);
+export type SessionType = z.infer<typeof SessionTypeZ>;
+
 export enum CircuitTitle {
     Miami = "Miami International Autodrome",
     Bahrain = "Bahrain International Circuit",
