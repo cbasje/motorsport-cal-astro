@@ -53,8 +53,8 @@ export const getSeriesColour = (s: SeriesId) => {
         FE: "#0000FF",
         XE: "#03FD9D",
         INDY: "#0086BF",
-        W: "#440099",
-        WEC: "#01A0F6",
+        W: "#D9FA1B",
+        WEC: "#91C74A",
         F1A: "#BE107E",
     };
     return titles[s];
