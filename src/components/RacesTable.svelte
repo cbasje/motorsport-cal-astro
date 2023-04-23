@@ -1,6 +1,5 @@
 <script lang="ts">
     import Icon from "@iconify/svelte";
-    import type { Round, Session } from "@prisma/client";
     import { onMount } from "svelte";
     import type { SeriesId } from "../../lib/types";
     import {
@@ -9,12 +8,11 @@
         getSeriesTitle,
     } from "../../lib/utils/series";
     import SeriesMultiSelect from "./SeriesMultiSelect.svelte";
+    import { trpc } from "src/pages/client";
 
-    type Race = Pick<Session, "id" | "startDate" | "endDate"> & {
-        round: Pick<Round, "title" | "series">;
-    };
+    type Races = Awaited<ReturnType<typeof trpc.rounds.getAllRaces.query>>;
+    let races = [] as Races;
 
-    let races = [] as Race[];
     $: filteredRaces = races.filter(
         (r) =>
             !(
@@ -42,17 +40,13 @@
         const dateDate = new Date(date);
         return Math.round((dateDate.valueOf() - Date.now()) / oneDay);
     };
-    const getDateString = (date: Date) => {
+    const parseDate = (date: Date) => {
         const diffDays = getDaysDiff(date);
         return timeFormatter.format(diffDays, "days");
     };
 
     const loadRaces = async () => {
-        const res = await fetch("/api/all-races").then(
-            async (r) => await r.json()
-        );
-
-        const data: Race[] = res.data;
+        const data = await trpc.rounds.getAllRaces.query();
         races = data;
     };
 
@@ -83,7 +77,7 @@
             <tr data-id={race.id} class="scroll-mt-12">
                 <td>{race.round.title}</td>
                 <td>
-                    {getDateString(race.startDate)}
+                    {parseDate(race.startDate)}
                 </td>
                 {#if new Date(race.endDate).valueOf() < Date.now()}
                     <td>🏁</td>

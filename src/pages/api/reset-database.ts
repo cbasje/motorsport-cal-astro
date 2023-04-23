@@ -1,26 +1,16 @@
 import type { APIRoute } from "astro";
-import prisma from "../../../lib/prisma-client";
+import { appRouter } from "../server/router";
 
 export const get: APIRoute = async ({ request }) => {
     try {
         const params = new URL(request.url).searchParams;
         const sure = params.get("sure") === "true";
 
-        if (!sure)
-            return new Response(
-                JSON.stringify({
-                    success: false,
-                    reason: "Not 'sure'",
-                }),
-                {
-                    status: 400,
-                    statusText: "Not 'sure'",
-                }
-            );
-
-        await prisma.session.deleteMany();
-        await prisma.round.deleteMany();
-        await prisma.circuit.deleteMany();
+        const caller = appRouter.createCaller({
+            req: request,
+            resHeaders: request.headers,
+        });
+        await caller.database.reset({ sure });
 
         return new Response(
             JSON.stringify({
