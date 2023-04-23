@@ -1,10 +1,12 @@
 ---
 import Countdown from "../components/Countdown.svelte";
 import MainLayout from "../layouts/main.astro";
+
+export const prerender = true;
 ---
 
 <MainLayout>
     <div class="w-full flex flex-col gap-3">
-        <Countdown client:load />
+        <Countdown client:idle />
     </div>
 </MainLayout>

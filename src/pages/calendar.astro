@@ -1,10 +1,12 @@
 ---
 import RacesTable from "../components/RacesTable.svelte";
 import MainLayout from "../layouts/main.astro";
+
+export const prerender = true;
 ---
 
 <MainLayout>
     <div class="w-full flex flex-col gap-3">
-        <RacesTable client:load />
+        <RacesTable client:idle />
     </div>
 </MainLayout>
