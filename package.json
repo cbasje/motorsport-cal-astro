@@ -22,7 +22,6 @@
         "@astrojs/tailwind": "^3.1.1",
         "@auth/core": "^0.5.1",
         "@netlify/functions": "^1.4.0",
-        "@next-auth/prisma-adapter": "^1.0.6",
         "@prisma/client": "^4.13.0",
         "@trpc/client": "^10.21.1",
         "@trpc/server": "^10.21.1",
