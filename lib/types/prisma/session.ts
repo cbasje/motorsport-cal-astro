@@ -1,5 +1,4 @@
 import * as z from "zod"
-import { SessionType } from "@prisma/client"
 import { CompleteRound, RelatedRoundZ } from "./index"
 
 export const SessionZ = z.object({
@@ -9,7 +8,7 @@ export const SessionZ = z.object({
   startDate: z.date(),
   endDate: z.date(),
   roundId: z.string(),
-  type: z.nativeEnum(SessionType),
+  type: z.string(),
 })
 
 export interface CompleteSession extends z.infer<typeof SessionZ> {

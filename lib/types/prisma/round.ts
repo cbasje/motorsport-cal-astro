@@ -1,5 +1,4 @@
 import * as z from "zod"
-import { SeriesId } from "@prisma/client"
 import { CompleteCircuit, RelatedCircuitZ, CompleteSession, RelatedSessionZ } from "./index"
 
 export const RoundZ = z.object({
@@ -10,7 +9,7 @@ export const RoundZ = z.object({
   season: z.string(),
   link: z.string().nullish(),
   circuitId: z.string(),
-  series: z.nativeEnum(SeriesId),
+  series: z.string(),
 })
 
 export interface CompleteRound extends z.infer<typeof RoundZ> {
