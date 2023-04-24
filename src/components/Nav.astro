@@ -9,6 +9,24 @@
             <li><a href="/calendar">Calendar</a></li>
             <li><a href="/api">API</a></li>
             <li><a href="/feed.ics" download>Feed</a></li>
+            <li>
+                <button id="login">Login</button>
+            </li>
+            <li>
+                <button id="logout">Logout</button>
+            </li>
         </ul>
     </div>
 </nav>
+<button data-confetti-button>Celebrate!</button>
+
+<script>
+    import { signIn, signOut } from "auth-astro/client";
+
+    document
+        .querySelector("#login")
+        ?.addEventListener("click", () => signIn("github"));
+    document
+        .querySelector("#logout")
+        ?.addEventListener("click", () => signOut());
+</script>
