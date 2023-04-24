@@ -1,5 +1,7 @@
 import { load as loadCheerio } from "cheerio";
+import type { NewSession } from "lib/types/api";
 import fetch from "node-fetch";
+import { trpc } from "src/pages/client";
 import type { SeriesId, SessionType } from "../types";
 import type { ScraperSeries } from "../types/scraper";
 import { flattenObject } from "../utils";
@@ -13,9 +15,6 @@ import {
     sessionAliases,
 } from "../utils/scraper";
 import scraperData from "./data";
-import type { NewSession } from "lib/types/api";
-import { trpc } from "src/pages/client";
-import { z } from "zod";
 
 export const main = async () => {
     try {
@@ -33,7 +32,6 @@ const scrape = async () => {
     ) as SeriesId[];
 
     for (const s of scraperData) {
-        console.time(`⏱️ Scraping '${s.id}'`);
         if (includedSeries.length && !includedSeries.includes(s.id)) continue;
 
         try {
@@ -94,9 +92,12 @@ const scrape = async () => {
                     rounds = $(s.rounds.selector, html);
 
                     for await (const r of rounds) {
-                        const roundUrlString = $(r)
-                            .find(s.rounds.link.selector)
-                            .attr(s.rounds.link.attr ?? "href");
+                        const roundUrlString = getAttr(
+                            $,
+                            r,
+                            s.rounds.link.selector,
+                            s.rounds.link.attr!
+                        );
 
                         if (!roundUrlString) continue;
                         const roundUrl = new URL(roundUrlString, s.baseUrl);
@@ -117,7 +118,6 @@ const scrape = async () => {
             console.error(`🚨 scrape() '%s'`, s.id, error);
             break;
         }
-        console.timeEnd(`⏱️ Scraping '${s.id}'`);
     }
 };
 

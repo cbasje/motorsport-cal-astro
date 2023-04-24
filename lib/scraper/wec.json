@@ -1,0 +1,55 @@
+{
+    "id": "WEC",
+    "baseUrl": "https://www.fiawec.com/",
+    "season": 2023,
+
+    "rounds": {
+        "url": "en/calendar/80",
+        "selector": "div.body_content footer div.footer-top-right-second.border-pixel > div > div.flex-container-v > a",
+        "link": {
+            "type": "attr",
+            "attr": "href",
+            "selector": ""
+        },
+        "sponsors": ["TotalEnergies"],
+        "actions": [
+            {
+                "param": "round-title",
+                "type": "attr",
+                "attr": "title",
+                "selector": "h2[itemprop='name']"
+            },
+            {
+                "param": "round-circuit",
+                "type": "attr",
+                "attr": "title",
+                "selector": "h2[itemprop='name']",
+                "regex": "of\\s+([\\D ]+)$"
+            }
+        ],
+        "sessions": {
+            "items": {
+                "type": "contents",
+                "selector": ".premain-first-container-timetable div[itemprop='subEvent']"
+            },
+            "date": {
+                "start": "{session-start-time}",
+                "end": "{session-end-time}"
+            },
+            "actions": [
+                {
+                    "param": "session-title",
+                    "type": "attr",
+                    "attr": "content",
+                    "selector": "meta[itemprop='name']"
+                },
+                {
+                    "param": "session-start-time",
+                    "type": "attr",
+                    "attr": "content",
+                    "selector": "meta[itemprop='startDate']"
+                }
+            ]
+        }
+    }
+}
