@@ -19,7 +19,7 @@ jobs:
 
               # Install dependencies
             - name: Install NPM Packages
-              run: npm install
+              run: npm install --legacy-peer-deps
 
             # Transform Figma Tokens JSON to something Style Dictionary can read
             - name: Transform Figma Tokens to Style Dictionary
