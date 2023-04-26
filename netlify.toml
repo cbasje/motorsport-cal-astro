@@ -1,0 +1,9 @@
+[build]
+  # custom build command that install bun and run build
+  command = "./build.sh"
+  # CRA output folder
+  publish = "build"
+
+[build.environment]
+   # disable NPM install
+   NPM_FLAGS = "--version"
