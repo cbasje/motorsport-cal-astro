@@ -1,5 +1,7 @@
 ---
 import Nav from "../components/Nav.astro";
+
+import "../styles/global.scss";
 ---
 
 <html lang="en" data-theme="cupcake">
@@ -15,8 +17,15 @@ import Nav from "../components/Nav.astro";
             <Nav />
         </header>
 
-        <main class="max-w-3xl mx-auto">
+        <main>
             <slot />
         </main>
     </body>
 </html>
+
+<style>
+    main {
+        max-width: 48rem;
+        margin-inline: auto;
+    }
+</style>

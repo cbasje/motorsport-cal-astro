@@ -1,14 +1,63 @@
-<nav class="daisy-navbar bg-base-100">
-    <div class="flex-1">
-        <a href="/" class="daisy-btn daisy-btn-ghost normal-case text-xl">
-            Motorsport Calendar
-        </a>
+<header class="navbar">
+    <div class="title">
+        <a href="/">Motorsport Calendar</a>
     </div>
-    <div class="flex-none">
-        <ul class="daisy-menu daisy-menu-horizontal px-1">
+    <nav>
+        <ul>
             <li><a href="/calendar">Calendar</a></li>
             <li><a href="/api">API</a></li>
             <li><a href="/feed.ics" download>Feed</a></li>
         </ul>
-    </div>
-</nav>
+    </nav>
+</header>
+
+<style lang="scss">
+    header.navbar {
+        display: flex;
+        align-items: center;
+        padding: 0.5rem;
+        min-height: 4rem;
+        width: 100%;
+
+        --tw-bg-opacity: 1;
+        background-color: hsl(var(--b1) / var(--tw-bg-opacity));
+
+        div.title {
+            flex: 1 1 0%;
+            min-width: 0;
+
+            a {
+                font-size: 1.25rem;
+                line-height: 1.75rem;
+                padding-inline: 1rem;
+                min-height: 3rem;
+                font-weight: 600;
+
+                &:hover {
+                    // text-decoration-line: none;
+                }
+            }
+        }
+
+        nav {
+            flex: none;
+
+            ul {
+                list-style: none;
+                display: inline-flex;
+                flex-direction: row;
+                flex-wrap: wrap;
+                width: -moz-max-content;
+                width: max-content;
+                padding-inline: 0.25rem;
+
+                li {
+                    flex-direction: row;
+                    gap: 0.75rem;
+                    padding: 0.75rem 1rem;
+                    color: currentColor;
+                }
+            }
+        }
+    }
+</style>

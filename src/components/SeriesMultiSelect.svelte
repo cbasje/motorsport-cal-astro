@@ -3,7 +3,11 @@
     import { onMount } from "svelte";
     import type { SeriesId } from "../../lib/types";
     import { seriesIds } from "../../lib/types";
-    import { getSeriesIcon, getSeriesTitle } from "../../lib/utils/series";
+    import {
+        getSeriesColour,
+        getSeriesIcon,
+        getSeriesTitle,
+    } from "../../lib/utils/series";
 
     export let series: SeriesId[];
     let seriesCopy: SeriesId[];
@@ -37,38 +41,139 @@
     });
 </script>
 
-<div class="flex w-full sticky top-0 z-10">
+<div class="multi-select">
     {#if series.length > 0}
         <button
             class="daisy-btn daisy-btn-square daisy-btn-active daisy-btn-ghost"
             on:click={reset}
             aria-label="Reset filter"
+            title="Reset filter"
         >
             <Icon icon="ph:arrow-counter-clockwise-bold" />
         </button>
-        <div class="daisy-divider daisy-divider-horizontal" aria-hidden />
+        <div class="divider horizontal" aria-hidden />
     {/if}
-    <div class="flex overflow-x-scroll overflow-y-hidden" aria-label="Filters">
+    <fieldset aria-label="Filters">
         {#each seriesIds as s}
-            <input
-                type="checkbox"
-                bind:group={series}
-                value={s}
-                id="{s}-check"
-                class="hidden {checkboxClass[s]}"
-            />
-            <label
-                for="{s}-check"
-                class="daisy-btn daisy-btn-active daisy-btn-ghost {labelClass[
-                    s
-                ]}"
-                title={getSeriesTitle(s)}
-            >
+            <label for={s} style="--icon-color: {getSeriesColour(s)}">
                 <Icon icon="fluent-emoji-high-contrast:{getSeriesIcon(s)}" />
-                {getSeriesTitle(s)}
+                <span>{getSeriesTitle(s)}</span>
+                <input
+                    type="checkbox"
+                    bind:group={series}
+                    id={s}
+                    name="series"
+                    value={s}
+                />
             </label>
-        {:else}
-            <p>Nothing</p>
         {/each}
-    </div>
+        <!-- <style>
+            html:has(#blog:checked)
+                .PostList
+                > li:not(:has([data-topic="blog"])) {
+                display: none;
+            }
+
+            html:has(#css:checked)
+                .PostList
+                > li:not(:has([data-topic="css"])) {
+                display: none;
+            }
+
+            html:has(#note:checked)
+                .PostList
+                > li:not(:has([data-topic="note"])) {
+                display: none;
+            }
+
+            html:has(#media:checked)
+                .PostList
+                > li:not(:has([data-topic="media"])) {
+                display: none;
+            }
+
+            html:has(#js:checked) .PostList > li:not(:has([data-topic="js"])) {
+                display: none;
+            }
+
+            html:has(#talks:checked)
+                .PostList
+                > li:not(:has([data-topic="talks"])) {
+                display: none;
+            }
+
+            html:has(#git:checked)
+                .PostList
+                > li:not(:has([data-topic="git"])) {
+                display: none;
+            }
+        </style> -->
+    </fieldset>
 </div>
+
+<style lang="scss">
+    @property --icon-color {
+        syntax: "<color>";
+        inherits: false;
+        initial-value: var(--gray-6);
+    }
+
+    .multi-select {
+        width: 100%;
+        display: flex;
+        position: sticky;
+        top: 0;
+        z-index: 10;
+
+        fieldset {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            align-self: start;
+            gap: var(--size-1);
+            padding: 0;
+            border: none;
+            overflow: scroll hidden;
+
+            label {
+                align-items: center;
+                border-radius: var(--radius-round);
+                color: var(--text-1);
+                display: inline-flex;
+                font-size: var(--font-size-3);
+                gap: var(--size-3);
+                margin-inline-start: calc(var(--size-4) * -1);
+                margin: 0;
+                outline-offset: 0;
+                padding: var(--size-2);
+                padding-inline: var(--size-3);
+                position: relative;
+                transition: outline-offset 145ms var(--ease-2) 0.2s;
+
+                > :global(svg.iconify) {
+                    color: var(--gray-6);
+                }
+                > span {
+                    flex: 2;
+                }
+                > input[type="checkbox"] {
+                    height: 0;
+                    opacity: 0;
+                    overflow: hidden;
+                    position: absolute;
+                    width: 0;
+                }
+
+                &:is(:hover, :target, :focus-visible, :has(:checked)) {
+                    background: var(--surface-1);
+                    color: var(--text-1);
+                    text-decoration: none;
+
+                    > :global(svg.iconify) {
+                        color: var(--icon-color);
+                    }
+                }
+            }
+        }
+    }
+</style>
