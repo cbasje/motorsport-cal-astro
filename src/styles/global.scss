@@ -103,8 +103,6 @@
 
 @layer overrides {
     :root {
-        background: var(--surface-document);
-
         --font-sans: "Atkinson Hyperlegible", ui-sans-serif, system-ui,
             -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans,
             sans-serif;
@@ -113,5 +111,10 @@
         --font-mono: ui-monospace, SFMono-Regular, Dank Mono, Operator Mono,
             Inconsolata, Fira Mono, ui-monospace, SF Mono, Monaco,
             Droid Sans Mono, Source Code Pro, monospace;
+
+        --surface-document: var(--gray-12);
+        --surface-1: var(--gray-10);
+
+        background: var(--surface-document);
     }
 }

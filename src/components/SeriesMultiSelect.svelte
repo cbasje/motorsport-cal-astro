@@ -43,12 +43,7 @@
 
 <div class="multi-select">
     {#if series.length > 0}
-        <button
-            class="daisy-btn daisy-btn-square daisy-btn-active daisy-btn-ghost"
-            on:click={reset}
-            aria-label="Reset filter"
-            title="Reset filter"
-        >
+        <button on:click={reset} aria-label="Reset filter" title="Reset filter">
             <Icon icon="ph:arrow-counter-clockwise-bold" />
         </button>
         <div class="divider horizontal" aria-hidden />

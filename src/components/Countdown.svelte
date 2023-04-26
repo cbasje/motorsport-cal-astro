@@ -93,16 +93,16 @@
 
 <style lang="scss">
     h1 {
-        font-size: 1.5rem;
-        line-height: 2rem;
-        font-weight: 500;
+        font-size: var(--font-size-5);
+        line-height: var(--font-lineheight-3);
+        font-weight: var(--font-weight-7);
     }
 
     .countdown-counter {
         display: grid;
         grid-auto-flow: column;
         grid-auto-columns: max-content;
-        gap: 1.25rem;
+        gap: var(--size-4);
 
         text-align: center;
 
@@ -110,21 +110,18 @@
             display: flex;
             flex-direction: column;
 
-            padding: 0.5rem;
-            border-radius: var(--rounded-box, 1rem);
+            padding: var(--size-2);
+            border-radius: var(--radius-3);
 
-            --tw-bg-opacity: 1;
-            background-color: hsl(var(--n) / var(--tw-bg-opacity));
-
-            --tw-text-opacity: 1;
-            color: hsl(var(--nc) / var(--tw-text-opacity));
+            background-color: var(--surface-1);
+            color: var(--text-2);
         }
     }
 
     .countdown {
         line-height: 1em;
         font-family: var(--font-mono);
-        font-size: 3rem;
+        font-size: var(--font-size-7);
 
         > * {
             height: 1em;

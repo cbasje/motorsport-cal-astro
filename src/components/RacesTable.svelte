@@ -115,23 +115,22 @@
         border-color: inherit;
         border-collapse: collapse;
         width: 100%;
+        color: var(--text-1);
 
         th,
         td {
             white-space: nowrap;
-            padding: 1rem;
+            padding: var(--size-3);
             vertical-align: middle;
         }
 
         thead {
             th {
-                --tw-bg-opacity: 1;
-                background-color: hsl(
-                    var(--b2, var(--b1)) / var(--tw-bg-opacity)
-                );
-                font-size: 0.75rem;
-                line-height: 1rem;
-                font-weight: 700;
+                background-color: var(--surface-1);
+                color: var(--text-3);
+                font-size: var(--font-size-0);
+                line-height: var(--font-lineheight-1);
+                font-weight: var(--font-weight-7);
                 text-transform: uppercase;
             }
         }
@@ -139,23 +138,19 @@
         tbody {
             th,
             td {
-                --tw-bg-opacity: 1;
-                background-color: hsl(var(--b1) / var(--tw-bg-opacity));
+                background-color: var(--surface-document);
             }
 
             tr:nth-child(even) {
                 th,
                 td {
-                    --tw-bg-opacity: 1;
-                    background-color: hsl(
-                        var(--b2, var(--b1)) / var(--tw-bg-opacity)
-                    );
+                    background: var(--surface-1);
                 }
             }
         }
 
         tbody > tr {
-            scroll-margin-top: 3rem;
+            scroll-margin-top: var(--size-8);
         }
     }
 </style>
