@@ -13,17 +13,28 @@ import "../styles/global.scss";
         <title>Motorsport Calendar</title>
     </head>
     <body>
+        <a id="skip-link" href="#main-content">Skip to main content</a>
+
         <header>
             <Nav />
         </header>
 
-        <main>
+        <main id="main-content">
             <slot />
         </main>
     </body>
 </html>
 
 <style>
+    #skip-link {
+        opacity: 0;
+        position: absolute;
+        transition: opacity 0.3s var(--ease-3);
+
+        &:focus {
+            opacity: 1;
+        }
+    }
     main {
         max-width: 48rem;
         margin-inline: auto;

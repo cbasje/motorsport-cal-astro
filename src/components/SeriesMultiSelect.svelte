@@ -133,7 +133,6 @@
             gap: var(--size-1);
             padding: 0;
             border: none;
-            overflow: scroll hidden;
 
             label {
                 align-items: center;
@@ -172,6 +171,10 @@
                     > :global(svg.iconify) {
                         color: var(--icon-color);
                     }
+                }
+                &:focus-within {
+                    outline: 1px solid var(--link);
+                    outline-offset: 5px;
                 }
             }
         }
