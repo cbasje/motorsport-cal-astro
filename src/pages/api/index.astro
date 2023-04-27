@@ -3,11 +3,11 @@ import MainLayout from "../../layouts/main.astro";
 ---
 
 <MainLayout>
-    <div class="w-full flex flex-col gap-3">
-        <h1 class="text-2xl font-medium">Motorsport Calendar REST API</h1>
-        <h2 class="text-lg">Available Routes</h2>
+    <div class="container">
+        <h1>Motorsport Calendar REST API</h1>
 
-        <table class="daisy-table daisy-table-zebra w-full">
+        <table>
+            <caption>Available Routes</caption>
             <thead>
                 <tr>
                     <th>Protocol</th>
@@ -61,3 +61,68 @@ import MainLayout from "../../layouts/main.astro";
         </table>
     </div>
 </MainLayout>
+
+<style lang="scss">
+    .container {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        gap: var(--size-3);
+    }
+
+    h1 {
+        font-size: var(--font-size-5);
+        line-height: var(--font-lineheight-3);
+        font-weight: var(--font-weight-7);
+    }
+    caption {
+        font-size: var(--font-size-3);
+        line-height: var(--font-lineheight-3);
+    }
+
+    table {
+        position: relative;
+        text-align: left;
+        text-indent: 0;
+        border-color: inherit;
+        border-collapse: collapse;
+        width: 100%;
+        color: var(--text-1);
+
+        th,
+        td {
+            white-space: nowrap;
+            padding: var(--size-3);
+            vertical-align: middle;
+        }
+
+        thead {
+            th {
+                background-color: var(--surface-1);
+                color: var(--text-3);
+                font-size: var(--font-size-0);
+                line-height: var(--font-lineheight-1);
+                font-weight: var(--font-weight-7);
+                text-transform: uppercase;
+            }
+        }
+
+        tbody {
+            th,
+            td {
+                background-color: var(--surface-document);
+            }
+
+            tr:nth-child(even) {
+                th,
+                td {
+                    background: var(--surface-1);
+                }
+            }
+        }
+
+        tbody > tr {
+            scroll-margin-top: var(--size-8);
+        }
+    }
+</style>

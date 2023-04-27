@@ -63,7 +63,7 @@
 
 <SeriesMultiSelect bind:series={includedSeries} />
 
-<table class="daisy-table daisy-table-zebra w-full">
+<table>
     <thead>
         <tr>
             <th>Title</th>
@@ -74,13 +74,15 @@
     </thead>
     <tbody>
         {#each filteredRaces as race (race.id)}
-            <tr data-id={race.id} class="scroll-mt-12">
+            <tr data-id={race.id}>
                 <td>{race.round.title}</td>
                 <td>
                     {parseDate(race.startDate)}
                 </td>
                 {#if new Date(race.endDate).valueOf() < Date.now()}
-                    <td>🏁</td>
+                    <td>
+                        <Icon icon="ph:flag-checkered-duotone" />
+                    </td>
                 {:else if Date.now() >= new Date(race.startDate).valueOf() && Date.now() <= new Date(race.endDate).valueOf()}
                     <td>...</td>
                 {:else}
@@ -104,3 +106,51 @@
         {/each}
     </tbody>
 </table>
+
+<style lang="scss">
+    table {
+        position: relative;
+        text-align: left;
+        text-indent: 0;
+        border-color: inherit;
+        border-collapse: collapse;
+        width: 100%;
+        color: var(--text-1);
+
+        th,
+        td {
+            white-space: nowrap;
+            padding: var(--size-3);
+            vertical-align: middle;
+        }
+
+        thead {
+            th {
+                background-color: var(--surface-1);
+                color: var(--text-3);
+                font-size: var(--font-size-0);
+                line-height: var(--font-lineheight-1);
+                font-weight: var(--font-weight-7);
+                text-transform: uppercase;
+            }
+        }
+
+        tbody {
+            th,
+            td {
+                background-color: var(--surface-document);
+            }
+
+            tr:nth-child(even) {
+                th,
+                td {
+                    background: var(--surface-1);
+                }
+            }
+        }
+
+        tbody > tr {
+            scroll-margin-top: var(--size-8);
+        }
+    }
+</style>
