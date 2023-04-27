@@ -12,28 +12,8 @@
     export let series: SeriesId[];
     let seriesCopy: SeriesId[];
 
-    const checkboxClass: Record<SeriesId, string> = {
-        F1: "peer/f1",
-        F2: "peer/f2",
-        F3: "peer/f3",
-        FE: "peer/fe",
-        INDY: "peer/indy",
-        W: "peer/w",
-        WEC: "peer/wec",
-        F1A: "peer/f1a",
-    };
-    const labelClass: Record<SeriesId, string> = {
-        F1: "peer-checked/f1:daisy-btn-primary",
-        F2: "peer-checked/f2:daisy-btn-primary",
-        F3: "peer-checked/f3:daisy-btn-primary",
-        FE: "peer-checked/fe:daisy-btn-primary",
-        INDY: "peer-checked/indy:daisy-btn-primary",
-        W: "peer-checked/w:daisy-btn-primary",
-        WEC: "peer-checked/wec:daisy-btn-primary",
-        F1A: "peer-checked/f1a:daisy-btn-primary",
-    };
-
-    const reset = () => {
+    const reset = (e: Event & { currentTarget: HTMLInputElement }) => {
+        if (series.length === 0) e.currentTarget!.checked = true;
         series = seriesCopy.slice(0);
     };
     onMount(() => {
@@ -42,22 +22,28 @@
 </script>
 
 <div class="multi-select">
-    {#if series.length > 0}
-        <button on:click={reset} aria-label="Reset filter" title="Reset filter">
-            <Icon icon="ph:arrow-counter-clockwise-bold" />
-        </button>
+    <fieldset aria-label="Filters for series">
+        <label for="all" aria-label="Show all series">
+            <Icon icon="ph:list-checks-bold" />
+            <span>All</span>
+            <input
+                id="all"
+                name="series"
+                type="checkbox"
+                checked={series.length === 0}
+                on:input={reset}
+            />
+        </label>
         <div class="divider horizontal" aria-hidden />
-    {/if}
-    <fieldset aria-label="Filters">
         {#each seriesIds as s}
             <label for={s} style="--icon-color: {getSeriesColour(s)}">
                 <Icon icon="fluent-emoji-high-contrast:{getSeriesIcon(s)}" />
                 <span>{getSeriesTitle(s)}</span>
                 <input
-                    type="checkbox"
-                    bind:group={series}
                     id={s}
                     name="series"
+                    type="checkbox"
+                    bind:group={series}
                     value={s}
                 />
             </label>
