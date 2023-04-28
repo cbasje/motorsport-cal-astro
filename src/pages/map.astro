@@ -1,0 +1,8 @@
+---
+import MainLayout from "src/layouts/main.astro";
+import Map from "src/components/map/index.svelte";
+---
+
+<MainLayout>
+    <Map client:idle client:only />
+</MainLayout>

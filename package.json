@@ -19,6 +19,8 @@
     "dependencies": {
         "@astrojs/netlify": "^2.2.2",
         "@astrojs/svelte": "^2.1.0",
+        "@iconify-json/ph": "^1.1.5",
+        "@iconify/utils": "^2.1.5",
         "@netlify/functions": "^1.4.0",
         "@prisma/client": "^4.13.0",
         "@trpc/client": "^10.21.1",
@@ -26,6 +28,7 @@
         "astro": "^2.2.2",
         "cheerio": "^1.0.0-rc.12",
         "ics": "^3.1.0",
+        "leaflet": "^1.9.3",
         "node-fetch": "^3.3.1",
         "open-props": "^1.5.8",
         "prisma": "^4.13.0",
@@ -39,6 +42,7 @@
     },
     "devDependencies": {
         "@iconify/svelte": "^3.1.1",
+        "@types/leaflet": "^1.9.3",
         "@types/node": "^18.15.11",
         "zod-prisma": "^0.5.4"
     }
