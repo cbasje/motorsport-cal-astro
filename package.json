@@ -19,15 +19,14 @@
         "deploy": "fly deploy --remote-only"
     },
     "dependencies": {
-        "@astrojs/node": "^5.3.0",
         "@astrojs/svelte": "^2.1.0",
+        "@matthewp/astro-fastify": "^2.1.5",
         "@prisma/client": "^4.13.0",
         "@trpc/client": "^10.34.0",
         "@trpc/server": "^10.34.0",
         "astro": "^2.7.0",
         "cheerio": "^1.0.0-rc.12",
         "ics": "^3.1.0",
-        "node-fetch": "^3.3.1",
         "open-props": "^1.5.8",
         "prisma": "^4.13.0",
         "sass": "^1.62.1",

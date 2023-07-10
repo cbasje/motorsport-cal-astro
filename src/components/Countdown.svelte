@@ -41,13 +41,11 @@
     }
 
     const loadNextRace = async () => {
-        // type H = Awaited<ReturnType<typeof trpc.getUserById.query>>;
         const data = await trpc.rounds.getNextRace.query();
 
         nextRace.date = new Date(data?.startDate ?? "");
         nextRace.title = data?.round.title ?? "";
         nextRace.series = data?.round.series ?? "";
-        // const data = await trpc.getUserById.query("Seb");
     };
 
     onMount(() => {

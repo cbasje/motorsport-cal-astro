@@ -1,12 +1,13 @@
-import svelte from "@astrojs/svelte";
 import { defineConfig } from "astro/config";
-import node from "@astrojs/node";
+import fastify from "@matthewp/astro-fastify";
+import svelte from "@astrojs/svelte";
 
 // https://astro.build/config
 export default defineConfig({
     output: "server",
-    adapter: node({
-        mode: "standalone",
+    adapter: fastify({
+        logger: false,
+        port: 8080,
     }),
     integrations: [svelte()],
     site: import.meta.env.PROD
