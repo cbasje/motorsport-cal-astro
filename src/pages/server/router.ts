@@ -1,7 +1,7 @@
 import { TRPCError, initTRPC } from "@trpc/server";
-import { NewCircuitZ, NewRoundZ, NewSessionZ } from "lib/types/api";
-import { CircuitZ } from "lib/types/prisma";
-import { CircuitWikipediaZ } from "lib/types/wikipedia";
+import { NewCircuitZ, NewRoundZ, NewSessionZ } from "../../../lib/types/api";
+import { CircuitZ } from "../../../lib/types/prisma";
+import { CircuitWikipediaZ } from "../../../lib/types/wikipedia";
 import superjson from "superjson";
 import { z } from "zod";
 import { prisma } from "../../../lib/prisma";

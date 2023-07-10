@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { trpc } from "src/pages/client";
+    import { trpc } from "../pages/client";
     import { onMount } from "svelte";
 
     $: nextRace = {

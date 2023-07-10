@@ -1,7 +1,7 @@
 import { load as loadCheerio } from "cheerio";
-import type { NewSession } from "lib/types/api";
+import type { NewSession } from "../types/api";
 import fetch from "node-fetch";
-import { trpc } from "src/pages/client";
+import { trpc } from "../../src/pages/client";
 import type { SeriesId, SessionType } from "../types";
 import type { ScraperSeries } from "../types/scraper";
 import { flattenObject } from "../utils";

@@ -1,4 +1,4 @@
-import { trpc } from "src/pages/client";
+import { trpc } from "../src/pages/client";
 import type {
     CircuitTitle,
     CircuitWikipedia,

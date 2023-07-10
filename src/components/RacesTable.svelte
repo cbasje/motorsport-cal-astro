@@ -8,7 +8,7 @@
         getSeriesTitle,
     } from "../../lib/utils/series";
     import SeriesMultiSelect from "./SeriesMultiSelect.svelte";
-    import { trpc } from "src/pages/client";
+    import { trpc } from "../pages/client";
 
     type Races = Awaited<ReturnType<typeof trpc.rounds.getAllRaces.query>>;
     let races = [] as Races;
