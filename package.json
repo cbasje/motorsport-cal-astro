@@ -17,9 +17,7 @@
         "migrate:prod": "yarn prisma migrate dev"
     },
     "dependencies": {
-        "@astrojs/netlify": "^2.2.2",
         "@astrojs/svelte": "^2.1.0",
-        "@netlify/functions": "^1.4.0",
         "@prisma/client": "^4.13.0",
         "@trpc/client": "^10.21.1",
         "@trpc/server": "^10.21.1",
