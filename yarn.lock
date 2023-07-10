@@ -719,15 +719,15 @@
     svelte-hmr "^0.15.1"
     vitefu "^0.2.4"
 
-"@trpc/client@^10.21.1":
-  version "10.21.1"
-  resolved "https://registry.npmjs.org/@trpc/client/-/client-10.21.1.tgz"
-  integrity sha512-oZgPbghs9y2frTCA9mZPSAlVknV9stCTKYO5nsvRr0aX+oaA0URoXJTKZTSpLZxLfuwWgxBj4iTiCWWWmaVelw==
+"@trpc/client@^10.34.0":
+  version "10.34.0"
+  resolved "https://registry.yarnpkg.com/@trpc/client/-/client-10.34.0.tgz#cd9bc5ec4801dde24bb343408c7fe203595db538"
+  integrity sha512-nqtDTIqSY/9syo2EjSy4WWWXPU9GsamEh9Tsg698gLAh1nhgFc5+/YYeb+Ne1pbvWGZ5/3t9Dcz3h4wMyyJ9gQ==
 
-"@trpc/server@^10.21.1":
-  version "10.21.1"
-  resolved "https://registry.npmjs.org/@trpc/server/-/server-10.21.1.tgz"
-  integrity sha512-4E4upTD2/Aq0Dm9HW4nbKSoIlqbV/ajRqNl1MCFBd9FjTv47qq2ncmAWMbb0AIVh2UV87PJlTjpPNNecRm6g9Q==
+"@trpc/server@^10.34.0":
+  version "10.34.0"
+  resolved "https://registry.yarnpkg.com/@trpc/server/-/server-10.34.0.tgz#0c56ca4a72f41bfc558b07a2db70d54b77077f8f"
+  integrity sha512-2VMW44Fpaoyqb50dBtzdSWMhqt8lmoJiocEyBBeDb03R0W+XrzbVD5kU/wqKPlcp1DWeNCkOEIMtetMZCfo1hA==
 
 "@ts-morph/common@~0.12.3":
   version "0.12.3"
