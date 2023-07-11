@@ -1,6 +1,6 @@
 # [Motorsport calendar](https://motorsport.benjami.in/)
 
-This is a website that shows motorsport events from around the world. Currently, it is a list with interactive filtering and a countdown but the plan is to expand on this in the future.
+This is a website that shows motorsport events from around the world. Currently, it can create a .ics-file and shows a list with interactive filtering but the plan is to make this a fully-fledged web app.
 
 ## Stack
 
