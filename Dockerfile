@@ -9,8 +9,8 @@ ADD     prisma /app/prisma
 ADD     public /app/public
 ADD     src /app/src
 
-ARG     DATABASE_URL
-ENV     DATABASE_URL "postgres://motorsport_cal_astro:${DATABASE_URL}@motorsport-cal-v2-db.flycast:5432/motorsport_cal_astro?sslmode=disable"
+ARG     DATABASE_PW
+ENV     DATABASE_URL "postgres://postgres:${DATABASE_PW}@motorsport-cal-db.flycast:5432?sslmode=disable"
 
 RUN     yarn install --frozen-lockfile
 RUN     yarn build

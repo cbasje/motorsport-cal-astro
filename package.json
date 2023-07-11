@@ -8,7 +8,7 @@
     "private": true,
     "scripts": {
         "dev": "astro dev",
-        "dev:db": "fly proxy 5432 -a motorsport-cal-v2-db",
+        "dev:db": "fly proxy 5432 -a motorsport-cal-db",
         "start": "node dist/server/entry.mjs",
         "build": "astro build",
         "postinstall": "prisma generate",
