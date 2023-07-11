@@ -1,7 +1,7 @@
 import { TRPCError, initTRPC } from "@trpc/server";
-import { NewCircuitZ, NewRoundZ, NewSessionZ } from "lib/types/api";
-import { CircuitZ } from "lib/types/prisma";
-import { CircuitWikipediaZ } from "lib/types/wikipedia";
+import { NewCircuitZ, NewRoundZ, NewSessionZ } from "../../../lib/types/api";
+import { CircuitZ } from "../../../lib/types/prisma";
+import { CircuitWikipediaZ } from "../../../lib/types/wikipedia";
 import superjson from "superjson";
 import { z } from "zod";
 import { prisma } from "../../../lib/prisma";
@@ -277,110 +277,6 @@ const database = router({
         }),
 });
 
-const scraper = router({
-    getAllCircuits: publicProcedure.use(logger).query(() =>
-        prisma.circuit.findMany({
-            select: {
-                id: true,
-                title: true,
-            },
-        })
-    ),
-
-    saveRound: publicProcedure
-        .use(logger)
-        .input(NewRoundZ)
-        .mutation(({ input }) =>
-            prisma.round.upsert({
-                create: {
-                    title: input.title,
-                    number: input.number,
-                    season: input.season,
-                    series: input.series,
-                    link: input.link,
-                    circuit: {
-                        connectOrCreate: {
-                            where: {
-                                title: input.circuitTitle,
-                            },
-                            create: {
-                                title: input.circuitTitle,
-                            },
-                        },
-                    },
-                },
-                update: {
-                    title: input.title,
-                    number: input.number,
-                    season: input.season,
-                    series: input.series,
-                    link: input.link,
-                },
-                where: {
-                    uniqueRoundPerSeriesSeason: {
-                        title: input.title,
-                        number: input.number,
-                        season: input.season,
-                        series: input.series,
-                    },
-                },
-            })
-        ),
-
-    saveSessions: publicProcedure
-        .use(logger)
-        .input(z.array(NewSessionZ))
-        .mutation(({ input }) =>
-            Promise.all(
-                input.map(async (row) => {
-                    await prisma.session.upsert({
-                        create: {
-                            type: row.type,
-                            number: row.number,
-                            roundId: row.roundId,
-                            startDate: row.startDate,
-                            endDate: row.endDate,
-                        },
-                        update: {
-                            type: row.type,
-                            number: row.number,
-                            roundId: row.roundId,
-                            startDate: row.startDate,
-                            endDate: row.endDate,
-                        },
-                        where: {
-                            uniqueSessionPerRoundId: {
-                                type: row.type,
-                                number: row.number,
-                                roundId: row.roundId,
-                            },
-                        },
-                    });
-                })
-            )
-        ),
-
-    saveWikipediaData: publicProcedure
-        .use(logger)
-        .input(z.array(CircuitWikipediaZ))
-        .mutation(({ input }) =>
-            Promise.all(
-                input.map(async (row) => {
-                    await prisma.circuit.update({
-                        data: {
-                            lat: row.lat,
-                            lon: row.lon,
-                            wikipediaPageId: row.wikipediaPageId,
-                        },
-                        where: {
-                            id: row.id,
-                        },
-                    });
-                })
-            )
-        ),
-});
-
 const feed = router({
     getAllSessions: publicProcedure.use(logger).query(() =>
         prisma.session.findMany({
@@ -400,7 +296,6 @@ export const appRouter = router({
     rounds,
     sessions,
     database,
-    scraper,
     feed,
 });
 
