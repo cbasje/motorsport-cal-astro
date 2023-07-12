@@ -112,8 +112,10 @@
             align-items: center;
             align-self: start;
             gap: var(--size-1);
-            padding: 0;
+            padding: var(--size-2) 0;
+
             border: none;
+            background: var(--surface-document);
 
             label {
                 align-items: center;
