@@ -1,18 +1,19 @@
-import * as z from "zod";
-import { CompleteRound, RelatedRoundZ } from "./index";
+import * as z from "zod"
+import { SessionType } from "@prisma/client"
+import { CompleteRound, RelatedRoundZ } from "./index"
 
 export const SessionZ = z.object({
-    id: z.string(),
-    created_at: z.date(),
-    number: z.number().int(),
-    startDate: z.date(),
-    endDate: z.date(),
-    roundId: z.string(),
-    type: z.enum(["PRACTICE", "QUALIFYING", "RACE", "SPRINT", "SHAKEDOWN"]),
-});
+  id: z.string(),
+  created_at: z.date(),
+  number: z.number().int(),
+  startDate: z.date(),
+  endDate: z.date(),
+  roundId: z.string(),
+  type: z.nativeEnum(SessionType),
+})
 
 export interface CompleteSession extends z.infer<typeof SessionZ> {
-    round: CompleteRound;
+  round: CompleteRound
 }
 
 /**
@@ -20,8 +21,6 @@ export interface CompleteSession extends z.infer<typeof SessionZ> {
  *
  * NOTE: Lazy required in case of potential circular dependencies within schema
  */
-export const RelatedSessionZ: z.ZodSchema<CompleteSession> = z.lazy(() =>
-    SessionZ.extend({
-        round: RelatedRoundZ,
-    })
-);
+export const RelatedSessionZ: z.ZodSchema<CompleteSession> = z.lazy(() => SessionZ.extend({
+  round: RelatedRoundZ,
+}))

@@ -13,4 +13,12 @@ export default defineConfig({
     site: import.meta.env.PROD
         ? "https://motorsport-cal-v2.netlify.app"
         : "http://localhost:3000",
+    vite: {
+        resolve: {
+            alias: {
+                ".prisma/client/index-browser":
+                    "./node_modules/.prisma/client/index-browser.js",
+            },
+        },
+    },
 });
