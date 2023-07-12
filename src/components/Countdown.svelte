@@ -1,12 +1,7 @@
 <script lang="ts">
-    import { trpc } from "../pages/client";
-    import { onMount } from "svelte";
+    import type { NextRace } from "../../lib/types";
 
-    $: nextRace = {
-        date: new Date(),
-        title: "",
-        series: "",
-    };
+    export let nextRace: NextRace;
 
     let currentDate = new Date();
 
@@ -21,71 +16,52 @@
 
     let days = 0,
         hours = 0,
-        mins = 0,
-        secs = 0;
+        mins = 0;
     $: {
         days =
             new Date(
-                nextRace.date.valueOf() - currentDate.valueOf()
+                nextRace.startDate.valueOf() - currentDate.valueOf()
             ).getDate() - 1;
         hours =
             new Date(
-                nextRace.date.valueOf() - currentDate.valueOf()
+                nextRace.startDate.valueOf() - currentDate.valueOf()
             ).getHours() - 1;
         mins = new Date(
-            nextRace.date.valueOf() - currentDate.valueOf()
+            nextRace.startDate.valueOf() - currentDate.valueOf()
         ).getMinutes();
-        secs = new Date(
-            nextRace.date.valueOf() - currentDate.valueOf()
-        ).getSeconds();
     }
-
-    const loadNextRace = async () => {
-        const data = await trpc.rounds.getNextRace.query();
-
-        nextRace.date = new Date(data?.startDate ?? "");
-        nextRace.title = data?.round.title ?? "";
-        nextRace.series = data?.round.series ?? "";
-    };
-
-    onMount(() => {
-        loadNextRace();
-    });
 </script>
 
-{#if nextRace.title !== ""}
-    <h1>
-        Time to: {nextRace.series}
-        {nextRace.title}
-    </h1>
+{#if nextRace.round.title !== ""}
+    <h2>
+        {nextRace.round.series}
+        {nextRace.round.title}
+    </h2>
 {:else}
     <h1>Loading...</h1>
 {/if}
 
 <div class="countdown-counter">
     <div>
-        <span class="countdown">
+        <span class="countdown" aria-hidden="true">
             <span style="--value: {days}" />
         </span>
+        <span class="visually-hidden">{days}</span>
         days
     </div>
     <div>
-        <span class="countdown">
+        <span class="countdown" aria-hidden="true">
             <span style="--value: {hours}" />
         </span>
+        <span class="visually-hidden">{hours}</span>
         hours
     </div>
     <div>
-        <span class="countdown">
+        <span class="countdown" aria-hidden="true">
             <span style="--value: {mins}" />
         </span>
+        <span class="visually-hidden">{mins}</span>
         mins
-    </div>
-    <div>
-        <span class="countdown">
-            <span style="--value: {secs}" />
-        </span>
-        secs
     </div>
 </div>
 

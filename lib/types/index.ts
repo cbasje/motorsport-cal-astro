@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { RoundZ, SessionZ } from "./prisma";
 
 export const seriesIds = [
     "F1",
@@ -69,3 +70,9 @@ export enum CircuitTitle {
     LeMans = "Circuit de la Sarthe",
     Fuji = "Fuji Speedway",
 }
+
+export const NextRaceZ = SessionZ.pick({
+    startDate: true,
+    endDate: true,
+}).merge(z.object({ round: RoundZ.pick({ title: true, series: true }) }));
+export type NextRace = z.infer<typeof NextRaceZ>;

@@ -1,5 +1,11 @@
 @layer normalize {
     @import "open-props/normalize";
+
+    :is(.visually-hidden, .sr-only) {
+        block-size: 0;
+        inline-size: 0;
+        overflow: hidden;
+    }
 }
 
 @layer theme {

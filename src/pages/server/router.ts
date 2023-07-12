@@ -1,10 +1,10 @@
 import { TRPCError, initTRPC } from "@trpc/server";
-import { NewCircuitZ, NewRoundZ, NewSessionZ } from "../../../lib/types/api";
-import { CircuitZ } from "../../../lib/types/prisma";
-import { CircuitWikipediaZ } from "../../../lib/types/wikipedia";
+import { SeriesIdZ, seriesIds } from "../../../lib/types";
 import superjson from "superjson";
 import { z } from "zod";
 import { prisma } from "../../../lib/prisma";
+import { NewCircuitZ, NewRoundZ, NewSessionZ } from "../../../lib/types/api";
+import { CircuitZ } from "../../../lib/types/prisma";
 import type { Context } from "./context";
 
 export const t = initTRPC.context<Context>().create({
@@ -160,27 +160,37 @@ const rounds = router({
         })
     ),
 
-    getNextRace: publicProcedure.use(logger).query(() =>
-        prisma.session.findFirst({
-            orderBy: { startDate: "asc" },
-            where: {
-                type: "RACE",
-                endDate: {
-                    gte: new Date(),
-                },
-            },
-            select: {
-                startDate: true,
-                endDate: true,
-                round: {
-                    select: {
-                        title: true,
-                        series: true,
-                    },
-                },
-            },
-        })
-    ),
+    getNextRaces: publicProcedure
+        .use(logger)
+        .input(z.optional(z.array(SeriesIdZ)))
+        .query(({ input }) =>
+            Promise.all(
+                (input ?? seriesIds).map((series) =>
+                    prisma.session.findFirst({
+                        orderBy: { startDate: "asc" },
+                        where: {
+                            type: "RACE",
+                            endDate: {
+                                gte: new Date(),
+                            },
+                            round: {
+                                series,
+                            },
+                        },
+                        select: {
+                            startDate: true,
+                            endDate: true,
+                            round: {
+                                select: {
+                                    title: true,
+                                    series: true,
+                                },
+                            },
+                        },
+                    })
+                )
+            )
+        ),
 });
 
 const sessions = router({
