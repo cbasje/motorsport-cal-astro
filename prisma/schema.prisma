@@ -58,7 +58,6 @@ enum SeriesId {
   F3
   FE
   INDY
-  W
   WEC
   F1A
 }

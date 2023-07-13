@@ -7,7 +7,6 @@ export const getSeriesIcon = (s: SeriesId) => {
         F3: "baby",
         FE: "battery",
         INDY: "eagle",
-        W: "woman",
         WEC: "stopwatch",
         F1A: "girl",
     };
@@ -21,7 +20,6 @@ export const getSeriesEmoji = (s: SeriesId) => {
         F3: "👶🏻",
         FE: "🔋",
         INDY: "🦅",
-        W: "👩🏻",
         WEC: "⏱️",
         F1A: "👧🏻",
     };
@@ -35,7 +33,6 @@ export const getSeriesTitle = (s: SeriesId) => {
         F3: "Formula 3",
         FE: "Formula E",
         INDY: "Indycar",
-        W: "W Series",
         WEC: "WEC",
         F1A: "F1 Academy",
     };
@@ -49,7 +46,6 @@ export const getSeriesColour = (s: SeriesId) => {
         F3: "#440099",
         FE: "#0000FF",
         INDY: "#01A0F6",
-        W: "#D9FA1B",
         WEC: "#03FD9D",
         F1A: "#BE107E",
     };

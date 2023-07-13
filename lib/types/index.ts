@@ -7,7 +7,6 @@ export const seriesIds = [
     "F3",
     "FE",
     "INDY",
-    "W",
     "WEC",
     "F1A",
 ] as const;
