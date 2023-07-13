@@ -1,10 +1,19 @@
+const postcssCustomMedia = require("postcss-custom-media");
+const postcssGlobalData = require("@csstools/postcss-global-data");
+// const postcssPresetEnv = require("postcss-preset-env");
+const autoprefixer = require("autoprefixer");
+const cssnano = require("cssnano");
+
 /** @type {import('postcss-load-config').Config} */
 const config = {
     plugins: [
-        require("postcss-custom-media"),
-        // require("postcss-preset-env"),
-        require("autoprefixer"),
-        require("cssnano"),
+        postcssGlobalData({
+            files: ["./node_modules/open-props/media.min.css"],
+        }),
+        postcssCustomMedia,
+        // postcssPresetEnv,
+        autoprefixer,
+        cssnano,
     ],
 };
 

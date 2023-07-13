@@ -19,29 +19,31 @@
         "deploy": "fly deploy --remote-only"
     },
     "dependencies": {
-        "@astrojs/svelte": "^2.1.0",
+        "@astrojs/svelte": "^3.1.0",
         "@matthewp/astro-fastify": "^2.1.5",
         "@prisma/client": "^5.0.0",
         "@trpc/client": "^10.34.0",
         "@trpc/server": "^10.34.0",
-        "astro": "^2.7.0",
-        "autoprefixer": "^10.4.14",
-        "cssnano": "^6.0.1",
+        "astro": "^2.8.1",
         "ics": "^3.1.0",
-        "open-props": "^1.5.8",
-        "postcss-custom-media": "^10.0.0",
         "prisma": "^5.0.0",
-        "sass": "^1.62.1",
-        "style-dictionary": "^3.7.2",
         "superjson": "^1.12.3",
         "svelte": "^3.58.0",
-        "token-transformer": "^0.0.32",
-        "typescript": "^5.0.4",
         "zod": "^3.21.4"
     },
     "devDependencies": {
+        "@csstools/postcss-global-data": "^2.0.0",
         "@iconify/svelte": "^3.1.1",
         "@types/node": "^18.15.11",
+        "autoprefixer": "^10.4.14",
+        "cssnano": "^6.0.1",
+        "open-props": "^1.5.10",
+        "postcss": "^8.4.25",
+        "postcss-custom-media": "^10.0.0",
+        "sass": "^1.63.6",
+        "style-dictionary": "^3.8.0",
+        "token-transformer": "^0.0.33",
+        "typescript": "^5.1.6",
         "zod-prisma": "^0.5.4"
     }
 }
