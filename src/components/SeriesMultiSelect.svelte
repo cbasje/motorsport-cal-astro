@@ -48,53 +48,10 @@
                 />
             </label>
         {/each}
-        <!-- <style>
-            html:has(#blog:checked)
-                .PostList
-                > li:not(:has([data-topic="blog"])) {
-                display: none;
-            }
-
-            html:has(#css:checked)
-                .PostList
-                > li:not(:has([data-topic="css"])) {
-                display: none;
-            }
-
-            html:has(#note:checked)
-                .PostList
-                > li:not(:has([data-topic="note"])) {
-                display: none;
-            }
-
-            html:has(#media:checked)
-                .PostList
-                > li:not(:has([data-topic="media"])) {
-                display: none;
-            }
-
-            html:has(#js:checked) .PostList > li:not(:has([data-topic="js"])) {
-                display: none;
-            }
-
-            html:has(#talks:checked)
-                .PostList
-                > li:not(:has([data-topic="talks"])) {
-                display: none;
-            }
-
-            html:has(#git:checked)
-                .PostList
-                > li:not(:has([data-topic="git"])) {
-                display: none;
-            }
-        </style> -->
     </fieldset>
 </div>
 
 <style lang="scss">
-    @import "open-props/media";
-
     @property --icon-color {
         syntax: "<color>";
         inherits: false;
