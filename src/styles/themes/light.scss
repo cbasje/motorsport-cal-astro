@@ -1,14 +1,18 @@
+@import "../oklch.scss";
+
 :root {
-            --theme-surface-1: #f8f9fa;
---theme-surface-2: #e9ecef;
---theme-surface-3: #ced4da;
---theme-text-1: #0d0f12;
---theme-text-2: #343a40;
---theme-text-3: #adb5bd;
---theme-text-on-accent: #f8f9fa;
---theme-accent-1: #7950f2;
---theme-accent-2: #9775fa;
---theme-gradient-green: linear-gradient(150deg, #c3fae8 0%, #66d9e8 100%);
---theme-gradient-purple: linear-gradient(150deg, #e5dbff 0%, #faa2c1 100%);
---theme-gradient-blue: linear-gradient(150deg, #c5f6fa 0%, #b197fc 100%);
-        }
+    --neutral-hue: 247;
+    --neutral-chroma: 0.01;
+    --theme-surface-1: #{get-surface(0)};
+    --theme-surface-2: #{get-surface(2)};
+    --theme-surface-3: #{get-surface(4)};
+    --theme-text-1: #{get-surface(8)};
+    --theme-text-2: #{get-surface(6)};
+    --theme-text-3: #{get-surface(4)};
+    --theme-text-on-accent: #{get-surface(0)};
+
+    --accent-hue: 40;
+    --accent-chroma: 0.17;
+    --theme-accent-1: #{get-surface(5, "accent-chroma", "accent-hue")};
+    --theme-accent-2: #{get-surface(4, "accent-chroma", "accent-hue")};
+}

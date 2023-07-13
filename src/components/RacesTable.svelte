@@ -3,7 +3,7 @@
     import { onMount } from "svelte";
     import type { SeriesId } from "../../lib/types";
     import {
-        getSeriesColour,
+        getSeriesHue,
         getSeriesIcon,
         getSeriesTitle,
     } from "../../lib/utils/series";
@@ -89,12 +89,15 @@
                     <td>-</td>
                 {/if}
                 <td>
-                    <span title={getSeriesTitle(race.round.series)}>
+                    <span
+                        class="icon"
+                        title={getSeriesTitle(race.round.series)}
+                        style="--icon-hue: {getSeriesHue(race.round.series)}"
+                    >
                         <Icon
                             icon="fluent-emoji-high-contrast:{getSeriesIcon(
                                 race.round.series
                             )}"
-                            color={getSeriesColour(race.round.series)}
                         />
                     </span>
                 </td>
@@ -108,6 +111,8 @@
 </table>
 
 <style lang="scss">
+    @import "../styles/oklch.scss";
+
     table {
         position: relative;
         text-align: left;
@@ -137,6 +142,14 @@
             th,
             td {
                 background-color: var(--theme-surface-1);
+
+                span.icon {
+                    --icon-chroma: 0.25;
+
+                    > :global(svg.iconify) {
+                        color: #{get-surface(5, "icon-chroma", "icon-hue")};
+                    }
+                }
             }
 
             tr:nth-child(even) {

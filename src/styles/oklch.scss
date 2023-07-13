@@ -1,0 +1,9 @@
+@use "sass:list";
+@use "sass:string";
+
+$lightness: 98%, 96.25%, 94%, 91%, 86.75%, 76%, 64.25%, 42.75%, 34.5%, 26%, 21%,
+    16.75%, 11.25%;
+
+@function get-surface($number, $chroma: "neutral-chroma", $hue: "neutral-hue") {
+    @return "oklch(#{list.nth($lightness, $number+1)} var(--#{$chroma}, none) var(--#{$hue}, none))";
+}

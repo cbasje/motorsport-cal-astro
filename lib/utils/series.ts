@@ -39,15 +39,15 @@ export const getSeriesTitle = (s: SeriesId) => {
     return titles[s];
 };
 
-export const getSeriesColour = (s: SeriesId) => {
-    const titles: Record<SeriesId, string> = {
-        F1: "#E10500",
-        F2: "#0090D0",
-        F3: "#440099",
-        FE: "#0000FF",
-        INDY: "#01A0F6",
-        WEC: "#03FD9D",
-        F1A: "#BE107E",
+export const getSeriesHue = (s: SeriesId) => {
+    const hues: Record<SeriesId, number> = {
+        F1: 29.5,
+        F2: 238,
+        F3: 290,
+        FE: 264,
+        INDY: 243,
+        WEC: 147,
+        F1A: 350,
     };
-    return titles[s];
+    return hues[s];
 };

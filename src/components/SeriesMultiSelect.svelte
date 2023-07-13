@@ -4,7 +4,7 @@
     import type { SeriesId } from "../../lib/types";
     import { seriesIds } from "../../lib/types";
     import {
-        getSeriesColour,
+        getSeriesHue,
         getSeriesIcon,
         getSeriesTitle,
     } from "../../lib/utils/series";
@@ -36,7 +36,7 @@
         </label>
         <div class="divider horizontal" aria-hidden />
         {#each seriesIds as s}
-            <label for={s} style="--icon-color: {getSeriesColour(s)}">
+            <label for={s} style="--icon-hue: {getSeriesHue(s)}">
                 <Icon icon="fluent-emoji-high-contrast:{getSeriesIcon(s)}" />
                 <span>{getSeriesTitle(s)}</span>
                 <input
@@ -52,11 +52,7 @@
 </div>
 
 <style lang="scss">
-    @property --icon-color {
-        syntax: "<color>";
-        inherits: false;
-        initial-value: var(--gray-6);
-    }
+    @import "../styles/oklch.scss";
 
     .multi-select {
         width: 100%;
@@ -74,6 +70,7 @@
             padding: var(--size-2) 0;
 
             border: none;
+            border-radius: 0;
             background: var(--theme-surface-1);
 
             label {
@@ -90,8 +87,10 @@
                 position: relative;
                 transition: outline-offset 145ms var(--ease-2) 0.2s;
 
+                --icon-chroma: 0.25;
+
                 > :global(svg.iconify) {
-                    color: var(--gray-6);
+                    color: #{get-surface(5, "neutral-chroma", "neutral-hue")};
                 }
                 > span {
                     flex: 2;
@@ -109,7 +108,7 @@
                     text-decoration: none;
 
                     > :global(svg.iconify) {
-                        color: var(--icon-color);
+                        color: #{get-surface(5, "icon-chroma", "icon-hue")};
                     }
                 }
                 @media (--md-n-above) {
@@ -118,7 +117,7 @@
                         text-decoration: none;
 
                         > :global(svg.iconify) {
-                            color: var(--icon-color);
+                            color: #{get-surface(5, "icon-chroma", "icon-hue")};
                         }
                     }
                 }
