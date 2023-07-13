@@ -115,7 +115,6 @@
         border-color: inherit;
         border-collapse: collapse;
         width: 100%;
-        color: var(--text-1);
 
         th,
         td {
@@ -126,8 +125,7 @@
 
         thead {
             th {
-                background-color: var(--surface-1);
-                color: var(--text-3);
+                background-color: var(--theme-surface-2);
                 font-size: var(--font-size-0);
                 line-height: var(--font-lineheight-1);
                 font-weight: var(--font-weight-7);
@@ -138,13 +136,13 @@
         tbody {
             th,
             td {
-                background-color: var(--surface-document);
+                background-color: var(--theme-surface-1);
             }
 
             tr:nth-child(even) {
                 th,
                 td {
-                    background: var(--surface-1);
+                    background: var(--theme-surface-2);
                 }
             }
         }

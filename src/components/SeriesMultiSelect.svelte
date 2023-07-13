@@ -79,7 +79,6 @@
             label {
                 align-items: center;
                 border-radius: var(--radius-round);
-                color: var(--text-1);
                 display: inline-flex;
                 font-size: var(--font-size-3);
                 gap: var(--size-3);
@@ -106,8 +105,7 @@
                 }
 
                 &:is(:focus-visible, :has(:checked)) {
-                    background: var(--surface-1);
-                    color: var(--text-1);
+                    background: var(--theme-surface-2);
                     text-decoration: none;
 
                     > :global(svg.iconify) {
@@ -116,8 +114,7 @@
                 }
                 @media (--md-n-above) {
                     &:is(:hover, :target) {
-                        background: var(--surface-1);
-                        color: var(--text-1);
+                        background: var(--theme-surface-2);
                         text-decoration: none;
 
                         > :global(svg.iconify) {

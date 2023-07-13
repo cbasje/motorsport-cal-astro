@@ -87,14 +87,12 @@
             padding: var(--size-2);
             border-radius: var(--radius-3);
 
-            background-color: var(--surface-1);
-            color: var(--text-2);
+            background-color: var(--theme-surface-2);
         }
     }
 
     .countdown {
         line-height: 1em;
-        font-family: var(--font-mono);
         font-size: var(--font-size-7);
 
         > * {

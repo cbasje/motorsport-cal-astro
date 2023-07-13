@@ -1,5 +1,3 @@
-@import "open-props/media";
-
 @layer normalize {
     @import "open-props/normalize";
     @import "open-props/zindex";
@@ -15,11 +13,7 @@
     }
 }
 
-@layer theme {
-    @layer colors {
-        @import "open-props/colors";
-    }
-
+@layer theming {
     @layer sizes {
         @import "open-props/borders";
         @import "open-props/sizes";
@@ -28,6 +22,19 @@
     @layer fonts {
         @import "open-props/fonts";
         @import "./fonts.scss";
+    }
+
+    @layer global {
+        @import "./themes/global.scss";
+    }
+
+    @layer themes {
+        @media (--OSlight) {
+            @import "./themes/light.scss";
+        }
+        @media (--OSdark) {
+            @import "./themes/dark.scss";
+        }
     }
 }
 
@@ -38,15 +45,6 @@
 }
 
 @layer overrides {
-    @import "./themes/global.scss";
-
-    @media (--OSlight) {
-        @import "./themes/light.scss";
-    }
-    @media (--OSdark) {
-        @import "./themes/dark.scss";
-    }
-
     :root {
         background-color: var(--theme-surface-1);
         color: var(--theme-text-1);

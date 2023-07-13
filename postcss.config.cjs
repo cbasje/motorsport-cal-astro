@@ -10,10 +10,10 @@ const config = {
         postcssGlobalData({
             files: ["./node_modules/open-props/media.min.css"],
         }),
-        postcssCustomMedia,
+        postcssCustomMedia({ preserve: true }),
         // postcssPresetEnv,
-        autoprefixer,
-        cssnano,
+        autoprefixer(),
+        cssnano(),
     ],
 };
 
