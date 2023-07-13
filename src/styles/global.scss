@@ -1,5 +1,12 @@
+@import "open-props/media";
+
 @layer normalize {
     @import "open-props/normalize";
+    @import "open-props/zindex";
+}
+
+@layer base {
+    @import "open-props/easings";
 
     :is(.visually-hidden, .sr-only) {
         block-size: 0;
@@ -20,46 +27,7 @@
 
     @layer fonts {
         @import "open-props/fonts";
-
-        @font-face {
-            font-family: "Atkinson Hyperlegible";
-            src: url("/fonts/Atkinson-Hyperlegible-Bold.woff2") format("woff2")
-                url("/fonts/Atkinson-Hyperlegible-Bold.woff") format("woff");
-            font-weight: bold;
-            font-style: normal;
-            font-display: swap;
-        }
-
-        @font-face {
-            font-family: "Atkinson Hyperlegible";
-            src: url("/fonts/Atkinson-Hyperlegible-BoldItalic.woff2")
-                format("woff2")
-                url("/fonts/Atkinson-Hyperlegible-BoldItalic.woff")
-                format("woff");
-            font-weight: bold;
-            font-style: italic;
-            font-display: swap;
-        }
-
-        @font-face {
-            font-family: "Atkinson Hyperlegible";
-            src: url("/fonts/Atkinson-Hyperlegible-Italic.woff2")
-                format("woff2") url("/fonts/Atkinson-Hyperlegible-Italic.woff")
-                format("woff");
-            font-weight: normal;
-            font-style: italic;
-            font-display: swap;
-        }
-
-        @font-face {
-            font-family: "Atkinson Hyperlegible";
-            src: url("/fonts/Atkinson-Hyperlegible-Regular.woff2")
-                format("woff2") url("/fonts/Atkinson-Hyperlegible-Regular.woff")
-                format("woff");
-            font-weight: normal;
-            font-style: normal;
-            font-display: swap;
-        }
+        @import "./fonts.scss";
     }
 }
 
@@ -67,60 +35,78 @@
     @import "open-props/buttons";
 
     @import "./components.scss";
-
-    :root {
-        // color-scheme: light;
-        // --pf: 183.03 47.368% 47.216%;
-        // --sf: 338.25 71.429% 62.431%;
-        // --af: 39 84.112% 46.431%;
-        // --nf: 280 46.479% 11.137%;
-        // --in: 198 93% 60%;
-        // --su: 158 64% 52%;
-        // --wa: 43 96% 56%;
-        // --er: 0 91% 71%;
-        // --pc: 183.03 100% 11.804%;
-        // --sc: 338.25 100% 15.608%;
-        // --ac: 39 100% 11.608%;
-        // --nc: 280 82.688% 82.784%;
-        // --inc: 198 100% 12%;
-        // --suc: 158 100% 10%;
-        // --wac: 43 100% 11%;
-        // --erc: 0 100% 14%;
-        // --rounded-box: 1rem;
-        // --rounded-badge: 1.9rem;
-        // --animation-btn: 0.25s;
-        // --animation-input: 0.2s;
-        // --btn-text-case: uppercase;
-        // --btn-focus-scale: 0.95;
-        // --border-btn: 1px;
-        // --p: 183.03 47.368% 59.02%;
-        // --s: 338.25 71.429% 78.039%;
-        // --a: 39 84.112% 58.039%;
-        // --n: 280 46.479% 13.922%;
-        // --b1: 24 33.333% 97.059%;
-        // --b2: 26.667 21.951% 91.961%;
-        // --b3: 22.5 14.286% 89.02%;
-        // --bc: 280 46.479% 13.922%;
-        // --rounded-btn: 1.9rem;
-        // --tab-border: 2px;
-        // --tab-radius: 0.5rem;
-    }
 }
 
 @layer overrides {
+    @import "./themes/global.scss";
+
+    @media (--OSlight) {
+        @import "./themes/light.scss";
+    }
+    @media (--OSdark) {
+        @import "./themes/dark.scss";
+    }
+
     :root {
-        --font-sans: "Atkinson Hyperlegible", ui-sans-serif, system-ui,
-            -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans,
-            sans-serif;
-        --font-serif: ui-serif, Georgia, Cambria, "Times New Roman", Times,
-            serif;
-        --font-mono: ui-monospace, SFMono-Regular, Dank Mono, Operator Mono,
-            Inconsolata, Fira Mono, ui-monospace, SF Mono, Monaco,
-            Droid Sans Mono, Source Code Pro, monospace;
-
-        --surface-document: var(--gray-12);
-        --surface-1: var(--gray-10);
-
-        background: var(--surface-document);
+        background-color: var(--theme-surface-1);
+        color: var(--theme-text-1);
+        accent-color: var(--theme-accent-1);
+        caret-color: var(--theme-accent-1);
+    }
+    h1 {
+        margin: 0 0 var(--size-3) 0;
+        font-size: var(--font-size-6);
+        font-family: var(--font-display);
+        font-weight: var(--font-weight-7);
+        text-transform: uppercase;
+        letter-spacing: var(--font-letterspacing-3);
+        line-height: var(--font-lineheight-2);
+    }
+    h2 {
+        margin: 0 0 var(--size-1) 0;
+        font-size: var(--font-size-5);
+        font-family: var(--font-display);
+        font-weight: var(--font-weight-5);
+        text-transform: uppercase;
+        letter-spacing: var(--font-letterspacing-3);
+        line-height: var(--font-lineheight-2);
+    }
+    h3,
+    h4,
+    h5,
+    h6 {
+        font-weight: var(--font-weight-5);
+        text-transform: uppercase;
+        letter-spacing: var(--font-letterspacing-3);
+        line-height: var(--font-lineheight-2);
+    }
+    h3 {
+        font-size: var(--font-size-4);
+    }
+    h4 {
+        font-size: var(--font-size-3);
+    }
+    h5,
+    h6 {
+        font-size: var(--font-size-1);
+    }
+    p {
+        // margin: 0 0 1.5em;
+        line-height: var(--font-lineheight-3);
+    }
+    a:not(.button) {
+        color: var(--theme-accent-1);
+        text-decoration: underline wavy;
+    }
+    a,
+    button,
+    input {
+        outline-color: var(--theme-accent-1);
+        outline-offset: var(--size-1);
+    }
+    ::selection {
+        background-color: var(--theme-accent-1);
+        color: var(--theme-text-on-accent);
+        text-shadow: none;
     }
 }

@@ -16,18 +16,26 @@ StyleDictionaryPackage.registerFormat({
                 : null;
         }
 
-        return `${this.selector} {
-            ${dictionary.allProperties
-                .map((prop) => {
-                    if (prop.type === "color") {
-                        const rgbValue = hexToRgb(prop.value);
-                        return `--${prop.name}: ${rgbValue.r} ${rgbValue.g} ${rgbValue.b};`;
-                    } else {
-                        return `--${prop.name}: ${prop.value};`;
-                    }
-                })
-                .join("\n")}
+        const content = dictionary.allProperties
+            .map((prop) => {
+                // if (prop.type === "color") {
+                //     const rgbValue = hexToRgb(prop.value);
+                //     return `--${prop.name}: ${rgbValue.r} ${rgbValue.g} ${rgbValue.b};`;
+                // } else {
+                return `--${prop.name}: ${prop.value};`;
+                // }
+            })
+            .join("\n");
+
+        // if (this.selector === "global") {
+        return `:root {
+            ${content}
         }`;
+        // } else {
+        //     return `:root[data-theme=$this.selector] {
+        //          ${content}
+        //     }`;
+        // }
     },
 });
 
@@ -56,15 +64,12 @@ function getStyleDictionaryConfig(theme) {
         platforms: {
             web: {
                 transforms: ["attribute/cti", "name/cti/kebab", "sizes/px"],
-                buildPath: `output/`,
+                buildPath: `src/styles/themes/`,
                 files: [
                     {
-                        destination: `${theme}.css`,
+                        destination: `${theme}.scss`,
                         format: "css/variables",
-                        selector:
-                            theme === "global"
-                                ? ":root"
-                                : `:root[data-theme='${theme}']`,
+                        selector: theme,
                     },
                 ],
             },

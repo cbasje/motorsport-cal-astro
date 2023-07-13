@@ -93,6 +93,8 @@
 </div>
 
 <style lang="scss">
+    @import "open-props/media";
+
     @property --icon-color {
         syntax: "<color>";
         inherits: false;
@@ -115,7 +117,7 @@
             padding: var(--size-2) 0;
 
             border: none;
-            background: var(--surface-document);
+            background: var(--theme-surface-1);
 
             label {
                 align-items: center;
@@ -146,13 +148,24 @@
                     width: 0;
                 }
 
-                &:is(:hover, :target, :focus-visible, :has(:checked)) {
+                &:is(:focus-visible, :has(:checked)) {
                     background: var(--surface-1);
                     color: var(--text-1);
                     text-decoration: none;
 
                     > :global(svg.iconify) {
                         color: var(--icon-color);
+                    }
+                }
+                @media (--md-n-above) {
+                    &:is(:hover, :target) {
+                        background: var(--surface-1);
+                        color: var(--text-1);
+                        text-decoration: none;
+
+                        > :global(svg.iconify) {
+                            color: var(--icon-color);
+                        }
                     }
                 }
                 &:focus-within {
