@@ -2,7 +2,7 @@
 
 :root {
     --neutral-hue: 40;
-    --neutral-chroma: 0.0025;
+    --neutral-chroma: 0.005;
     --theme-surface-1: #{get-surface(0)};
     --theme-surface-2: #{get-surface(2)};
     --theme-surface-3: #{get-surface(4)};
@@ -12,7 +12,7 @@
     --theme-text-on-accent: #{get-surface(0)};
 
     --accent-hue: 40;
-    --accent-chroma: 0.17;
+    --accent-chroma: 0.15;
     --theme-accent-1: #{get-surface(5, "accent-chroma", "accent-hue")};
     --theme-accent-2: #{get-surface(4, "accent-chroma", "accent-hue")};
 }
