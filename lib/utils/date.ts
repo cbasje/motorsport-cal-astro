@@ -42,7 +42,7 @@ const getWeekend = (weekOffset = 0) => {
     const diff = (day + 7 - 1) % 7; // Calculate the difference from Monday (1) to the current day
 
     lastMonday.setDate(now.getDate() - diff + 7 * weekOffset);
-    nextMonday.setDate(lastMonday.getDate() + 7);
+    nextMonday.setDate(now.getDate() - diff + 7 * (weekOffset + 1));
 
     lastMonday.setHours(12, 0, 0, 0);
     nextMonday.setHours(12, 0, 0, 0);

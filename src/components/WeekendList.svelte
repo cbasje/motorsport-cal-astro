@@ -1,7 +1,17 @@
 <script lang="ts">
-    import { getSeriesTitle } from "lib/utils/series";
+    import {
+        getSeriesHue,
+        getSeriesIcon,
+        getSeriesTitle,
+    } from "../../lib/utils/series";
     import { trpc } from "../pages/client";
-    import { getWeekend, relTime, trackTime, yourTime } from "lib/utils/date";
+    import {
+        getWeekend,
+        relTime,
+        trackTime,
+        yourTime,
+    } from "../../lib/utils/date";
+    import Icon from "@iconify/svelte";
 
     let weekOffset = 0;
     let timeFormat: "track" | "your" | "rel" = "your";
@@ -18,16 +28,27 @@
             "week"
         )}
     </h1>
-    <ul>
-        {#each weekends as weekend}
+    <ul class="round-list">
+        {#each weekends as round (round.id)}
             <li>
                 <div>
-                    <div>{weekend.title}</div>
-                    <div>{getSeriesTitle(weekend.series)}</div>
+                    <span
+                        class="icon"
+                        title={getSeriesTitle(round.series)}
+                        style="--icon-hue: {getSeriesHue(round.series)}"
+                    >
+                        <Icon
+                            icon="fluent-emoji-high-contrast:{getSeriesIcon(
+                                round.series
+                            )}"
+                        />
+                    </span>
+                    <div>{round.title}</div>
+                    <div>{getSeriesTitle(round.series)}</div>
                 </div>
 
                 <ol>
-                    {#each weekend.sessions as session}
+                    {#each round.sessions as session}
                         <li>
                             <div>{session.type} {session.number}</div>
                             <time datetime={session.startDate.toISOString()}>
@@ -43,6 +64,8 @@
                     {/each}
                 </ol>
             </li>
+        {:else}
+            <li>Nothing</li>
         {/each}
     </ul>
     <button
@@ -60,3 +83,21 @@
         Next
     </button>
 {/await}
+
+<style lang="scss">
+    @import "../styles/oklch.scss";
+
+    ul.round-list {
+        > li {
+            > div {
+                span.icon {
+                    --icon-chroma: 0.25;
+
+                    > :global(svg.iconify) {
+                        color: #{get-surface(5, "icon-chroma", "icon-hue")};
+                    }
+                }
+            }
+        }
+    }
+</style>
