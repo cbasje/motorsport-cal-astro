@@ -17,3 +17,14 @@
         {/each}
     </ul>
 {/await}
+
+<style lang="scss">
+    ul {
+        list-style: none;
+        padding: 0;
+
+        li {
+            padding: 0;
+        }
+    }
+</style>

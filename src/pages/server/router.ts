@@ -191,6 +191,36 @@ const rounds = router({
                 )
             )
         ),
+
+    getWeekends: publicProcedure
+        .input(z.object({ startDate: z.date(), endDate: z.date() }))
+        .query(({ input }) =>
+            prisma.round.findMany({
+                where: {
+                    sessions: {
+                        some: {
+                            AND: {
+                                startDate: { gte: input.startDate },
+                                endDate: { lte: input.endDate },
+                            },
+                        },
+                    },
+                },
+                select: {
+                    id: true,
+                    title: true,
+                    series: true,
+                    sessions: {
+                        orderBy: { startDate: "asc" },
+                        select: {
+                            type: true,
+                            startDate: true,
+                            number: true,
+                        },
+                    },
+                },
+            })
+        ),
 });
 
 const sessions = router({
