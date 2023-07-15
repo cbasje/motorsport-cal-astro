@@ -1,8 +1,8 @@
 @import "../oklch.scss";
 
 :root {
-    --neutral-hue: 247;
-    --neutral-chroma: 0.01;
+    --neutral-hue: 40;
+    --neutral-chroma: 0.0025;
     --theme-surface-1: #{get-surface(11)};
     --theme-surface-2: #{get-surface(9)};
     --theme-surface-3: #{get-surface(7)};
