@@ -215,6 +215,7 @@ const rounds = router({
                         select: {
                             type: true,
                             startDate: true,
+                            endDate: true,
                             number: true,
                         },
                     },

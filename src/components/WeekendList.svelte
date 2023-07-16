@@ -49,7 +49,7 @@
 
                 <ol>
                     {#each round.sessions as session}
-                        <li>
+                        <li class:past={session.endDate.valueOf() < Date.now()}>
                             <div>{session.type} {session.number}</div>
                             <time datetime={session.startDate.toISOString()}>
                                 {#if timeFormat === "track"}
@@ -95,6 +95,14 @@
 
                     > :global(svg.iconify) {
                         color: #{get-surface(5, "icon-chroma", "icon-hue")};
+                    }
+                }
+            }
+
+            > ol {
+                > li {
+                    &.past {
+                        color: #{get-surface(5, "neutral-chroma", "neutral-hue")};
                     }
                 }
             }
