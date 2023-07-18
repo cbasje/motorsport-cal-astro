@@ -3,9 +3,8 @@ generator client {
 }
 
 generator zod {
-  provider = "zod-prisma"
-  output   = "../lib/types/prisma"
-
+  provider    = "zod-prisma"
+  output      = "../lib/types/prisma"
   modelSuffix = "Z"
 }
 
@@ -31,6 +30,8 @@ model Round {
   title      String
   season     String
   link       String?
+  startDate  DateTime?
+  endDate    DateTime?
   circuitId  String
   series     SeriesId
   circuit    Circuit   @relation(fields: [circuitId], references: [id])
