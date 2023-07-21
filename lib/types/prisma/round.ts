@@ -9,6 +9,8 @@ export const RoundZ = z.object({
   title: z.string(),
   season: z.string(),
   link: z.string().nullish(),
+  startDate: z.date().nullish(),
+  endDate: z.date().nullish(),
   circuitId: z.string(),
   series: z.nativeEnum(SeriesId),
 })

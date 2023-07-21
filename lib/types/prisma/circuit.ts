@@ -6,6 +6,7 @@ export const CircuitZ = z.object({
   created_at: z.date(),
   title: z.string(),
   wikipediaPageId: z.number().int().nullish(),
+  wikipediaTitle: z.string().nullish(),
   lon: z.number().nullish(),
   lat: z.number().nullish(),
 })
