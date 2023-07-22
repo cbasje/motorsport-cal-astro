@@ -12,6 +12,7 @@
         getSeriesTitle,
     } from "../../lib/utils/series";
     import { trpc } from "../pages/client";
+    import { getSessionTitle } from "lib/utils/sessions";
 
     let weekOffset = 0;
     let timeFormat: "track" | "your" | "rel" = "your";
@@ -42,16 +43,18 @@
                                 round.series
                             )}"
                         />
+                        {getSeriesTitle(round.series)}
                     </span>
                     <div>{round.title}</div>
                     <div>{round.circuit.wikipediaTitle}</div>
-                    <div>{getSeriesTitle(round.series)}</div>
                 </div>
 
                 <ol>
                     {#each round.sessions as session}
                         <li class:past={session.endDate.valueOf() < Date.now()}>
-                            <div>{session.type} {session.number}</div>
+                            <div>
+                                {getSessionTitle(session.type, session.number)}
+                            </div>
                             <time datetime={session.startDate.toISOString()}>
                                 {#if timeFormat === "track"}
                                     {trackTime(session.startDate)}
