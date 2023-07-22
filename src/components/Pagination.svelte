@@ -29,9 +29,7 @@
 <!-- this is the pull to refresh spinner -->
 <div class="main" id="scroll-area">
     <div id="ptf-1" class="pull-to-refresh">
-        <div class="ptr-icon">
-            <Icon icon="ph:arrow-clockwise-bold" />
-        </div>
+        <div class="ptr-icon" />
     </div>
     <div class="text">
         {#if !$refreshing1}
@@ -42,8 +40,6 @@
         {/if}
     </div>
     <div id="ptf-2" class="pull-to-refresh">
-        <div class="ptr-icon">
-            <Icon icon="ph:arrow-clockwise-bold" />
-        </div>
+        <div class="ptr-icon" />
     </div>
 </div>

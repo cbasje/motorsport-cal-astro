@@ -42,11 +42,11 @@ export function onRefresh(
         if (direction === -1) {
             if (
                 scrollArea!.scrollTop + document.documentElement.clientHeight <
-                border
+                border - 5
             )
                 return;
         } else {
-            if (scrollArea!.scrollTop > border) return;
+            if (scrollArea!.scrollTop > border + 5) return;
         }
         const touch = Array.from(e.changedTouches).find(
             (t) => t.identifier === touchId
@@ -58,14 +58,6 @@ export function onRefresh(
             distance = touch.screenY + scrollArea!.scrollTop - startY;
             shouldRefresh = distance <= thresholdDistance;
             // if (distance != 0) scrollArea!.style.overflowY = "hidden";
-
-            console.log("🚀 -------------------------------------🚀");
-            console.log(
-                "🚀 ~ onTouchMove ~ distance:",
-                touch.screenY,
-                distance
-            );
-            console.log("🚀 -------------------------------------🚀");
 
             offset.set(Math.abs(Math.max(distance, thresholdDistance)));
         } else {
@@ -132,8 +124,8 @@ export function onRefresh(
         const offsetUnsub = offset.subscribe((val) => {
             requestAnimationFrame(() => {
                 pullToRefresh?.style.setProperty(
-                    "--offset",
-                    `${val < 0 ? 0 : val}px`
+                    "--percentage",
+                    `${val < 0 ? 0 : val}`
                 );
             });
         });
