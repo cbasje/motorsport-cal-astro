@@ -219,6 +219,11 @@ const rounds = router({
                             number: true,
                         },
                     },
+                    circuit: {
+                        select: {
+                            wikipediaTitle: true,
+                        },
+                    },
                 },
             })
         ),

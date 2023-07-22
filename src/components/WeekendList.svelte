@@ -1,17 +1,17 @@
 <script lang="ts">
-    import {
-        getSeriesHue,
-        getSeriesIcon,
-        getSeriesTitle,
-    } from "../../lib/utils/series";
-    import { trpc } from "../pages/client";
+    import Icon from "@iconify/svelte";
     import {
         getWeekend,
         relTime,
         trackTime,
         yourTime,
     } from "../../lib/utils/date";
-    import Icon from "@iconify/svelte";
+    import {
+        getSeriesHue,
+        getSeriesIcon,
+        getSeriesTitle,
+    } from "../../lib/utils/series";
+    import { trpc } from "../pages/client";
 
     let weekOffset = 0;
     let timeFormat: "track" | "your" | "rel" = "your";
@@ -44,6 +44,7 @@
                         />
                     </span>
                     <div>{round.title}</div>
+                    <div>{round.circuit.wikipediaTitle}</div>
                     <div>{getSeriesTitle(round.series)}</div>
                 </div>
 
