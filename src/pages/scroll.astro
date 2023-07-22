@@ -157,7 +157,6 @@ import Pagination from "src/components/Pagination.svelte";
 
             /* these are the custom properties we will manipulate with js later on --offset is the amount the icon is dragged and --angle is it's rotation */
             --y: calc(var(--offset, 0px) + var(--initial));
-            --angle: 0deg;
 
             /* take the spinner out of document flow and place it relative to scroll area */
             // position: absolute;
@@ -177,10 +176,6 @@ import Pagination from "src/components/Pagination.svelte";
                 border-radius: 9999px;
                 background-color: black;
                 color: white;
-
-                /* use the custom properties to rotate and drag the spinner */
-                // translate: 0px var(--y);
-                rotate: var(--angle, 0deg);
             }
         }
 

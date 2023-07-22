@@ -10,7 +10,6 @@
                     resolve();
                 }, 3000);
             }),
-        "scroll-area",
         "ptf-1",
         1
     );
@@ -22,7 +21,6 @@
                     resolve();
                 }, 1000);
             }),
-        "scroll-area",
         "ptf-2",
         -1
     );

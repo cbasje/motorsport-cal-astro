@@ -5,7 +5,6 @@ import { writable, type Writable } from "svelte/store";
 
 export function onRefresh(
     callback: () => Promise<void>,
-    scrollAreaId = "#scroll-area",
     pullToRefreshId = "#pull-to-refresh",
     direction = 1
 ) {
@@ -29,7 +28,6 @@ export function onRefresh(
 
     // will be linked to css properties later on
     const offset = spring(0);
-    const angle = spring(0);
 
     function onTouchStart(e: TouchEvent) {
         // return if another touch is already registered for pull to refresh
@@ -77,8 +75,6 @@ export function onRefresh(
 
             offset.set(Math.min(distance, thresholdDistance));
         }
-
-        angle.set(Math.min(distance, thresholdDistance) * 2);
     }
 
     function onTouchEnd(e: TouchEvent) {
@@ -98,41 +94,20 @@ export function onRefresh(
             shouldRefresh = false;
             refreshing.set(true);
 
-            callback().then(() => refreshing.set(false));
+            callback().then(() => {
+                refreshing.set(false);
+                pullToRefresh?.scrollIntoView();
+            });
         }
-
-        // create a proxy value for the store to avoid using get(refreshing) in the spin loop
-        let isRefreshing: boolean = true;
-        const unsubscribe = refreshing.subscribe(
-            (state) => (isRefreshing = state)
-        );
-
-        // spin the loader while refreshing
-        function spin() {
-            if (isRefreshing) {
-                angle.update(($angle) => $angle + 5);
-                requestAnimationFrame(spin);
-            } else {
-                offset.set(0);
-                angle.set(0);
-                unsubscribe();
-            }
-        }
-        requestAnimationFrame(spin);
     }
 
     // set element references, link css properties to stores & register touch handlers
     onMount(() => {
-        // scrollArea = document.querySelector<HTMLDivElement>(
-        //     scrollAreaId.replace(/^#?/g, "#")
-        // );
         scrollArea = document.documentElement;
         pullToRefresh = document.querySelector<HTMLDivElement>(
             pullToRefreshId.replace(/^#?/g, "#")
         );
 
-        if (!scrollArea)
-            throw new Error(`no element with id ${scrollAreaId} found`);
         if (!pullToRefresh)
             throw new Error(`no element with id ${pullToRefreshId} found`);
 
@@ -146,13 +121,6 @@ export function onRefresh(
             });
         });
 
-        // link angle to css properties
-        const angleUnsub = angle.subscribe((val) => {
-            requestAnimationFrame(() => {
-                pullToRefresh?.style.setProperty("--angle", `${val}deg`);
-            });
-        });
-
         border = direction === -1 ? scrollArea!.scrollHeight : 0;
 
         scrollArea?.addEventListener("touchstart", onTouchStart);
@@ -162,7 +130,6 @@ export function onRefresh(
 
         return () => {
             offsetUnsub();
-            angleUnsub();
             scrollArea?.removeEventListener("touchstart", onTouchStart);
             scrollArea?.removeEventListener("touchmove", onTouchMove);
             scrollArea?.removeEventListener("touchend", onTouchEnd);
