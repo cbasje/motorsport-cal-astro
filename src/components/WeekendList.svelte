@@ -13,11 +13,17 @@
     } from "../../lib/utils/series";
     import { trpc } from "../pages/client";
     import { getSessionTitle } from "lib/utils/sessions";
+    import { onMount } from "svelte";
 
     let weekOffset = 0;
     let timeFormat: "track" | "your" | "rel" = "your";
 
     $: [startDate, endDate] = getWeekend(weekOffset);
+
+    onMount(() => {
+        const params = new URLSearchParams(window.location.search);
+        weekOffset = Number(params.get("w"));
+    });
 </script>
 
 {#await trpc.rounds.getWeekends.query({ startDate, endDate })}
