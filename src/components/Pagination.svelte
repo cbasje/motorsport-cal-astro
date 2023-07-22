@@ -1,28 +1,51 @@
 <script lang="ts">
+    import Icon from "@iconify/svelte";
     import { onRefresh } from "lib/scroll-pagination";
 
-    const refreshing = onRefresh({
-        callback(state) {
-            setTimeout(() => {
-                state.set(false);
-            }, 3000);
-        },
-    });
+    const refreshing1 = onRefresh(
+        () =>
+            new Promise<void>((resolve, reject) => {
+                console.log("ref1 ⬆️");
+                setTimeout(() => {
+                    resolve();
+                }, 3000);
+            }),
+        "scroll-area",
+        "ptf-1",
+        1
+    );
+    const refreshing2 = onRefresh(
+        () =>
+            new Promise<void>((resolve, reject) => {
+                console.log("ref2 ⬇️");
+                setTimeout(() => {
+                    resolve();
+                }, 1000);
+            }),
+        "scroll-area",
+        "ptf-2",
+        -1
+    );
 </script>
 
+<!-- this is the pull to refresh spinner -->
 <div class="main" id="scroll-area">
-    <!-- this is the pull to refresh spinner -->
-    <div id="pull-to-refresh">
+    <div id="ptf-1" class="pull-to-refresh">
         <div class="ptr-icon">
-            <svg width="1em" height="1em" viewBox="0 0 8 8"
-                ><path
-                    fill="currentColor"
-                    d="M4 0C1.8 0 0 1.8 0 4s1.8 4 4 4c1.1 0 2.12-.43 2.84-1.16l-.72-.72c-.54.54-1.29.88-2.13.88c-1.66 0-3-1.34-3-3s1.34-3 3-3c.83 0 1.55.36 2.09.91L4.99 3h3V0L6.8 1.19C6.08.47 5.09 0 3.99 0z"
-                /></svg
-            >
+            <Icon icon="ph:arrow-clockwise-bold" />
         </div>
     </div>
-    {#if !$refreshing}
-        <slot />
-    {/if}
+    <div class="text">
+        {#if !$refreshing1}
+            <slot name="1" />
+        {/if}
+        {#if !$refreshing2}
+            <slot name="2" />
+        {/if}
+    </div>
+    <div id="ptf-2" class="pull-to-refresh">
+        <div class="ptr-icon">
+            <Icon icon="ph:arrow-clockwise-bold" />
+        </div>
+    </div>
 </div>

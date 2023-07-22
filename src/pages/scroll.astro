@@ -12,83 +12,85 @@ import Pagination from "src/components/Pagination.svelte";
     </head>
     <body>
         <div class="container">
-            <nav class="nav">
-                <div class="nav__logo">Pull To Refresh</div>
-            </nav>
-
             <Pagination client:idle>
-                <p>
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                    Ipsum magnam dolor est velit optio eaque perferendis,
-                    suscipit voluptatum sit accusamus eius illo cumque
-                    laboriosam. Non est quia totam ipsam dignissimos.
-                </p>
-                <p>
-                    Sint dolor anim eu nulla ea nulla culpa veniam amet occaecat
-                    magna. Consequat aliqua velit ad laborum nulla elit aliquip.
-                    Ullamco sit fugiat mollit anim incididunt quis aliquip
-                    proident. Sit minim proident adipisicing pariatur nisi
-                    dolore amet qui aliquip deserunt veniam aute qui. Excepteur
-                    aute tempor ad.
-                </p>
-                <p>
-                    Dolore culpa laboris ad culpa amet. Proident duis
-                    adipisicing incididunt et occaecat laboris cillum eiusmod
-                    sit ex. Ut nisi deserunt velit non aliqua exercitation
-                    commodo do voluptate consectetur eu aliqua quis labore
-                    consequat. Ea dolore proident ex adipisicing occaecat veniam
-                    minim. Officia culpa fugiat consectetur adipisicing ex dolor
-                    consequat commodo ut cillum qui minim mollit. Tempor
-                    exercitation ex dolore id proident quis exercitation mollit.
-                    Non anim minim cillum esse sint nulla eu voluptate amet esse
-                    adipisicing tempor minim anim. Officia dolor ut non eu
-                    consectetur.
-                </p>
-                <p>
-                    Occaecat excepteur sit ex minim. Do pariatur ad officia aute
-                    dolore quis laboris sit. Fugiat dolor do elit et. Excepteur
-                    irure elit mollit nostrud. Culpa pariatur id non. Nulla
-                    incididunt aliqua adipisicing nulla officia. Culpa
-                    reprehenderit incididunt aliqua commodo qui fugiat tempor
-                    consequat elit.
-                </p>
-                <p>
-                    Eu in magna dolore pariatur voluptate dolor. Elit Lorem qui
-                    mollit cupidatat culpa magna Lorem tempor ut Lorem ex dolor.
-                    Eiusmod reprehenderit nostrud culpa. Fugiat minim occaecat
-                    elit magna mollit Lorem laborum dolor consectetur magna
-                    dolor amet non ea excepteur. Ad cupidatat elit sint id sint
-                    velit ut sint culpa nostrud nulla non. Commodo exercitation
-                    pariatur non. Elit aliquip reprehenderit anim exercitation
-                    cillum exercitation est dolor aliquip anim. Reprehenderit
-                    tempor excepteur et.
-                </p>
-                <p>
-                    Aliquip officia ipsum non aute incididunt veniam. In
-                    proident tempor quis nisi culpa ipsum cillum non pariatur
-                    aliquip sit. Duis sit nulla dolore anim do id ullamco non
-                    amet nostrud do deserunt in exercitation anim. Adipisicing
-                    do mollit qui. Enim laborum Lorem ex veniam elit esse
-                    consequat amet aute duis culpa nisi aliquip eu. Commodo
-                    dolore anim aliqua et ut culpa culpa et. Amet aliqua est qui
-                    mollit. Sit pariatur ea exercitation officia deserunt
-                    ullamco aliquip pariatur minim cillum.
-                </p>
-                <p>
-                    Laborum aute dolore dolor excepteur commodo minim commodo
-                    consectetur velit ea quis exercitation elit ut. Commodo
-                    deserunt in quis commodo. Officia consectetur irure deserunt
-                    qui occaecat labore adipisicing sit. Occaecat aliquip
-                    reprehenderit nisi ipsum nulla laboris laboris nisi tempor
-                    non enim cillum ea.
-                </p>
+                <div slot="1">
+                    <p>
+                        Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                        Ipsum magnam dolor est velit optio eaque perferendis,
+                        suscipit voluptatum sit accusamus eius illo cumque
+                        laboriosam. Non est quia totam ipsam dignissimos.
+                    </p>
+                    <p>
+                        Sint dolor anim eu nulla ea nulla culpa veniam amet
+                        occaecat magna. Consequat aliqua velit ad laborum nulla
+                        elit aliquip. Ullamco sit fugiat mollit anim incididunt
+                        quis aliquip proident. Sit minim proident adipisicing
+                        pariatur nisi dolore amet qui aliquip deserunt veniam
+                        aute qui. Excepteur aute tempor ad.
+                    </p>
+                    <p>
+                        Dolore culpa laboris ad culpa amet. Proident duis
+                        adipisicing incididunt et occaecat laboris cillum
+                        eiusmod sit ex. Ut nisi deserunt velit non aliqua
+                        exercitation commodo do voluptate consectetur eu aliqua
+                        quis labore consequat. Ea dolore proident ex adipisicing
+                        occaecat veniam minim. Officia culpa fugiat consectetur
+                        adipisicing ex dolor consequat commodo ut cillum qui
+                        minim mollit. Tempor exercitation ex dolore id proident
+                        quis exercitation mollit. Non anim minim cillum esse
+                        sint nulla eu voluptate amet esse adipisicing tempor
+                        minim anim. Officia dolor ut non eu consectetur.
+                    </p>
+                </div>
+                <div slot="2">
+                    <p>
+                        Occaecat excepteur sit ex minim. Do pariatur ad officia
+                        aute dolore quis laboris sit. Fugiat dolor do elit et.
+                        Excepteur irure elit mollit nostrud. Culpa pariatur id
+                        non. Nulla incididunt aliqua adipisicing nulla officia.
+                        Culpa reprehenderit incididunt aliqua commodo qui fugiat
+                        tempor consequat elit.
+                    </p>
+                    <p>
+                        Eu in magna dolore pariatur voluptate dolor. Elit Lorem
+                        qui mollit cupidatat culpa magna Lorem tempor ut Lorem
+                        ex dolor. Eiusmod reprehenderit nostrud culpa. Fugiat
+                        minim occaecat elit magna mollit Lorem laborum dolor
+                        consectetur magna dolor amet non ea excepteur. Ad
+                        cupidatat elit sint id sint velit ut sint culpa nostrud
+                        nulla non. Commodo exercitation pariatur non. Elit
+                        aliquip reprehenderit anim exercitation cillum
+                        exercitation est dolor aliquip anim. Reprehenderit
+                        tempor excepteur et.
+                    </p>
+                    <p>
+                        Aliquip officia ipsum non aute incididunt veniam. In
+                        proident tempor quis nisi culpa ipsum cillum non
+                        pariatur aliquip sit. Duis sit nulla dolore anim do id
+                        ullamco non amet nostrud do deserunt in exercitation
+                        anim. Adipisicing do mollit qui. Enim laborum Lorem ex
+                        veniam elit esse consequat amet aute duis culpa nisi
+                        aliquip eu. Commodo dolore anim aliqua et ut culpa culpa
+                        et. Amet aliqua est qui mollit. Sit pariatur ea
+                        exercitation officia deserunt ullamco aliquip pariatur
+                        minim cillum.
+                    </p>
+                    <p>
+                        Laborum aute dolore dolor excepteur commodo minim
+                        commodo consectetur velit ea quis exercitation elit ut.
+                        Commodo deserunt in quis commodo. Officia consectetur
+                        irure deserunt qui occaecat labore adipisicing sit.
+                        Occaecat aliquip reprehenderit nisi ipsum nulla laboris
+                        laboris nisi tempor non enim cillum ea.
+                    </p>
+                </div>
             </Pagination>
         </div>
     </body>
 </html>
 
 <style lang="scss">
-    * {
+    :global(*) {
         box-sizing: border-box;
         padding: 0;
         margin: 0;
@@ -106,14 +108,14 @@ import Pagination from "src/components/Pagination.svelte";
     /* create a container to layout our nav and scroll area */
     .container {
         --padding: 1rem;
-        display: grid;
+        // display: grid;
         grid-template-columns: 1fr;
 
         /* the navbar is auto sized and the scroll area takes the remaining height */
         grid-template-rows: auto 1fr;
 
         /* needed to make the scroll area have the scrollbar */
-        height: 100%;
+        // height: 100%;
 
         /* pretty styles not necessary for this to be functional */
         .nav {
@@ -127,19 +129,17 @@ import Pagination from "src/components/Pagination.svelte";
         }
 
         :global(.main) {
-            padding: var(--padding);
-            display: grid;
-            place-content: start;
-            gap: 1em;
+            display: flex;
+            flex-direction: column;
+            align-items: stretch;
 
-            :global(.ptr-icon) {
-                padding: 0.75rem;
-                font-size: 1.5rem;
-                display: grid;
-                place-content: center;
-                border-radius: 9999px;
-                background-color: black;
-                color: white;
+            > :global(.text) {
+                display: flex;
+                gap: var(--padding);
+                padding: var(--padding);
+                flex-direction: column;
+                align-items: stretch;
+                min-height: 100vh;
             }
         }
 
@@ -150,28 +150,53 @@ import Pagination from "src/components/Pagination.svelte";
 
             /* attach scrollbar on overflow */
             overflow-y: auto;
+        }
 
-            :global(#pull-to-refresh) {
-                /* we define some css custom properties that we will later use to style the pull-to-refresh spinner */
+        :global(.pull-to-refresh) {
+            /* we define some css custom properties that we will later use to style the pull-to-refresh spinner */
 
-                /* this is the initial offset of the spinner we translate it by -100% to place it behind the navbar */
-                --initial: -100%;
+            /* these are the custom properties we will manipulate with js later on --offset is the amount the icon is dragged and --angle is it's rotation */
+            --y: calc(var(--offset, 0px) + var(--initial));
+            --angle: 0deg;
 
-                /* these are the custom properties we will manipulate with js later on --offset is the amount the icon is dragged and --angle is it's rotation */
-                --y: calc(var(--offset, 0px) + var(--initial));
-                --angle: 0deg;
+            /* take the spinner out of document flow and place it relative to scroll area */
+            // position: absolute;
+            // inset: auto 0;
 
-                /* take the spinner out of document flow and place it relative to scroll area */
-                position: absolute;
-                inset: auto 0;
+            /* center the containing icon */
+            display: grid;
+            place-content: center;
 
-                /* use the custom properties to rotate and drag the spinner */
-                transform: translateY(var(--y)) rotate(var(--angle, 0deg));
+            overflow: hidden;
 
-                /* center the containing icon */
+            :global(.ptr-icon) {
+                padding: 0.75rem;
+                font-size: 1.5rem;
                 display: grid;
                 place-content: center;
+                border-radius: 9999px;
+                background-color: black;
+                color: white;
+
+                /* use the custom properties to rotate and drag the spinner */
+                // translate: 0px var(--y);
+                rotate: var(--angle, 0deg);
             }
+        }
+
+        :global(#ptf-1) {
+            // top: var(--y);
+            height: var(--offset, 0px);
+
+            /* this is the initial offset of the spinner we translate it by -100% to place it behind the navbar */
+            // --initial: -100%;
+        }
+        :global(#ptf-2) {
+            // bottom: var(--y);
+            height: var(--offset, 0px);
+
+            /* this is the initial offset of the spinner we translate it by -100% to place it behind the navbar */
+            // --initial: 100%;
         }
     }
 </style>

@@ -3,12 +3,14 @@ import { onMount } from "svelte";
 import { spring } from "svelte/motion";
 import { writable, type Writable } from "svelte/store";
 
-export function onRefresh({
+export function onRefresh(
+    callback: () => Promise<void>,
     scrollAreaId = "#scroll-area",
     pullToRefreshId = "#pull-to-refresh",
-    thresholdDistance = 100,
-    callback = (refreshing: Writable<boolean>) => refreshing.set(false),
-} = {}) {
+    direction = 1
+) {
+    const thresholdDistance = 100 * direction;
+
     // this represents refreshing state if we are currently refreshing or not, this will be return to the caller of this function
     const refreshing = writable(false);
 
@@ -16,11 +18,12 @@ export function onRefresh({
     let shouldRefresh = false;
 
     // will be set to element references later on
-    let scrollArea: HTMLDivElement | null;
+    let scrollArea: HTMLElement | null;
     let pullToRefresh: HTMLDivElement | null;
 
     // start Y coordinate of swipe
     let startY = 0;
+    let border = 0;
     // touch ID used to start pullToRefresh, -1 is used to represent no pullToRefresh started yet
     let touchId = -1;
 
@@ -38,19 +41,43 @@ export function onRefresh({
 
     function onTouchMove(e: TouchEvent) {
         // pull to refresh should only trigger if user is at top of the scroll area
-        if (scrollArea!.scrollTop > 0) return;
+        if (direction === -1) {
+            if (
+                scrollArea!.scrollTop + document.documentElement.clientHeight <
+                border
+            )
+                return;
+        } else {
+            if (scrollArea!.scrollTop > border) return;
+        }
         const touch = Array.from(e.changedTouches).find(
             (t) => t.identifier === touchId
         );
         if (!touch) return;
 
-        const distance = touch.screenY - startY;
-        shouldRefresh = distance >= thresholdDistance;
-        if (distance > 0) {
-            scrollArea!.style.overflowY = "hidden";
+        let distance;
+        if (direction === -1) {
+            distance = touch.screenY + scrollArea!.scrollTop - startY;
+            shouldRefresh = distance <= thresholdDistance;
+            // if (distance != 0) scrollArea!.style.overflowY = "hidden";
+
+            console.log("🚀 -------------------------------------🚀");
+            console.log(
+                "🚀 ~ onTouchMove ~ distance:",
+                touch.screenY,
+                distance
+            );
+            console.log("🚀 -------------------------------------🚀");
+
+            offset.set(Math.abs(Math.max(distance, thresholdDistance)));
+        } else {
+            distance = touch.screenY - startY;
+            shouldRefresh = distance >= thresholdDistance;
+            // if (distance != 0) scrollArea!.style.overflowY = "hidden";
+
+            offset.set(Math.min(distance, thresholdDistance));
         }
 
-        offset.set(Math.min(distance, thresholdDistance));
         angle.set(Math.min(distance, thresholdDistance) * 2);
     }
 
@@ -70,7 +97,8 @@ export function onRefresh({
         if (shouldRefresh) {
             shouldRefresh = false;
             refreshing.set(true);
-            callback(refreshing);
+
+            callback().then(() => refreshing.set(false));
         }
 
         // create a proxy value for the store to avoid using get(refreshing) in the spin loop
@@ -95,8 +123,13 @@ export function onRefresh({
 
     // set element references, link css properties to stores & register touch handlers
     onMount(() => {
-        scrollArea = document.querySelector<HTMLDivElement>(scrollAreaId);
-        pullToRefresh = document.querySelector<HTMLDivElement>(pullToRefreshId);
+        // scrollArea = document.querySelector<HTMLDivElement>(
+        //     scrollAreaId.replace(/^#?/g, "#")
+        // );
+        scrollArea = document.documentElement;
+        pullToRefresh = document.querySelector<HTMLDivElement>(
+            pullToRefreshId.replace(/^#?/g, "#")
+        );
 
         if (!scrollArea)
             throw new Error(`no element with id ${scrollAreaId} found`);
@@ -106,7 +139,10 @@ export function onRefresh({
         // link offset to css properties
         const offsetUnsub = offset.subscribe((val) => {
             requestAnimationFrame(() => {
-                pullToRefresh?.style.setProperty("--offset", `${val}px`);
+                pullToRefresh?.style.setProperty(
+                    "--offset",
+                    `${val < 0 ? 0 : val}px`
+                );
             });
         });
 
@@ -116,6 +152,8 @@ export function onRefresh({
                 pullToRefresh?.style.setProperty("--angle", `${val}deg`);
             });
         });
+
+        border = direction === -1 ? scrollArea!.scrollHeight : 0;
 
         scrollArea?.addEventListener("touchstart", onTouchStart);
         scrollArea?.addEventListener("touchmove", onTouchMove);
