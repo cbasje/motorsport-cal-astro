@@ -99,6 +99,23 @@ export function onRefresh(
                 pullToRefresh?.scrollIntoView();
             });
         }
+
+        // create a proxy value for the store to avoid using get(refreshing) in the spin loop
+        let isRefreshing: boolean = true;
+        const unsubscribe = refreshing.subscribe(
+            (state) => (isRefreshing = state)
+        );
+
+        // spin the loader while refreshing
+        function spin() {
+            if (isRefreshing) {
+                requestAnimationFrame(spin);
+            } else {
+                offset.set(0);
+                unsubscribe();
+            }
+        }
+        requestAnimationFrame(spin);
     }
 
     // set element references, link css properties to stores & register touch handlers
