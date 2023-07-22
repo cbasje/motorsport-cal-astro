@@ -196,6 +196,7 @@ const rounds = router({
         .input(z.object({ startDate: z.date(), endDate: z.date() }))
         .query(({ input }) =>
             prisma.round.findMany({
+                orderBy: { startDate: "asc" },
                 where: {
                     sessions: {
                         some: {
