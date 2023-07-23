@@ -271,59 +271,6 @@ const sessions = router({
         ),
 });
 
-const database = router({
-    reset: publicProcedure
-        .use(logger)
-        .input(z.object({ sure: z.boolean() }))
-        .mutation(async ({ input }) => {
-            if (!input.sure)
-                throw new TRPCError({
-                    code: "BAD_REQUEST",
-                    message: '"sure" is required',
-                });
-
-            await prisma.session.deleteMany();
-            await prisma.round.deleteMany();
-            await prisma.circuit.deleteMany();
-        }),
-
-    deleteSeason: publicProcedure
-        .use(logger)
-        .input(z.object({ year: z.string(), includeCurrent: z.boolean() }))
-        .mutation(async ({ input }) => {
-            if (!input.year)
-                throw new TRPCError({
-                    code: "BAD_REQUEST",
-                    message: '"year" is required',
-                });
-
-            const sessions = await prisma.session.deleteMany({
-                where: {
-                    round: {
-                        AND: {
-                            season: {
-                                contains: input.year,
-                                not: input.includeCurrent
-                                    ? {
-                                          contains: String(
-                                              new Date().getFullYear()
-                                          ),
-                                      }
-                                    : undefined,
-                            },
-                        },
-                    },
-                },
-            });
-
-            if (!sessions.count)
-                throw new TRPCError({
-                    code: "INTERNAL_SERVER_ERROR",
-                    message: "Nothing deleted",
-                });
-        }),
-});
-
 const feed = router({
     getAllSessions: publicProcedure.use(logger).query(() =>
         prisma.session.findMany({
@@ -342,7 +289,6 @@ export const appRouter = router({
     circuits,
     rounds,
     sessions,
-    database,
     feed,
 });
 
