@@ -38,12 +38,14 @@
     <ul class="round-list" role="list">
         {#each weekends as round (round.id)}
             <li role="listitem">
-                <div class="round-header">
+                <div
+                    class="round-header"
+                    style="--color-hue: var(--{round.series}-hue)"
+                >
                     <Icon
                         icon="fluent-emoji-high-contrast:{getSeriesIcon(
                             round.series
                         )}"
-                        style="--color-hue: {getSeriesHue(round.series)}"
                     />
                     <h2>
                         {getSeriesTitle(round.series)}
@@ -103,9 +105,10 @@
             padding: 0;
 
             > .round-header {
+                background: var(--color-1);
+
                 > :global(svg.iconify) {
-                    --color-chroma: 0.25;
-                    color: var(--color-5);
+                    color: var(--color-bright);
                 }
             }
 

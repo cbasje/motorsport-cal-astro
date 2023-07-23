@@ -39,7 +39,7 @@
             <label for={s}>
                 <Icon
                     icon="fluent-emoji-high-contrast:{getSeriesIcon(s)}"
-                    style="--color-hue: {getSeriesHue(s)}"
+                    style="--color-hue: var(--{s}-hue)"
                 />
                 <span>{getSeriesTitle(s)}</span>
                 <input
@@ -88,8 +88,6 @@
                 position: relative;
                 transition: outline-offset 145ms var(--ease-2) 0.2s;
 
-                --icon-chroma: 0.25;
-
                 > :global(svg.iconify) {
                     color: var(--gray-5);
                 }
@@ -109,7 +107,7 @@
                     text-decoration: none;
 
                     &:not(.clear-all) > :global(svg.iconify) {
-                        color: var(--color-5);
+                        color: var(--color-bright);
                     }
                 }
                 @media (--md-n-above) {
@@ -118,7 +116,7 @@
                         text-decoration: none;
 
                         &:not(.clear-all) > :global(svg.iconify) {
-                            color: var(--color-5);
+                            color: var(--color-bright);
                         }
                     }
                 }

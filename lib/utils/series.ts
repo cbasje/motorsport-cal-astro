@@ -38,16 +38,3 @@ export const getSeriesTitle = (s: SeriesId) => {
     };
     return titles[s];
 };
-
-export const getSeriesHue = (s: SeriesId) => {
-    const hues: Record<SeriesId, number> = {
-        F1: 27,
-        F2: 238,
-        F3: 295,
-        FE: 273,
-        INDY: 260,
-        WEC: 156,
-        F1A: 345,
-    };
-    return hues[s];
-};

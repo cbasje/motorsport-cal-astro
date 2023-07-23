@@ -1,33 +1,26 @@
-// :where(*) {
-//     --color-1: oklch(98% 0.06 var(--color-hue, 0));
-//     --color-2: oklch(96.25% 0.12 var(--color-hue, 0));
-//     --color-3: oklch(94% 0.14 var(--color-hue, 0));
-//     --color-4: oklch(91% 0.16 var(--color-hue, 0));
-//     --color-5: oklch(86.75% 0.19 var(--color-hue, 0));
-//     --color-6: oklch(76% 0.2 var(--color-hue, 0));
-//     --color-7: oklch(64.25% 0.21 var(--color-hue, 0));
-//     --color-8: oklch(42.75% 0.2 var(--color-hue, 0));
-//     --color-9: oklch(34.5% 0.19 var(--color-hue, 0));
-//     --color-10: oklch(26% 0.17 var(--color-hue, 0));
-//     --color-11: oklch(21% 0.15 var(--color-hue, 0));
-//     --color-12: oklch(16.75% 0.12 var(--color-hue, 0));
-//     --color-13: oklch(11.25% 0.09 var(--color-hue, 0));
-
-//     --gray-1: oklch(98% var(--gray-chroma, none) var(--gray-hue, none));
-//     --gray-2: oklch(96.25% var(--gray-chroma, none) var(--gray-hue, none));
-//     --gray-3: oklch(94% var(--gray-chroma, none) var(--gray-hue, none));
-//     --gray-4: oklch(91% var(--gray-chroma, none) var(--gray-hue, none));
-//     --gray-5: oklch(86.75% var(--gray-chroma, none) var(--gray-hue, none));
-//     --gray-6: oklch(76% var(--gray-chroma, none) var(--gray-hue, none));
-//     --gray-7: oklch(64.25% var(--gray-chroma, none) var(--gray-hue, none));
-//     --gray-8: oklch(42.75% var(--gray-chroma, none) var(--gray-hue, none));
-//     --gray-9: oklch(34.5% var(--gray-chroma, none) var(--gray-hue, none));
-//     --gray-10: oklch(26% var(--gray-chroma, none) var(--gray-hue, none));
-//     --gray-11: oklch(21% var(--gray-chroma, none) var(--gray-hue, none));
-//     --gray-12: oklch(16.75% var(--gray-chroma, none) var(--gray-hue, none));
-//     --gray-13: oklch(11.25% var(--gray-chroma, none) var(--gray-hue, none));
+// :where(html) {
+//     --hue-red: 25;
+//     --hue-pink: 350;
+//     --hue-purple: 310;
+//     --hue-violet: 290;
+//     --hue-indigo: 270;
+//     --hue-blue: 240;
+//     --hue-cyan: 210;
+//     --hue-teal: 185;
+//     --hue-green: 145;
+//     --hue-lime: 125;
+//     --hue-yellow: 100;
+//     --hue-orange: 75;
 // }
-
+:root {
+    --F1-hue: 25;
+    --F2-hue: 240;
+    --F3-hue: 310;
+    --FE-hue: 270;
+    --INDY-hue: 185;
+    --WEC-hue: 135;
+    --F1A-hue: 350;
+}
 :where(*) {
     --color-0: oklch(99% 0.03 var(--color-hue, 0));
     --color-1: oklch(95% 0.06 var(--color-hue, 0));

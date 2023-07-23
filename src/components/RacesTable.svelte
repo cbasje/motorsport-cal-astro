@@ -97,9 +97,7 @@
                             icon="fluent-emoji-high-contrast:{getSeriesIcon(
                                 race.round.series
                             )}"
-                            style="--color-hue: {getSeriesHue(
-                                race.round.series
-                            )}"
+                            style="--color-hue: var(--{race.round.series}-hue)"
                         />
                     </span>
                 </td>
@@ -145,7 +143,7 @@
 
                 span.icon {
                     > :global(svg.iconify) {
-                        color: var(--color-5);
+                        color: var(--color-bright);
                     }
                 }
             }

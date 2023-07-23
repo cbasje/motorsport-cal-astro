@@ -1,6 +1,4 @@
 ---
-import Nav from "../components/Nav.astro";
-
 import "../styles/global.scss";
 ---
 
@@ -14,10 +12,6 @@ import "../styles/global.scss";
     </head>
     <body>
         <a id="skip-link" href="#main-content">Skip to main content</a>
-
-        <header>
-            <Nav />
-        </header>
 
         <main id="main-content">
             <slot />
@@ -34,11 +28,7 @@ import "../styles/global.scss";
         const hue = rgbToHSL(primary).h;
         if (hue) {
             document.documentElement.style.setProperty(
-                "--neutral-hue",
-                String(hue)
-            );
-            document.documentElement.style.setProperty(
-                "--accent-hue",
+                "--arc-hue",
                 String(hue)
             );
         }

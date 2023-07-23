@@ -1,5 +1,5 @@
 :where(*) {
-    --gray-hue: 40;
+    --gray-hue: var(--arc-hue, 40);
     --gray-chroma: 0.0025;
     --surface-1: var(--gray-14);
     --surface-2: var(--gray-13);
@@ -10,7 +10,7 @@
     --text-3: var(--gray-4);
     --text-on-accent: var(--gray-0);
 
-    --color-hue: 40;
+    --color-hue: var(--arc-hue, 40);
     --accent-1: var(--color-3);
     --accent-2: var(--color-4);
 }
