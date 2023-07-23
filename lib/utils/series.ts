@@ -32,9 +32,22 @@ export const getSeriesTitle = (s: SeriesId) => {
         F2: "Formula 2",
         F3: "Formula 3",
         FE: "Formula E",
-        INDY: "Indycar",
+        INDY: "IndyCar",
         WEC: "WEC",
         F1A: "F1 Academy",
+    };
+    return titles[s];
+};
+
+export const getSeriesTitleShort = (s: SeriesId) => {
+    const titles: Record<SeriesId, string> = {
+        F1: "F1",
+        F2: "F2",
+        F3: "F3",
+        FE: "FE",
+        INDY: "Indy",
+        WEC: "WEC",
+        F1A: "F1A",
     };
     return titles[s];
 };

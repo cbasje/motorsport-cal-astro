@@ -8,7 +8,12 @@
         yourTime,
     } from "../../lib/utils/date";
     import { trpc } from "../pages/client";
-    import { getSessionTitle } from "lib/utils/sessions";
+    import { getSessionTitle } from "../../lib/utils/sessions";
+    import {
+        getSeriesIcon,
+        getSeriesTitle,
+        getSeriesTitleShort,
+    } from "../../lib/utils/series";
 
     let weekOffset = 0;
     let timeFormat: "track" | "your" | "rel" = "your";
@@ -50,14 +55,17 @@
                 )}
             >
                 <a class="round-header button" href="/round/{round.id}">
-                    <div>
-                        <!-- <Icon
+                    <div class="round-title">
+                        <Icon
                             icon="fluent-emoji-high-contrast:{getSeriesIcon(
                                 round.series
                             )}"
-                        /> -->
+                        />
                         <h2>{round.title}</h2>
-                        <div>{round.circuit.wikipediaTitle}</div>
+                        <div>
+                            {getSeriesTitleShort(round.series)} @ {round.circuit
+                                .wikipediaTitle}
+                        </div>
                     </div>
 
                     {#if nextSession}
@@ -145,7 +153,7 @@
         > li {
             padding: 0;
 
-            * {
+            :global(*) {
                 --color-hue: inherit;
             }
 
@@ -162,14 +170,24 @@
                 gap: var(--size-3);
                 padding: var(--size-4);
 
+                isolation: isolate;
+                position: relative;
+                overflow: hidden;
+
                 &:hover {
                     text-decoration: none;
                     background: var(--color-4);
                     border-color: var(--color-3);
                 }
 
-                > :global(svg.iconify) {
-                    color: var(--color-bright);
+                > .round-title > :global(.iconify) {
+                    color: var(--color-7);
+                    font-size: 12rem;
+
+                    position: absolute;
+                    top: -3rem;
+                    right: -2.5rem;
+                    z-index: -1;
                 }
 
                 > .next-session {
@@ -180,7 +198,7 @@
                     display: flex;
                     flex-direction: row;
                     gap: var(--size-2);
-                    padding: var(--size-1) var(--size-2);
+                    padding: var(--size-1) var(--size-3);
                 }
             }
 
