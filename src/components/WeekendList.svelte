@@ -1,5 +1,7 @@
 <script lang="ts">
     import Icon from "@iconify/svelte";
+    import { getSessionTitle } from "lib/utils/sessions";
+    import { onMount } from "svelte";
     import {
         getWeekend,
         relTime,
@@ -12,8 +14,6 @@
         getSeriesTitle,
     } from "../../lib/utils/series";
     import { trpc } from "../pages/client";
-    import { getSessionTitle } from "lib/utils/sessions";
-    import { onMount } from "svelte";
 
     let weekOffset = 0;
     let timeFormat: "track" | "your" | "rel" = "your";
@@ -35,32 +35,32 @@
             "week"
         )}
     </h1>
-    <ul class="round-list">
+    <ul class="round-list" role="list">
         {#each weekends as round (round.id)}
-            <li>
-                <div>
-                    <span
-                        class="icon"
-                        title={getSeriesTitle(round.series)}
+            <li role="listitem">
+                <div class="round-header">
+                    <Icon
+                        icon="fluent-emoji-high-contrast:{getSeriesIcon(
+                            round.series
+                        )}"
                         style="--icon-hue: {getSeriesHue(round.series)}"
-                    >
-                        <Icon
-                            icon="fluent-emoji-high-contrast:{getSeriesIcon(
-                                round.series
-                            )}"
-                        />
+                    />
+                    <h2>
                         {getSeriesTitle(round.series)}
-                    </span>
+                    </h2>
                     <div>{round.title}</div>
                     <div>{round.circuit.wikipediaTitle}</div>
                 </div>
 
-                <ol>
+                <ol role="list">
                     {#each round.sessions as session}
-                        <li class:past={session.endDate.valueOf() < Date.now()}>
-                            <div>
+                        <li
+                            class:past={session.endDate.valueOf() < Date.now()}
+                            role="listitem"
+                        >
+                            <h3>
                                 {getSessionTitle(session.type, session.number)}
-                            </div>
+                            </h3>
                             <time datetime={session.startDate.toISOString()}>
                                 {#if timeFormat === "track"}
                                     {trackTime(session.startDate)}
@@ -75,7 +75,7 @@
                 </ol>
             </li>
         {:else}
-            <li>Nothing</li>
+            <li role="listitem">Nothing</li>
         {/each}
     </ul>
     <button
@@ -97,20 +97,27 @@
 <style lang="scss">
     @import "../styles/oklch.scss";
 
-    ul.round-list {
-        > li {
-            > div {
-                span.icon {
-                    --icon-chroma: 0.25;
+    .round-list {
+        list-style: none;
+        padding: 0;
 
-                    > :global(svg.iconify) {
-                        color: #{get-surface(5, "icon-chroma", "icon-hue")};
-                    }
+        > li {
+            padding: 0;
+
+            > .round-header {
+                > :global(svg.iconify) {
+                    --icon-chroma: 0.25;
+                    color: #{get-surface(5, "icon-chroma", "icon-hue")};
                 }
             }
 
             > ol {
+                list-style: none;
+                padding: 0;
+
                 > li {
+                    padding: 0;
+
                     &.past {
                         color: #{get-surface(5, "neutral-chroma", "neutral-hue")};
                     }

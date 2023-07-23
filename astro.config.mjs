@@ -1,6 +1,6 @@
-import { defineConfig } from "astro/config";
-import fastify from "@matthewp/astro-fastify";
 import svelte from "@astrojs/svelte";
+import fastify from "@matthewp/astro-fastify";
+import { defineConfig } from "astro/config";
 
 // https://astro.build/config
 export default defineConfig({
