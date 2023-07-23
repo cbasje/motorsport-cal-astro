@@ -4,7 +4,6 @@
     import type { SeriesId } from "../../lib/types";
     import { seriesIds } from "../../lib/types";
     import {
-        getSeriesHue,
         getSeriesIcon,
         getSeriesTitle,
     } from "../../lib/utils/series";

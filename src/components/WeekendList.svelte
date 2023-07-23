@@ -8,11 +8,7 @@
         trackTime,
         yourTime,
     } from "../../lib/utils/date";
-    import {
-        getSeriesHue,
-        getSeriesIcon,
-        getSeriesTitle,
-    } from "../../lib/utils/series";
+    import { getSeriesIcon, getSeriesTitle } from "../../lib/utils/series";
     import { trpc } from "../pages/client";
 
     let weekOffset = 0;

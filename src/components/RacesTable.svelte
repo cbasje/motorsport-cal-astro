@@ -2,11 +2,7 @@
     import Icon from "@iconify/svelte";
     import { onMount } from "svelte";
     import type { SeriesId } from "../../lib/types";
-    import {
-        getSeriesHue,
-        getSeriesIcon,
-        getSeriesTitle,
-    } from "../../lib/utils/series";
+    import { getSeriesIcon, getSeriesTitle } from "../../lib/utils/series";
     import SeriesMultiSelect from "./SeriesMultiSelect.svelte";
     import { trpc } from "../pages/client";
 
