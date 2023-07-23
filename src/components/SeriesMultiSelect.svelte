@@ -23,7 +23,7 @@
 
 <div class="multi-select">
     <fieldset aria-label="Filters for series">
-        <label for="all" aria-label="Show all series">
+        <label for="all" aria-label="Show all series" class="clear-all">
             <Icon icon="ph:list-checks-bold" />
             <span>All</span>
             <input
@@ -36,8 +36,11 @@
         </label>
         <div class="divider horizontal" aria-hidden />
         {#each seriesIds as s}
-            <label for={s} style="--icon-hue: {getSeriesHue(s)}">
-                <Icon icon="fluent-emoji-high-contrast:{getSeriesIcon(s)}" />
+            <label for={s}>
+                <Icon
+                    icon="fluent-emoji-high-contrast:{getSeriesIcon(s)}"
+                    style="--color-hue: {getSeriesHue(s)}"
+                />
                 <span>{getSeriesTitle(s)}</span>
                 <input
                     id={s}
@@ -52,8 +55,6 @@
 </div>
 
 <style lang="scss">
-    @import "../styles/oklch.scss";
-
     .multi-select {
         width: 100%;
         display: flex;
@@ -71,7 +72,7 @@
 
             border: none;
             border-radius: 0;
-            background: var(--theme-surface-1);
+            background: var(--surface-1);
 
             label {
                 align-items: center;
@@ -90,7 +91,7 @@
                 --icon-chroma: 0.25;
 
                 > :global(svg.iconify) {
-                    color: #{get-surface(5, "neutral-chroma", "neutral-hue")};
+                    color: var(--gray-5);
                 }
                 > span {
                     flex: 2;
@@ -104,20 +105,20 @@
                 }
 
                 &:is(:focus-visible, :has(:checked)) {
-                    background: var(--theme-surface-2);
+                    background: var(--surface-2);
                     text-decoration: none;
 
-                    > :global(svg.iconify) {
-                        color: #{get-surface(5, "icon-chroma", "icon-hue")};
+                    &:not(.clear-all) > :global(svg.iconify) {
+                        color: var(--color-5);
                     }
                 }
                 @media (--md-n-above) {
                     &:is(:hover, :target) {
-                        background: var(--theme-surface-2);
+                        background: var(--surface-2);
                         text-decoration: none;
 
-                        > :global(svg.iconify) {
-                            color: #{get-surface(5, "icon-chroma", "icon-hue")};
+                        &:not(.clear-all) > :global(svg.iconify) {
+                            color: var(--color-5);
                         }
                     }
                 }

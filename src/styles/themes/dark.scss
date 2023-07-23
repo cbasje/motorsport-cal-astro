@@ -1,18 +1,16 @@
-@import "../oklch.scss";
+:where(*) {
+    --gray-hue: 40;
+    --gray-chroma: 0.0025;
+    --surface-1: var(--gray-14);
+    --surface-2: var(--gray-13);
+    --surface-3: var(--gray-12);
+    --surface-3: var(--gray-11);
+    --text-1: var(--gray-0);
+    --text-2: var(--gray-2);
+    --text-3: var(--gray-4);
+    --text-on-accent: var(--gray-0);
 
-:root {
-    --neutral-hue: 40;
-    --neutral-chroma: 0.0025;
-    --theme-surface-1: #{get-surface(11)};
-    --theme-surface-2: #{get-surface(9)};
-    --theme-surface-3: #{get-surface(7)};
-    --theme-text-1: #{get-surface(0)};
-    --theme-text-2: #{get-surface(2)};
-    --theme-text-3: #{get-surface(4)};
-    --theme-text-on-accent: #{get-surface(0)};
-
-    --accent-hue: 40;
-    --accent-chroma: 0.15;
-    --theme-accent-1: #{get-surface(4, "accent-chroma", "accent-hue")};
-    --theme-accent-2: #{get-surface(5, "accent-chroma", "accent-hue")};
+    --color-hue: 40;
+    --accent-1: var(--color-3);
+    --accent-2: var(--color-4);
 }

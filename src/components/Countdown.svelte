@@ -87,7 +87,7 @@
             padding: var(--size-2);
             border-radius: var(--radius-3);
 
-            background-color: var(--theme-surface-2);
+            background-color: var(--surface-2);
         }
     }
 

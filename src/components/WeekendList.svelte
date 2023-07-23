@@ -43,7 +43,7 @@
                         icon="fluent-emoji-high-contrast:{getSeriesIcon(
                             round.series
                         )}"
-                        style="--icon-hue: {getSeriesHue(round.series)}"
+                        style="--color-hue: {getSeriesHue(round.series)}"
                     />
                     <h2>
                         {getSeriesTitle(round.series)}
@@ -95,8 +95,6 @@
 {/await}
 
 <style lang="scss">
-    @import "../styles/oklch.scss";
-
     .round-list {
         list-style: none;
         padding: 0;
@@ -106,8 +104,8 @@
 
             > .round-header {
                 > :global(svg.iconify) {
-                    --icon-chroma: 0.25;
-                    color: #{get-surface(5, "icon-chroma", "icon-hue")};
+                    --color-chroma: 0.25;
+                    color: var(--color-5);
                 }
             }
 
@@ -119,7 +117,7 @@
                     padding: 0;
 
                     &.past {
-                        color: #{get-surface(5, "neutral-chroma", "neutral-hue")};
+                        opacity: 0.5;
                     }
                 }
             }

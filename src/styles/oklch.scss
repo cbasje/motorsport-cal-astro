@@ -1,9 +1,66 @@
-@use "sass:list";
-@use "sass:string";
+// :where(*) {
+//     --color-1: oklch(98% 0.06 var(--color-hue, 0));
+//     --color-2: oklch(96.25% 0.12 var(--color-hue, 0));
+//     --color-3: oklch(94% 0.14 var(--color-hue, 0));
+//     --color-4: oklch(91% 0.16 var(--color-hue, 0));
+//     --color-5: oklch(86.75% 0.19 var(--color-hue, 0));
+//     --color-6: oklch(76% 0.2 var(--color-hue, 0));
+//     --color-7: oklch(64.25% 0.21 var(--color-hue, 0));
+//     --color-8: oklch(42.75% 0.2 var(--color-hue, 0));
+//     --color-9: oklch(34.5% 0.19 var(--color-hue, 0));
+//     --color-10: oklch(26% 0.17 var(--color-hue, 0));
+//     --color-11: oklch(21% 0.15 var(--color-hue, 0));
+//     --color-12: oklch(16.75% 0.12 var(--color-hue, 0));
+//     --color-13: oklch(11.25% 0.09 var(--color-hue, 0));
 
-$lightness: 98%, 96.25%, 94%, 91%, 86.75%, 76%, 64.25%, 42.75%, 34.5%, 26%, 21%,
-    16.75%, 11.25%;
+//     --gray-1: oklch(98% var(--gray-chroma, none) var(--gray-hue, none));
+//     --gray-2: oklch(96.25% var(--gray-chroma, none) var(--gray-hue, none));
+//     --gray-3: oklch(94% var(--gray-chroma, none) var(--gray-hue, none));
+//     --gray-4: oklch(91% var(--gray-chroma, none) var(--gray-hue, none));
+//     --gray-5: oklch(86.75% var(--gray-chroma, none) var(--gray-hue, none));
+//     --gray-6: oklch(76% var(--gray-chroma, none) var(--gray-hue, none));
+//     --gray-7: oklch(64.25% var(--gray-chroma, none) var(--gray-hue, none));
+//     --gray-8: oklch(42.75% var(--gray-chroma, none) var(--gray-hue, none));
+//     --gray-9: oklch(34.5% var(--gray-chroma, none) var(--gray-hue, none));
+//     --gray-10: oklch(26% var(--gray-chroma, none) var(--gray-hue, none));
+//     --gray-11: oklch(21% var(--gray-chroma, none) var(--gray-hue, none));
+//     --gray-12: oklch(16.75% var(--gray-chroma, none) var(--gray-hue, none));
+//     --gray-13: oklch(11.25% var(--gray-chroma, none) var(--gray-hue, none));
+// }
 
-@function get-surface($number, $chroma: "neutral-chroma", $hue: "neutral-hue") {
-    @return "oklch(#{list.nth($lightness, $number+1)} var(--#{$chroma}, none) var(--#{$hue}, none))";
+:where(*) {
+    --color-0: oklch(99% 0.03 var(--color-hue, 0));
+    --color-1: oklch(95% 0.06 var(--color-hue, 0));
+    --color-2: oklch(88% 0.12 var(--color-hue, 0));
+    --color-3: oklch(80% 0.14 var(--color-hue, 0));
+    --color-4: oklch(74% 0.16 var(--color-hue, 0));
+    --color-5: oklch(68% 0.19 var(--color-hue, 0));
+    --color-6: oklch(63% 0.2 var(--color-hue, 0));
+    --color-7: oklch(58% 0.21 var(--color-hue, 0));
+    --color-8: oklch(53% 0.2 var(--color-hue, 0));
+    --color-9: oklch(49% 0.19 var(--color-hue, 0));
+    --color-10: oklch(42% 0.17 var(--color-hue, 0));
+    --color-11: oklch(35% 0.15 var(--color-hue, 0));
+    --color-12: oklch(27% 0.12 var(--color-hue, 0));
+    --color-13: oklch(20% 0.09 var(--color-hue, 0));
+    --color-14: oklch(14% 0.07 var(--color-hue, 0));
+    --color-15: oklch(11% 0.05 var(--color-hue, 0));
+    --color-bright: oklch(65% 0.3 var(--color-hue, 0));
+
+    --gray-0: oklch(99% var(--gray-chroma, none) var(--gray-hue, none));
+    --gray-1: oklch(95% var(--gray-chroma, none) var(--gray-hue, none));
+    --gray-2: oklch(88% var(--gray-chroma, none) var(--gray-hue, none));
+    --gray-3: oklch(80% var(--gray-chroma, none) var(--gray-hue, none));
+    --gray-4: oklch(74% var(--gray-chroma, none) var(--gray-hue, none));
+    --gray-5: oklch(68% var(--gray-chroma, none) var(--gray-hue, none));
+    --gray-6: oklch(63% var(--gray-chroma, none) var(--gray-hue, none));
+    --gray-7: oklch(58% var(--gray-chroma, none) var(--gray-hue, none));
+    --gray-8: oklch(53% var(--gray-chroma, none) var(--gray-hue, none));
+    --gray-9: oklch(49% var(--gray-chroma, none) var(--gray-hue, none));
+    --gray-10: oklch(43% var(--gray-chroma, none) var(--gray-hue, none));
+    --gray-11: oklch(37% var(--gray-chroma, none) var(--gray-hue, none));
+    --gray-12: oklch(31% var(--gray-chroma, none) var(--gray-hue, none));
+    --gray-13: oklch(25% var(--gray-chroma, none) var(--gray-hue, none));
+    --gray-14: oklch(18% var(--gray-chroma, none) var(--gray-hue, none));
+    --gray-15: oklch(10% var(--gray-chroma, none) var(--gray-hue, none));
 }

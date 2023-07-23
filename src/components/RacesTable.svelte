@@ -92,10 +92,12 @@
                     <span
                         class="icon"
                         title={getSeriesTitle(race.round.series)}
-                        style="--icon-hue: {getSeriesHue(race.round.series)}"
                     >
                         <Icon
                             icon="fluent-emoji-high-contrast:{getSeriesIcon(
+                                race.round.series
+                            )}"
+                            style="--color-hue: {getSeriesHue(
                                 race.round.series
                             )}"
                         />
@@ -111,8 +113,6 @@
 </table>
 
 <style lang="scss">
-    @import "../styles/oklch.scss";
-
     table {
         position: relative;
         text-align: left;
@@ -130,7 +130,7 @@
 
         thead {
             th {
-                background-color: var(--theme-surface-2);
+                background-color: var(--surface-2);
                 font-size: var(--font-size-0);
                 line-height: var(--font-lineheight-1);
                 font-weight: var(--font-weight-7);
@@ -141,13 +141,11 @@
         tbody {
             th,
             td {
-                background-color: var(--theme-surface-1);
+                background-color: var(--surface-1);
 
                 span.icon {
-                    --icon-chroma: 0.25;
-
                     > :global(svg.iconify) {
-                        color: #{get-surface(5, "icon-chroma", "icon-hue")};
+                        color: var(--color-5);
                     }
                 }
             }
@@ -155,7 +153,7 @@
             tr:nth-child(even) {
                 th,
                 td {
-                    background: var(--theme-surface-2);
+                    background: var(--surface-2);
                 }
             }
         }
