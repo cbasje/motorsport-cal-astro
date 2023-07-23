@@ -42,7 +42,7 @@ export function onRefresh(
         if (direction === -1) {
             if (
                 scrollArea!.scrollTop + document.documentElement.clientHeight <
-                border - 5
+                border - 10
             )
                 return;
         } else {

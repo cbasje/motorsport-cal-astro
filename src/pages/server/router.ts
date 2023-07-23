@@ -35,6 +35,21 @@ const logger = middleware(async ({ path, type, next }) => {
 // });
 
 const circuits = router({
+    getOne: publicProcedure
+        .use(logger)
+        .input(z.string())
+        .query(({ input }) =>
+            prisma.circuit.findFirst({
+                where: { id: input },
+                include: {
+                    rounds: true,
+                    _count: {
+                        select: { rounds: true },
+                    },
+                },
+            })
+        ),
+
     getAll: publicProcedure.use(logger).query(() =>
         prisma.circuit.findMany({
             orderBy: { created_at: "asc" },
@@ -82,6 +97,23 @@ const circuits = router({
 });
 
 const rounds = router({
+    getOne: publicProcedure
+        .use(logger)
+        .input(z.string())
+        .query(({ input }) =>
+            prisma.round.findFirst({
+                where: { id: input },
+                include: {
+                    sessions: {
+                        orderBy: { startDate: "asc" },
+                    },
+                    _count: {
+                        select: { sessions: true },
+                    },
+                },
+            })
+        ),
+
     getAll: publicProcedure.use(logger).query(() =>
         prisma.round.findMany({
             orderBy: { series: "asc" },
@@ -231,6 +263,15 @@ const rounds = router({
 });
 
 const sessions = router({
+    getOne: publicProcedure
+        .use(logger)
+        .input(z.string())
+        .query(({ input }) =>
+            prisma.session.findFirst({
+                where: { id: input },
+            })
+        ),
+
     getAll: publicProcedure.use(logger).query(() =>
         prisma.session.findMany({
             orderBy: { startDate: "desc" },

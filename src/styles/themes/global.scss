@@ -42,9 +42,10 @@
     --radius-1: 2px;
     --radius-2: 5px;
     --radius-3: 1rem;
-    --radius-4: 2rem;
-    --radius-5: 4rem;
-    --radius-6: 8rem;
+    --radius-4: 1.5rem;
+    --radius-5: 2rem;
+    --radius-6: 4rem;
+    --radius-7: 8rem;
     --radius-conditional-6: clamp(
         0px,
         calc(100vw - 100%) * 1e5,

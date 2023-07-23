@@ -1,6 +1,5 @@
 <script lang="ts">
     import Icon from "@iconify/svelte";
-    import { getSessionTitle } from "lib/utils/sessions";
     import { onMount } from "svelte";
     import {
         getWeekend,
@@ -8,17 +7,24 @@
         trackTime,
         yourTime,
     } from "../../lib/utils/date";
-    import { getSeriesIcon, getSeriesTitle } from "../../lib/utils/series";
     import { trpc } from "../pages/client";
+    import { getSessionTitle } from "lib/utils/sessions";
 
     let weekOffset = 0;
     let timeFormat: "track" | "your" | "rel" = "your";
 
     $: [startDate, endDate] = getWeekend(weekOffset);
+    let now = Date.now();
 
     onMount(() => {
         const params = new URLSearchParams(window.location.search);
         weekOffset = Number(params.get("w"));
+
+        const dateInterval = setInterval(() => {
+            now = Date.now();
+        }, 60 * 1000);
+
+        return { dateInterval };
     });
 </script>
 
@@ -33,27 +39,58 @@
     </h1>
     <ul class="round-list" role="list">
         {#each weekends as round (round.id)}
-            <li role="listitem">
-                <div
-                    class="round-header"
-                    style="--color-hue: var(--{round.series}-hue)"
-                >
-                    <Icon
-                        icon="fluent-emoji-high-contrast:{getSeriesIcon(
-                            round.series
-                        )}"
-                    />
-                    <h2>
-                        {getSeriesTitle(round.series)}
-                    </h2>
-                    <div>{round.title}</div>
-                    <div>{round.circuit.wikipediaTitle}</div>
-                </div>
+            {@const nextSession = round.sessions.find(
+                (s) => s.endDate.valueOf() > now
+            )}
+            <li
+                role="listitem"
+                style="--color-hue: var(--{round.series}-hue)"
+                class:past={round.sessions.every(
+                    (s) => s.endDate.valueOf() < now
+                )}
+            >
+                <a class="round-header button" href="/round/{round.id}">
+                    <div>
+                        <!-- <Icon
+                            icon="fluent-emoji-high-contrast:{getSeriesIcon(
+                                round.series
+                            )}"
+                        /> -->
+                        <h2>{round.title}</h2>
+                        <div>{round.circuit.wikipediaTitle}</div>
+                    </div>
 
-                <ol role="list">
+                    {#if nextSession}
+                        <div class="next-session">
+                            <Icon icon="ph:arrow-line-right-bold" />
+                            <span>
+                                {getSessionTitle(
+                                    nextSession.type,
+                                    nextSession.number
+                                )}
+                            </span>
+                            <time
+                                datetime={nextSession.startDate.toISOString()}
+                            >
+                                {#if timeFormat === "track"}
+                                    {trackTime(nextSession.startDate)}
+                                {:else if timeFormat === "your"}
+                                    {yourTime(
+                                        nextSession.startDate,
+                                        nextSession.endDate
+                                    )}
+                                {:else}
+                                    {relTime(nextSession.startDate, now)}
+                                {/if}
+                            </time>
+                        </div>
+                    {/if}
+                </a>
+
+                <!-- <ol role="list">
                     {#each round.sessions as session}
                         <li
-                            class:past={session.endDate.valueOf() < Date.now()}
+                            class:past={session.endDate.valueOf() < now}
                             role="listitem"
                         >
                             <h3>
@@ -70,7 +107,7 @@
                             </time>
                         </li>
                     {/each}
-                </ol>
+                </ol> -->
             </li>
         {:else}
             <li role="listitem">Nothing</li>
@@ -93,31 +130,63 @@
 {/await}
 
 <style lang="scss">
+    h1 {
+        text-transform: capitalize;
+    }
+
     .round-list {
-        list-style: none;
+        display: flex;
+        flex-direction: column;
+        gap: var(--size-7);
+
         padding: 0;
+        list-style: none;
 
         > li {
             padding: 0;
 
+            * {
+                --color-hue: inherit;
+            }
+
             > .round-header {
-                background: var(--color-1);
+                background: var(--color-5);
+                color: var(--text-on-accent);
+                border-radius: var(--radius-4);
+                border: var(--color-3) var(--border-size-3) solid;
+                box-shadow: var(--color-3) 0px var(--border-size-4) 0px;
+
+                display: flex;
+                flex-direction: column;
+                align-items: flex-start;
+                gap: var(--size-3);
+                padding: var(--size-4);
+
+                &:hover {
+                    text-decoration: none;
+                    background: var(--color-4);
+                    border-color: var(--color-3);
+                }
 
                 > :global(svg.iconify) {
                     color: var(--color-bright);
                 }
+
+                > .next-session {
+                    background: var(--gray-0);
+                    color: var(--color-7);
+                    border-radius: var(--radius-3);
+
+                    display: flex;
+                    flex-direction: row;
+                    gap: var(--size-2);
+                    padding: var(--size-1) var(--size-2);
+                }
             }
 
-            > ol {
-                list-style: none;
-                padding: 0;
-
-                > li {
-                    padding: 0;
-
-                    &.past {
-                        opacity: 0.5;
-                    }
+            &.past {
+                .round-header {
+                    opacity: 0.5;
                 }
             }
         }

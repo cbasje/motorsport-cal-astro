@@ -56,29 +56,12 @@
     h1 {
         margin: 0 0 var(--size-3) 0;
         font-size: var(--font-size-6);
-        font-family: var(--font-display);
         font-weight: var(--font-weight-7);
-        text-transform: uppercase;
-        letter-spacing: var(--font-letterspacing-3);
-        line-height: var(--font-lineheight-2);
     }
     h2 {
         margin: 0 0 var(--size-1) 0;
         font-size: var(--font-size-5);
-        font-family: var(--font-display);
-        font-weight: var(--font-weight-5);
-        text-transform: uppercase;
-        letter-spacing: var(--font-letterspacing-3);
-        line-height: var(--font-lineheight-2);
-    }
-    h3,
-    h4,
-    h5,
-    h6 {
-        font-weight: var(--font-weight-5);
-        text-transform: uppercase;
-        letter-spacing: var(--font-letterspacing-3);
-        line-height: var(--font-lineheight-2);
+        font-weight: var(--font-weight-7);
     }
     h3 {
         font-size: var(--font-size-4);
@@ -89,6 +72,22 @@
     h5,
     h6 {
         font-size: var(--font-size-1);
+    }
+    h1,
+    h2 {
+        font-family: var(--font-display);
+        letter-spacing: var(--font-letterspacing-1);
+        line-height: var(--font-lineheight-2);
+        color: inherit;
+    }
+    h3,
+    h4,
+    h5,
+    h6 {
+        font-weight: var(--font-weight-5);
+        letter-spacing: var(--font-letterspacing-1);
+        line-height: var(--font-lineheight-2);
+        color: inherit;
     }
     p {
         // margin: 0 0 1.5em;

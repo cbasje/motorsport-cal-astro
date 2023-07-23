@@ -11,7 +11,7 @@ export default defineConfig({
     }),
     integrations: [svelte()],
     site: import.meta.env.PROD
-        ? "https://motorsport-cal-v2.netlify.app"
+        ? "https://motorsport-cal-astro.fly.dev"
         : "http://localhost:3000",
     vite: {
         resolve: {

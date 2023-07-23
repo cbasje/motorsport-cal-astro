@@ -1,0 +1,66 @@
+---
+import MainLayout from "../../layouts/main.astro";
+import { trpc } from "../../pages/client";
+import { getSessionTitle } from "../../../lib/utils/sessions";
+
+const { id } = Astro.params;
+
+const round = await trpc.rounds.getOne.query(id ?? "");
+---
+
+<MainLayout>
+    {
+        round && (
+            <>
+                <div
+                    class={
+                        "round-header button " +
+                        round.sessions.every(
+                            (s) => s.endDate.valueOf() < Date.now()
+                        )
+                            ? "past"
+                            : ""
+                    }
+                >
+                    <div>
+                        <h2>{round.title}</h2>
+                    </div>
+                </div>
+                <ol role="list" class="session-list">
+                    {round.sessions.map((session) => (
+                        <li
+                            class={
+                                session.endDate.valueOf() < Date.now()
+                                    ? "past"
+                                    : ""
+                            }
+                            role="listitem"
+                        >
+                            <h3>
+                                {getSessionTitle(session.type, session.number)}
+                            </h3>
+                        </li>
+                    ))}
+                </ol>
+            </>
+        )
+    }
+</MainLayout>
+
+<style lang="scss" define:vars={{ "color-hue": `var(--${round?.series}-hue)` }}>
+    .round-header {
+    }
+
+    .session-list {
+        list-style: none;
+        padding: 0;
+
+        > li {
+            padding: 0;
+
+            &.past {
+                opacity: 0.5;
+            }
+        }
+    }
+</style>

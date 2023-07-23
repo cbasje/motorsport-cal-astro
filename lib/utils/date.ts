@@ -7,15 +7,22 @@ const trackTime = (date: Date) => {
     return 0;
 };
 
-const yourTime = (date: Date) => {
-    return new Intl.DateTimeFormat("en-GB", {
-        dateStyle: "short",
-        timeStyle: "short",
-    }).format(date);
+const yourTime = (startDate: Date, endDate?: Date) => {
+    const yourTimeFormat = new Intl.DateTimeFormat("en-GB", {
+        weekday: "short",
+        hour: "numeric",
+        minute: "numeric",
+    });
+
+    if (endDate) {
+        return yourTimeFormat.formatRange(startDate, endDate);
+    } else {
+        return yourTimeFormat.format(startDate);
+    }
 };
 
-const relTime = (date: Date) => {
-    const rel = date.valueOf() - Date.now();
+const relTime = (date: Date, now: number) => {
+    const rel = date.valueOf() - now;
     const relTimeFormat = new Intl.RelativeTimeFormat("en-GB", {
         style: "long",
         numeric: "auto",
