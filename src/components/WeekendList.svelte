@@ -83,10 +83,7 @@
                                 {#if timeFormat === "track"}
                                     {trackTime(nextSession.startDate)}
                                 {:else if timeFormat === "your"}
-                                    {yourTime(
-                                        nextSession.startDate,
-                                        nextSession.endDate
-                                    )}
+                                    {yourTime(nextSession.startDate)}
                                 {:else}
                                     {relTime(nextSession.startDate, now)}
                                 {/if}
@@ -94,28 +91,6 @@
                         </div>
                     {/if}
                 </a>
-
-                <!-- <ol role="list">
-                    {#each round.sessions as session}
-                        <li
-                            class:past={session.endDate.valueOf() < now}
-                            role="listitem"
-                        >
-                            <h3>
-                                {getSessionTitle(session.type, session.number)}
-                            </h3>
-                            <time datetime={session.startDate.toISOString()}>
-                                {#if timeFormat === "track"}
-                                    {trackTime(session.startDate)}
-                                {:else if timeFormat === "your"}
-                                    {yourTime(session.startDate)}
-                                {:else}
-                                    {relTime(session.startDate)}
-                                {/if}
-                            </time>
-                        </li>
-                    {/each}
-                </ol> -->
             </li>
         {:else}
             <li role="listitem">Nothing</li>
