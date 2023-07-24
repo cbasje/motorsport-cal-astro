@@ -2,11 +2,11 @@ generator client {
   provider = "prisma-client-js"
 }
 
-generator zod {
-  provider    = "zod-prisma"
-  output      = "../lib/types/prisma"
-  modelSuffix = "Z"
-}
+// generator zod {
+//   provider    = "zod-prisma"
+//   output      = "../lib/types/prisma"
+//   modelSuffix = "Z"
+// }
 
 datasource db {
   provider = "postgresql"
@@ -65,9 +65,10 @@ enum SeriesId {
 }
 
 enum SessionType {
-  PRACTICE
-  QUALIFYING
   RACE
-  SHAKEDOWN
   SPRINT
+  QUALIFYING
+  SPRINT_QUALIFYING
+  PRACTICE
+  SHAKEDOWN
 }
