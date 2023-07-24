@@ -1,35 +1,20 @@
 <script lang="ts">
     import Icon from "@iconify/svelte";
     import { onMount } from "svelte";
-    import {
-        getWeekend,
-        relTime,
-        trackTime,
-        yourTime,
-    } from "../../lib/utils/date";
-    import { trpc } from "../pages/client";
+    import { getWeekend } from "../../lib/utils/date";
+    import { getSeriesIcon, getSeriesTitleShort } from "../../lib/utils/series";
     import { getSessionTitle } from "../../lib/utils/sessions";
-    import {
-        getSeriesIcon,
-        getSeriesTitle,
-        getSeriesTitleShort,
-    } from "../../lib/utils/series";
+    import { trpc } from "../pages/client";
+    import Time from "./Time.svelte";
 
     let weekOffset = 0;
-    let timeFormat: "track" | "your" | "rel" = "your";
+    const now = Date.now();
 
     $: [startDate, endDate] = getWeekend(weekOffset);
-    let now = Date.now();
 
     onMount(() => {
         const params = new URLSearchParams(window.location.search);
         weekOffset = Number(params.get("w"));
-
-        const dateInterval = setInterval(() => {
-            now = Date.now();
-        }, 60 * 1000);
-
-        return { dateInterval };
     });
 </script>
 
@@ -77,17 +62,7 @@
                                     nextSession.number
                                 )}
                             </span>
-                            <time
-                                datetime={nextSession.startDate.toISOString()}
-                            >
-                                {#if timeFormat === "track"}
-                                    {trackTime(nextSession.startDate)}
-                                {:else if timeFormat === "your"}
-                                    {yourTime(nextSession.startDate)}
-                                {:else}
-                                    {relTime(nextSession.startDate, now)}
-                                {/if}
-                            </time>
+                            <Time startDate={nextSession.startDate} />
                         </div>
                     {/if}
                 </a>
@@ -133,12 +108,6 @@
             }
 
             > .round-header {
-                background: var(--color-5);
-                color: var(--text-on-accent);
-                border-radius: var(--radius-4);
-                border: var(--color-3) var(--border-size-3) solid;
-                box-shadow: var(--color-3) 0px var(--border-size-4) 0px;
-
                 display: flex;
                 flex-direction: column;
                 align-items: flex-start;
@@ -148,12 +117,6 @@
                 isolation: isolate;
                 position: relative;
                 overflow: hidden;
-
-                &:hover {
-                    text-decoration: none;
-                    background: var(--color-4);
-                    border-color: var(--color-3);
-                }
 
                 > .round-title > :global(.iconify) {
                     color: var(--color-7);

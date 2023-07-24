@@ -1,7 +1,10 @@
 ---
+import { Icon } from "astro-icon/components";
+import { getSeriesIcon } from "../../../lib/utils/series";
+import { getSessionTitle } from "../../../lib/utils/sessions";
+import Time from "../../components/Time.svelte";
 import MainLayout from "../../layouts/main.astro";
 import { trpc } from "../../pages/client";
-import { getSessionTitle } from "../../../lib/utils/sessions";
 
 const { id } = Astro.params;
 
@@ -9,45 +12,63 @@ const round = await trpc.rounds.getOne.query(id ?? "");
 ---
 
 <MainLayout>
-    {
-        round && (
-            <>
-                <div
-                    class={
-                        "round-header button " +
-                        round.sessions.every(
-                            (s) => s.endDate.valueOf() < Date.now()
-                        )
-                            ? "past"
-                            : ""
-                    }
-                >
-                    <div>
+    <div class="container">
+        {
+            round && (
+                <>
+                    <div
+                        class={
+                            "round-header button " +
+                            round.sessions.every(
+                                (s) => s.endDate.valueOf() < Date.now()
+                            )
+                                ? "past"
+                                : ""
+                        }
+                    >
+                        <Icon
+                            name={`fluent-emoji-high-contrast:${getSeriesIcon(
+                                round.series
+                            )}`}
+                        />
                         <h2>{round.title}</h2>
                     </div>
-                </div>
-                <ol role="list" class="session-list">
-                    {round.sessions.map((session) => (
-                        <li
-                            class={
-                                session.endDate.valueOf() < Date.now()
-                                    ? "past"
-                                    : ""
-                            }
-                            role="listitem"
-                        >
-                            <h3>
-                                {getSessionTitle(session.type, session.number)}
-                            </h3>
-                        </li>
-                    ))}
-                </ol>
-            </>
-        )
-    }
+                    <ol role="list" class="session-list">
+                        {round.sessions.map((session) => (
+                            <li
+                                class={
+                                    session.endDate.valueOf() < Date.now()
+                                        ? "past"
+                                        : ""
+                                }
+                                role="listitem"
+                            >
+                                <h3>
+                                    {getSessionTitle(
+                                        session.type,
+                                        session.number
+                                    )}
+                                </h3>
+                                <Time startDate={session.startDate} />
+                            </li>
+                        ))}
+                    </ol>
+                </>
+            )
+        }
+    </div>
 </MainLayout>
 
 <style lang="scss" define:vars={{ "color-hue": `var(--${round?.series}-hue)` }}>
+    .container {
+        display: flex;
+        flex-direction: column;
+        gap: var(--size-3);
+        max-inline-size: var(--size-content-2);
+        margin: 0 auto;
+        padding: 0 var(--size-4);
+    }
+
     .round-header {
     }
 
