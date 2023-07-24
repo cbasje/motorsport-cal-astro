@@ -9,6 +9,7 @@ ADD     prisma /app/prisma
 ADD     public /app/public
 ADD     src /app/src
 
+ARG     DATABASE_PW
 ENV     DATABASE_URL "postgres://postgres:${DATABASE_PW}@motorsport-cal-db.flycast:5432?sslmode=disable"
 
 RUN     yarn install --frozen-lockfile
