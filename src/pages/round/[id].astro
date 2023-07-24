@@ -1,8 +1,7 @@
 ---
 import { Icon } from "astro-icon/components";
 import { getSeriesIcon } from "../../../lib/utils/series";
-import { getSessionTitle } from "../../../lib/utils/sessions";
-import Time from "../../components/Time.svelte";
+import SessionCard from "../../components/SessionCard.astro";
 import MainLayout from "../../layouts/main.astro";
 import { trpc } from "../../pages/client";
 
@@ -35,22 +34,7 @@ const round = await trpc.rounds.getOne.query(id ?? "");
                     </div>
                     <ol role="list" class="session-list">
                         {round.sessions.map((session) => (
-                            <li
-                                class={
-                                    session.endDate.valueOf() < Date.now()
-                                        ? "past"
-                                        : ""
-                                }
-                                role="listitem"
-                            >
-                                <h3>
-                                    {getSessionTitle(
-                                        session.type,
-                                        session.number
-                                    )}
-                                </h3>
-                                <Time startDate={session.startDate} />
-                            </li>
+                            <SessionCard {session} />
                         ))}
                     </ol>
                 </>
@@ -75,13 +59,5 @@ const round = await trpc.rounds.getOne.query(id ?? "");
     .session-list {
         list-style: none;
         padding: 0;
-
-        > li {
-            padding: 0;
-
-            &.past {
-                opacity: 0.5;
-            }
-        }
     }
 </style>

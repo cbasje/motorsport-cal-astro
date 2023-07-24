@@ -1,0 +1,30 @@
+---
+import type { Session } from "@prisma/client";
+import { getSessionTitle } from "../../lib/utils/sessions";
+import Time from "./Time.svelte";
+
+interface Props {
+    session: Session;
+}
+const { session } = Astro.props;
+---
+
+<li
+    class={session.endDate.valueOf() < Date.now() ? "past" : ""}
+    role="listitem"
+>
+    <h3>
+        {getSessionTitle(session.type, session.number)}
+    </h3>
+    <Time startDate={session.startDate} />
+</li>
+
+<style lang="scss">
+    li {
+        padding: 0;
+
+        &.past {
+            opacity: 0.5;
+        }
+    }
+</style>
