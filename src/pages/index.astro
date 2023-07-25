@@ -22,7 +22,13 @@ const weekends = await trpc.rounds.getWeekends.query({ startDate, endDate });
         }
     </h1>
     <ul class="round-list" role="list">
-        {weekends.map((round) => <RoundCard {round} />)}
+        {
+            weekends.map((round) => (
+                <li>
+                    <RoundCard {round} showNextSession />
+                </li>
+            ))
+        }
     </ul>
     <a href={`?offset=${weekOffset - 1}`}>Previous</a>
     <a href={`?offset=${weekOffset + 1}`}>Next</a>
@@ -41,5 +47,9 @@ const weekends = await trpc.rounds.getWeekends.query({ startDate, endDate });
 
         padding: 0;
         list-style: none;
+
+        > li {
+            padding: 0;
+        }
     }
 </style>

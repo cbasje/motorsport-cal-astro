@@ -8,86 +8,81 @@ import type { trpc } from "../pages/client";
 type Round = Awaited<ReturnType<typeof trpc.rounds.getWeekends.query>>[number];
 interface Props {
     round: Round;
+    showNextSession?: boolean;
 }
-const { round } = Astro.props;
+const { round, showNextSession } = Astro.props;
 
 const now = Date.now();
 
 const nextSession = round.sessions.find((s) => s.endDate.valueOf() > now);
 ---
 
-<li
-    role="listitem"
+<a
     style={`--color-hue: var(--${round.series}-hue)`}
-    class={round.sessions.every((s) => s.endDate.valueOf() < now) ? "past" : ""}
+    class={`round-header button ${
+        round.sessions.every((s) => s.endDate.valueOf() < now) ? "past" : ""
+    }`}
+    href={`/round/${round.id}`}
 >
-    <a class="round-header button" href={`/round/${round.id}`}>
-        <div class="round-title">
-            <Icon
-                name={`fluent-emoji-high-contrast:${getSeriesIcon(
-                    round.series
-                )}`}
-            />
-            <h2>{round.title}</h2>
-            <div>
-                {getSeriesTitleShort(round.series)} @
-                {round.circuit.wikipediaTitle}
-            </div>
+    <div class="round-title">
+        <Icon
+            name={`fluent-emoji-high-contrast:${getSeriesIcon(round.series)}`}
+        />
+        <h2>{round.title}</h2>
+        <div>
+            {getSeriesTitleShort(round.series)} @
+            {round.circuit.wikipediaTitle}
         </div>
+    </div>
 
-        {
-            nextSession && (
-                <div class="next-session">
-                    <Icon name="ph:arrow-line-right-bold" />
-                    <span>
-                        {getSessionTitle(nextSession.type, nextSession.number)}
-                    </span>
-                    <Time startDate={nextSession.startDate} />
-                </div>
-            )
-        }
-    </a>
-</li>
+    {
+        nextSession && showNextSession && (
+            <div class="next-session">
+                <Icon name="ph:arrow-line-right-bold" />
+                <span>
+                    {getSessionTitle(nextSession.type, nextSession.number)}
+                </span>
+                <Time startDate={nextSession.startDate} />
+            </div>
+        )
+    }
+</a>
 
 <style lang="scss">
-    li {
-        padding: 0;
-
+    .round-header {
         :global(*) {
             --color-hue: inherit;
         }
 
-        > .round-header {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: var(--size-3);
+        padding: var(--size-4);
+
+        isolation: isolate;
+        position: relative;
+        overflow: hidden;
+
+        > .round-title > :global([data-icon]) {
+            color: var(--color-7);
+            font-size: 12rem;
+
+            position: absolute;
+            top: -3rem;
+            right: -2.5rem;
+            z-index: -1;
+        }
+
+        > .next-session {
+            background: var(--gray-0);
+            color: var(--color-7);
+            border-radius: var(--radius-3);
+
             display: flex;
-            flex-direction: column;
-            align-items: flex-start;
-            gap: var(--size-3);
-            padding: var(--size-4);
-
-            isolation: isolate;
-            position: relative;
-            overflow: hidden;
-
-            > .round-title > :global([data-icon]) {
-                color: var(--color-7);
-                font-size: 12rem;
-
-                position: absolute;
-                top: -3rem;
-                right: -2.5rem;
-                z-index: -1;
-            }
-
-            > .next-session {
-                background: var(--gray-0);
-                color: var(--color-7);
-                border-radius: var(--radius-3);
-
-                display: flex;
-                flex-direction: row;
-                gap: var(--size-2);
-                padding: var(--size-1) var(--size-3);
-            }
+            flex-direction: row;
+            gap: var(--size-2);
+            padding: var(--size-1) var(--size-3);
         }
 
         &.past {

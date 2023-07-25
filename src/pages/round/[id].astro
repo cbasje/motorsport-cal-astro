@@ -1,6 +1,5 @@
 ---
-import { Icon } from "astro-icon/components";
-import { getSeriesIcon } from "../../../lib/utils/series";
+import RoundCard from "../../components/RoundCard.astro";
 import SessionCard from "../../components/SessionCard.astro";
 import MainLayout from "../../layouts/main.astro";
 import { trpc } from "../../pages/client";
@@ -14,23 +13,8 @@ const round = await trpc.rounds.getOne.query(id ?? "");
         {
             round && (
                 <>
-                    <div
-                        class={
-                            "round-header button " +
-                            round.sessions.every(
-                                (s) => s.endDate.valueOf() < Date.now()
-                            )
-                                ? "past"
-                                : ""
-                        }
-                    >
-                        <Icon
-                            name={`fluent-emoji-high-contrast:${getSeriesIcon(
-                                round.series
-                            )}`}
-                        />
-                        <h2>{round.title}</h2>
-                    </div>
+                    <RoundCard {round} />
+
                     <ol role="list" class="session-list">
                         {round.sessions.map((session) => (
                             <SessionCard {session} />

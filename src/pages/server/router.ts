@@ -104,6 +104,7 @@ const rounds = router({
             prisma.round.findFirst({
                 where: { id: input },
                 include: {
+                    circuit: true,
                     sessions: {
                         orderBy: { startDate: "asc" },
                     },
