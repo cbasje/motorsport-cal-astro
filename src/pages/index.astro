@@ -26,6 +26,7 @@ const weekends = await trpc.rounds.getWeekends.query({ startDate, endDate });
     </ul>
     <a href={`?offset=${weekOffset - 1}`}>Previous</a>
     <a href={`?offset=${weekOffset + 1}`}>Next</a>
+    {weekOffset !== 0 && <a href={`?offset=0`}>Back to This week</a>}
 </MainLayout>
 
 <style lang="scss">
