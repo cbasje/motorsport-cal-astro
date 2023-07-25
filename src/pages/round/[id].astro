@@ -11,7 +11,6 @@ const round = await trpc.rounds.getOne.query(id ?? "");
 ---
 
 <MainLayout>
-    <div class="container">
         {
             round && (
                 <>
@@ -40,19 +39,9 @@ const round = await trpc.rounds.getOne.query(id ?? "");
                 </>
             )
         }
-    </div>
 </MainLayout>
 
 <style lang="scss" define:vars={{ "color-hue": `var(--${round?.series}-hue)` }}>
-    .container {
-        display: flex;
-        flex-direction: column;
-        gap: var(--size-3);
-        max-inline-size: var(--size-content-2);
-        margin: 0 auto;
-        padding: 0 var(--size-4);
-    }
-
     .round-header {
     }
 

@@ -4,16 +4,5 @@ import MainLayout from "../layouts/main.astro";
 ---
 
 <MainLayout>
-    <div class="container">
-        <CountdownList client:idle />
-    </div>
+    <CountdownList client:idle />
 </MainLayout>
-
-<style lang="scss">
-    .container {
-        width: 100%;
-        display: flex;
-        flex-direction: column;
-        gap: var(--size-3);
-    }
-</style>

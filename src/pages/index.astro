@@ -14,32 +14,21 @@ const weekends = await trpc.rounds.getWeekends.query({ startDate, endDate });
 ---
 
 <MainLayout>
-    <div class="container">
-        <h1>
-            {
-                new Intl.RelativeTimeFormat("en-GB", {
-                    numeric: "auto",
-                }).format(weekOffset, "week")
-            }
-        </h1>
-        <ul class="round-list" role="list">
-            {weekends.map((round) => <RoundCard {round} />)}
-        </ul>
-        <a href={`?offset=${weekOffset - 1}`}> Previous</a>
-        <a href={`?offset=${weekOffset + 1}`}> Next</a>
-    </div>
+    <h1>
+        {
+            new Intl.RelativeTimeFormat("en-GB", {
+                numeric: "auto",
+            }).format(weekOffset, "week")
+        }
+    </h1>
+    <ul class="round-list" role="list">
+        {weekends.map((round) => <RoundCard {round} />)}
+    </ul>
+    <a href={`?offset=${weekOffset - 1}`}>Previous</a>
+    <a href={`?offset=${weekOffset + 1}`}>Next</a>
 </MainLayout>
 
 <style lang="scss">
-    .container {
-        display: flex;
-        flex-direction: column;
-        gap: var(--size-3);
-        max-inline-size: var(--size-content-2);
-        margin: 0 auto;
-        padding: 0 var(--size-4);
-    }
-
     h1 {
         text-transform: capitalize;
     }
