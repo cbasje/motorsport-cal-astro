@@ -9,8 +9,9 @@ type Round = Awaited<ReturnType<typeof trpc.rounds.getWeekends.query>>[number];
 interface Props {
     round: Round;
     showNextSession?: boolean;
+    link?: string;
 }
-const { round, showNextSession } = Astro.props;
+const { round, showNextSession, link } = Astro.props;
 
 const now = Date.now();
 
@@ -22,7 +23,7 @@ const nextSession = round.sessions.find((s) => s.endDate.valueOf() > now);
     class={`round-header button ${
         round.sessions.every((s) => s.endDate.valueOf() < now) ? "past" : ""
     }`}
-    href={`/round/${round.id}`}
+    href={link}
 >
     <div class="round-title">
         <Icon
@@ -47,6 +48,18 @@ const nextSession = round.sessions.find((s) => s.endDate.valueOf() > now);
         )
     }
 </a>
+<script>
+    async function goBack() {
+        if ("navigation" in window && navigation.canGoBack) {
+            await navigation.back().finished;
+        }
+    }
+
+    const a = document.querySelector<HTMLAnchorElement>(
+        ".round-header:not([href])"
+    );
+    a?.addEventListener("click", goBack);
+</script>
 
 <style lang="scss">
     .round-header {

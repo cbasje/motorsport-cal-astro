@@ -25,7 +25,11 @@ const weekends = await trpc.rounds.getWeekends.query({ startDate, endDate });
         {
             weekends.map((round) => (
                 <li>
-                    <RoundCard {round} showNextSession />
+                    <RoundCard
+                        link={`/round/${round.id}`}
+                        {round}
+                        showNextSession
+                    />
                 </li>
             ))
         }
