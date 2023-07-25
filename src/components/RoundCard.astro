@@ -68,7 +68,7 @@ const nextSession = round.sessions.find((s) => s.endDate.valueOf() > now);
             position: relative;
             overflow: hidden;
 
-            > .round-title > :global(.iconify) {
+            > .round-title > :global([data-icon]) {
                 color: var(--color-7);
                 font-size: 12rem;
 

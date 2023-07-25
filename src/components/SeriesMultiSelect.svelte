@@ -3,10 +3,7 @@
     import { onMount } from "svelte";
     import type { SeriesId } from "../../lib/types";
     import { seriesIds } from "../../lib/types";
-    import {
-        getSeriesIcon,
-        getSeriesTitle,
-    } from "../../lib/utils/series";
+    import { getSeriesIcon, getSeriesTitle } from "../../lib/utils/series";
 
     export let series: SeriesId[];
     let seriesCopy: SeriesId[];
@@ -87,7 +84,7 @@
                 position: relative;
                 transition: outline-offset 145ms var(--ease-2) 0.2s;
 
-                > :global(svg.iconify) {
+                > :global(.iconify) {
                     color: var(--gray-5);
                 }
                 > span {
@@ -105,7 +102,7 @@
                     background: var(--surface-2);
                     text-decoration: none;
 
-                    &:not(.clear-all) > :global(svg.iconify) {
+                    &:not(.clear-all) > :global(.iconify) {
                         color: var(--color-bright);
                     }
                 }
@@ -114,7 +111,7 @@
                         background: var(--surface-2);
                         text-decoration: none;
 
-                        &:not(.clear-all) > :global(svg.iconify) {
+                        &:not(.clear-all) > :global(.iconify) {
                             color: var(--color-bright);
                         }
                     }
