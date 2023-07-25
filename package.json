@@ -26,7 +26,7 @@
         "@prisma/client": "^5.0.0",
         "@trpc/client": "^10.34.0",
         "@trpc/server": "^10.34.0",
-        "astro": "^2.8.1",
+        "astro": "^2.9.2",
         "astro-icon": "^1.0.0-next.2",
         "ics": "^3.1.0",
         "prisma": "^5.0.0",

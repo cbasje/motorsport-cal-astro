@@ -24,7 +24,7 @@ const weekends = await trpc.rounds.getWeekends.query({ startDate, endDate });
     <ul class="round-list" role="list">
         {
             weekends.map((round) => (
-                <li>
+                <li transition:name={`round-${round.id}`}>
                     <RoundCard
                         link={`/round/${round.id}`}
                         {round}
@@ -54,6 +54,7 @@ const weekends = await trpc.rounds.getWeekends.query({ startDate, endDate });
 
         > li {
             padding: 0;
+            max-inline-size: unset;
         }
     }
 </style>
