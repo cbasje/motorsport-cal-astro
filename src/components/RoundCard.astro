@@ -24,9 +24,11 @@ const now = Date.now();
         <Icon
             name={`fluent-emoji-high-contrast:${getSeriesIcon(round.series)}`}
         />
-        <h2>{round.title}</h2>
+        <h2>
+            {getSeriesTitleShort(round.series)}
+            {round.title}
+        </h2>
         <div>
-            {getSeriesTitleShort(round.series)} @
             {round.circuit.wikipediaTitle}
         </div>
     </div>
