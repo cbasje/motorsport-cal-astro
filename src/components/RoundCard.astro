@@ -43,7 +43,7 @@ const nextSession = round.sessions.find((s) => s.endDate.valueOf() > now);
                 <span>
                     {getSessionTitle(nextSession.type, nextSession.number)}
                 </span>
-                <Time startDate={nextSession.startDate} />
+                <Time startDate={nextSession.startDate} client:idle />
             </div>
         )
     }

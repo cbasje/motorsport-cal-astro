@@ -16,7 +16,7 @@ const { session } = Astro.props;
     <h3>
         {getSessionTitle(session.type, session.number)}
     </h3>
-    <Time startDate={session.startDate} />
+    <Time startDate={session.startDate} client:idle />
 </li>
 
 <style lang="scss">
