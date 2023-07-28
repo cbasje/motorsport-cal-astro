@@ -7,21 +7,13 @@ import { SeriesIdZ, seriesIds } from "../types";
 import { NewCircuitZ, NewRoundZ, NewSessionZ } from "../types/api";
 import { CircuitZ } from "../types/prisma";
 
-export const t = initTRPC.context<Context>().create({
+const t = initTRPC.context<Context>().create({
     transformer: superjson,
 });
 
 export const router = t.router;
-export const middleware = t.middleware;
-export const publicProcedure = t.procedure;
-
-const logger = middleware(async ({ path, type, next }) => {
-    const start = Date.now();
-    const result = await next();
-    const ms = Date.now() - start;
-    console.log(`tRPC ${result.ok ? "✅" : "🚨"} ${type} ${path} - ${ms}ms`);
-    return result;
-});
+const middleware = t.middleware;
+const publicProcedure = t.procedure;
 
 // const auth = middleware(async ({ ctx, next }) => {
 //     if (!ctx.user) {
@@ -33,24 +25,32 @@ const logger = middleware(async ({ path, type, next }) => {
 //         },
 //     });
 // });
+const logger = middleware(async ({ path, type, next }) => {
+    const start = Date.now();
+    const result = await next();
+    const ms = Date.now() - start;
+    console.log(`tRPC ${result.ok ? "✅" : "🚨"} ${type} ${path} - ${ms}ms`);
+    return result;
+});
+
+// const protectedProcedure = publicProcedure.use(auth);
+const loggedProcedure = publicProcedure.use(logger);
+// const loggedAndMockedProcedure = loggedProcedure.use(mock);
 
 const circuits = router({
-    getOne: publicProcedure
-        .use(logger)
-        .input(z.string())
-        .query(({ input }) =>
-            prisma.circuit.findFirst({
-                where: { id: input },
-                include: {
-                    rounds: true,
-                    _count: {
-                        select: { rounds: true },
-                    },
+    getOne: loggedProcedure.input(z.string()).query(({ input }) =>
+        prisma.circuit.findFirst({
+            where: { id: input },
+            include: {
+                rounds: true,
+                _count: {
+                    select: { rounds: true },
                 },
-            })
-        ),
+            },
+        })
+    ),
 
-    getAll: publicProcedure.use(logger).query(() =>
+    getAll: loggedProcedure.query(() =>
         prisma.circuit.findMany({
             orderBy: { created_at: "asc" },
             include: {
@@ -62,21 +62,15 @@ const circuits = router({
         })
     ),
 
-    deleteAll: publicProcedure
-        .use(logger)
-        .mutation(() => prisma.circuit.deleteMany({})),
+    deleteAll: loggedProcedure.mutation(() => prisma.circuit.deleteMany({})),
 
-    createCircuit: publicProcedure
-        .use(logger)
-        .input(NewCircuitZ)
-        .mutation(({ input }) =>
-            prisma.circuit.create({
-                data: input,
-            })
-        ),
+    createCircuit: loggedProcedure.input(NewCircuitZ).mutation(({ input }) =>
+        prisma.circuit.create({
+            data: input,
+        })
+    ),
 
-    updateMultiple: publicProcedure
-        .use(logger)
+    updateMultiple: loggedProcedure
         .input(z.array(CircuitZ))
         .mutation(({ input }) =>
             Promise.all(
@@ -97,25 +91,22 @@ const circuits = router({
 });
 
 const rounds = router({
-    getOne: publicProcedure
-        .use(logger)
-        .input(z.string())
-        .query(({ input }) =>
-            prisma.round.findFirst({
-                where: { id: input },
-                include: {
-                    circuit: true,
-                    sessions: {
-                        orderBy: { startDate: "asc" },
-                    },
-                    _count: {
-                        select: { sessions: true },
-                    },
+    getOne: loggedProcedure.input(z.string()).query(({ input }) =>
+        prisma.round.findFirst({
+            where: { id: input },
+            include: {
+                circuit: true,
+                sessions: {
+                    orderBy: { startDate: "asc" },
                 },
-            })
-        ),
+                _count: {
+                    select: { sessions: true },
+                },
+            },
+        })
+    ),
 
-    getAll: publicProcedure.use(logger).query(() =>
+    getAll: loggedProcedure.query(() =>
         prisma.round.findMany({
             orderBy: { series: "asc" },
             include: {
@@ -129,51 +120,46 @@ const rounds = router({
         })
     ),
 
-    deleteAll: publicProcedure
-        .use(logger)
-        .mutation(() => prisma.round.deleteMany({})),
+    deleteAll: loggedProcedure.mutation(() => prisma.round.deleteMany({})),
 
-    create: publicProcedure
-        .use(logger)
-        .input(NewRoundZ)
-        .mutation(({ input }) =>
-            prisma.round.upsert({
-                create: {
-                    title: input.title,
-                    number: input.number,
-                    season: input.season,
-                    series: input.series,
-                    link: input.link,
-                    circuit: {
-                        connectOrCreate: {
-                            where: {
-                                title: input.circuitTitle,
-                            },
-                            create: {
-                                title: input.circuitTitle,
-                            },
+    create: loggedProcedure.input(NewRoundZ).mutation(({ input }) =>
+        prisma.round.upsert({
+            create: {
+                title: input.title,
+                number: input.number,
+                season: input.season,
+                series: input.series,
+                link: input.link,
+                circuit: {
+                    connectOrCreate: {
+                        where: {
+                            title: input.circuitTitle,
+                        },
+                        create: {
+                            title: input.circuitTitle,
                         },
                     },
                 },
-                update: {
+            },
+            update: {
+                title: input.title,
+                number: input.number,
+                season: input.season,
+                series: input.series,
+                link: input.link,
+            },
+            where: {
+                uniqueRoundPerSeriesSeason: {
                     title: input.title,
                     number: input.number,
                     season: input.season,
                     series: input.series,
-                    link: input.link,
                 },
-                where: {
-                    uniqueRoundPerSeriesSeason: {
-                        title: input.title,
-                        number: input.number,
-                        season: input.season,
-                        series: input.series,
-                    },
-                },
-            })
-        ),
+            },
+        })
+    ),
 
-    getAllRaces: publicProcedure.use(logger).query(() =>
+    getAllRaces: loggedProcedure.query(() =>
         prisma.session.findMany({
             orderBy: { startDate: "asc" },
             where: {
@@ -193,8 +179,7 @@ const rounds = router({
         })
     ),
 
-    getNextRaces: publicProcedure
-        .use(logger)
+    getNextRaces: loggedProcedure
         .input(z.optional(z.array(SeriesIdZ)))
         .query(({ input }) =>
             Promise.all(
@@ -225,7 +210,7 @@ const rounds = router({
             )
         ),
 
-    getWeekends: publicProcedure
+    getWeekends: loggedProcedure
         .input(z.object({ startDate: z.date(), endDate: z.date() }))
         .query(({ input }) =>
             prisma.round.findMany({
@@ -264,57 +249,49 @@ const rounds = router({
 });
 
 const sessions = router({
-    getOne: publicProcedure
-        .use(logger)
-        .input(z.string())
-        .query(({ input }) =>
-            prisma.session.findFirst({
-                where: { id: input },
-            })
-        ),
+    getOne: loggedProcedure.input(z.string()).query(({ input }) =>
+        prisma.session.findFirst({
+            where: { id: input },
+        })
+    ),
 
-    getAll: publicProcedure.use(logger).query(() =>
+    getAll: loggedProcedure.query(() =>
         prisma.session.findMany({
             orderBy: { startDate: "desc" },
         })
     ),
 
-    deleteAll: publicProcedure
-        .use(logger)
-        .mutation(() => prisma.session.deleteMany({})),
+    deleteAll: loggedProcedure.mutation(() => prisma.session.deleteMany({})),
 
-    create: publicProcedure
-        .use(logger)
-        .input(NewSessionZ)
-        .mutation(({ input }) =>
-            prisma.session.upsert({
-                create: {
+    create: loggedProcedure.input(NewSessionZ).mutation(({ input }) =>
+        prisma.session.upsert({
+            create: {
+                type: input.type,
+                number: input.number,
+                roundId: input.roundId,
+                startDate: input.startDate,
+                endDate: input.endDate,
+            },
+            update: {
+                type: input.type,
+                number: input.number,
+                roundId: input.roundId,
+                startDate: input.startDate,
+                endDate: input.endDate,
+            },
+            where: {
+                uniqueSessionPerRoundId: {
                     type: input.type,
                     number: input.number,
                     roundId: input.roundId,
-                    startDate: input.startDate,
-                    endDate: input.endDate,
                 },
-                update: {
-                    type: input.type,
-                    number: input.number,
-                    roundId: input.roundId,
-                    startDate: input.startDate,
-                    endDate: input.endDate,
-                },
-                where: {
-                    uniqueSessionPerRoundId: {
-                        type: input.type,
-                        number: input.number,
-                        roundId: input.roundId,
-                    },
-                },
-            })
-        ),
+            },
+        })
+    ),
 });
 
 const feed = router({
-    getAllSessions: publicProcedure.use(logger).query(() =>
+    getAllSessions: loggedProcedure.query(() =>
         prisma.session.findMany({
             include: {
                 round: {
