@@ -1,9 +1,9 @@
 ---
 import { Icon } from "astro-icon/components";
 import { getSessionTitle } from "lib/utils/sessions";
+import type { trpc } from "../../lib/trpc/client";
 import { getSeriesIcon, getSeriesTitleShort } from "../../lib/utils/series";
 import Time from "../components/Time.svelte";
-import type { trpc } from "../pages/client";
 
 type Round = Awaited<ReturnType<typeof trpc.rounds.getWeekends.query>>[number];
 interface Props {
@@ -80,13 +80,17 @@ const nextSession = round.sessions.find((s) => s.endDate.valueOf() > now);
         overflow: hidden;
 
         > .round-title > :global([data-icon]) {
-            color: var(--color-7);
+            color: var(--color-6);
             font-size: 12rem;
 
             position: absolute;
             top: -3rem;
             right: -2.5rem;
             z-index: -1;
+        }
+
+        &:hover > .round-title > :global([data-icon]) {
+            color: var(--color-5);
         }
 
         > .next-session {

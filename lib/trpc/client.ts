@@ -1,6 +1,6 @@
 import { createTRPCProxyClient, httpBatchLink } from "@trpc/client";
 import superjson from "superjson";
-import type { AppRouter } from "../server/router";
+import type { AppRouter } from "./router";
 
 export function getTrpcUrl() {
     if (typeof window !== "undefined")

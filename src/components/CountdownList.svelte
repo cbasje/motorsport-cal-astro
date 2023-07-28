@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { trpc } from "../pages/client";
+    import { trpc } from "../../lib/trpc/client";
     import Countdown from "./Countdown.svelte";
 </script>
 

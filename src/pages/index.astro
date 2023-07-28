@@ -1,8 +1,8 @@
 ---
+import { trpc } from "../../lib/trpc/client";
 import { getWeekend } from "../../lib/utils/date";
 import RoundCard from "../components/RoundCard.astro";
 import MainLayout from "../layouts/main.astro";
-import { trpc } from "./client";
 
 const url = Astro.request.url;
 const params = new URL(url).searchParams;

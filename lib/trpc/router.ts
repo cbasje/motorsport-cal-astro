@@ -1,11 +1,11 @@
-import { TRPCError, initTRPC } from "@trpc/server";
-import { SeriesIdZ, seriesIds } from "../../../lib/types";
+import { initTRPC } from "@trpc/server";
 import superjson from "superjson";
 import { z } from "zod";
-import { prisma } from "../../../lib/prisma";
-import { NewCircuitZ, NewRoundZ, NewSessionZ } from "../../../lib/types/api";
-import { CircuitZ } from "../../../lib/types/prisma";
-import type { Context } from "./context";
+import type { Context } from "./server";
+import { prisma } from "../prisma";
+import { SeriesIdZ, seriesIds } from "../types";
+import { NewCircuitZ, NewRoundZ, NewSessionZ } from "../types/api";
+import { CircuitZ } from "../types/prisma";
 
 export const t = initTRPC.context<Context>().create({
     transformer: superjson,

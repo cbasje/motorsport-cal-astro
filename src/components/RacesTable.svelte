@@ -1,10 +1,10 @@
 <script lang="ts">
     import Icon from "@iconify/svelte";
     import { onMount } from "svelte";
+    import { trpc } from "../../lib/trpc/client";
     import type { SeriesId } from "../../lib/types";
     import { getSeriesIcon, getSeriesTitle } from "../../lib/utils/series";
     import SeriesMultiSelect from "./SeriesMultiSelect.svelte";
-    import { trpc } from "../pages/client";
 
     type Races = Awaited<ReturnType<typeof trpc.rounds.getAllRaces.query>>;
     let races = [] as Races;

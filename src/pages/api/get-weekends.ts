@@ -1,6 +1,6 @@
 import type { APIRoute } from "astro";
+import { appRouter } from "../../../lib/trpc/router";
 import { getWeekend } from "../../../lib/utils/date";
-import { appRouter } from "../server/router";
 
 export const get: APIRoute = async ({ request }) => {
     try {
