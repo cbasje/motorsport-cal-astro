@@ -2,7 +2,7 @@
 import { Icon } from "astro-icon/components";
 import type { trpc } from "../../lib/trpc/client";
 import { getSeriesIcon, getSeriesTitleShort } from "../../lib/utils/series";
-import NextSession from "../components/NextSession.svelte";
+import NextSessionWrapper from "../components/NextSessionWrapper.svelte";
 
 type Round = Awaited<ReturnType<typeof trpc.rounds.getWeekends.query>>[number];
 interface Props {
@@ -13,15 +13,11 @@ interface Props {
 const { round, showNextSession, link } = Astro.props;
 
 const now = Date.now();
-
-const nextSession = round.sessions.find((s) => s.endDate.valueOf() > now);
 ---
 
 <a
     style={`--color-hue: var(--${round.series}-hue)`}
-    class={`round-header button ${
-        round.sessions.every((s) => s.endDate.valueOf() < now) ? "past" : ""
-    }`}
+    class={`round-header button ${round.endDate.valueOf() < now ? "past" : ""}`}
     href={link ?? "/"}
 >
     <div class="round-title">
@@ -35,11 +31,7 @@ const nextSession = round.sessions.find((s) => s.endDate.valueOf() > now);
         </div>
     </div>
 
-    {
-        nextSession && showNextSession && (
-            <NextSession {nextSession} client:idle />
-        )
-    }
+    {showNextSession && <NextSessionWrapper roundId={round.id} client:idle />}
 </a>
 <!-- FIXME: doesn't work with ViewTransitions?
 <script>

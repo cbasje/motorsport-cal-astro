@@ -24,6 +24,7 @@
         "@iconify-json/ph": "^1.1.5",
         "@matthewp/astro-fastify": "^2.1.5",
         "@prisma/client": "^5.0.0",
+        "@sveltestack/svelte-query": "^1.6.0",
         "@trpc/client": "^10.34.0",
         "@trpc/server": "^10.34.0",
         "astro": "^2.9.2",

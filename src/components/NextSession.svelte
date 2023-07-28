@@ -1,27 +1,37 @@
 <script lang="ts">
-    import { SessionZ } from "../../lib/types/prisma";
     import Icon from "@iconify/svelte";
+    import { useQuery } from "@sveltestack/svelte-query";
+    import { trpc } from "lib/trpc/client";
     import { getSessionTitle } from "../../lib/utils/sessions";
     import Time from "./Time.svelte";
-    import type { z } from "zod";
 
-    const NextSessionZ = SessionZ.pick({
-        type: true,
-        startDate: true,
-        endDate: true,
-        number: true,
-    });
-    type NextSession = z.infer<typeof NextSessionZ>;
+    export let roundId: string;
 
-    export let nextSession: NextSession;
+    const queryResult = useQuery(
+        "nextSession",
+        () =>
+            trpc.sessions.getNextSessionByRoundId.query({
+                roundId,
+                now: new Date(),
+            }),
+        { refetchInterval: 5 * 60 * 1000, refetchIntervalInBackground: false }
+    );
+    // const nextSession = round.sessions.find((s) => s.endDate.valueOf() > now);
 </script>
 
 <div class="next-session">
     <Icon icon="ph:arrow-line-right-bold" />
-    <span>
-        {getSessionTitle(nextSession.type, nextSession.number)}
-    </span>
-    <Time startDate={nextSession.startDate} />
+
+    {#if $queryResult.isLoading}
+        <span>Loading...</span>
+        <!-- {:else if $queryResult.error}
+    <span>An error has occurred: {$queryResult.error.message}</span> -->
+    {:else if $queryResult.data}
+        <span>
+            {getSessionTitle($queryResult.data.type, $queryResult.data.number)}
+        </span>
+        <Time startDate={$queryResult.data.startDate} />
+    {/if}
 </div>
 
 <style lang="scss">

@@ -880,6 +880,11 @@
     svelte-hmr "^0.15.2"
     vitefu "^0.2.4"
 
+"@sveltestack/svelte-query@^1.6.0":
+  version "1.6.0"
+  resolved "https://registry.yarnpkg.com/@sveltestack/svelte-query/-/svelte-query-1.6.0.tgz#d175863557a7abe6a8dcb0da2080a9f43ae8d1d1"
+  integrity sha512-C0wWuh6av1zu3Pzwrg6EQmX3BhDZQ4gMAdYu6Tfv4bjbEZTB00uEDz52z92IZdONh+iUKuyo0xRZ2e16k2Xifg==
+
 "@trpc/client@^10.34.0":
   version "10.34.0"
   resolved "https://registry.yarnpkg.com/@trpc/client/-/client-10.34.0.tgz#cd9bc5ec4801dde24bb343408c7fe203595db538"

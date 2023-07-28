@@ -214,7 +214,7 @@ const rounds = router({
         .input(z.object({ startDate: z.date(), endDate: z.date() }))
         .query(({ input }) =>
             prisma.round.findMany({
-                orderBy: { startDate: "asc" },
+                orderBy: { series: "asc" },
                 where: {
                     sessions: {
                         some: {
@@ -229,15 +229,8 @@ const rounds = router({
                     id: true,
                     title: true,
                     series: true,
-                    sessions: {
-                        orderBy: { startDate: "asc" },
-                        select: {
-                            type: true,
-                            startDate: true,
-                            endDate: true,
-                            number: true,
-                        },
-                    },
+                    startDate: true,
+                    endDate: true,
                     circuit: {
                         select: {
                             wikipediaTitle: true,
@@ -288,6 +281,23 @@ const sessions = router({
             },
         })
     ),
+
+    getNextSessionByRoundId: loggedProcedure
+        .input(z.object({ now: z.date(), roundId: z.string() }))
+        .query(({ input }) =>
+            prisma.session.findFirst({
+                orderBy: { startDate: "asc" },
+                where: {
+                    AND: { roundId: input.roundId, endDate: { gt: input.now } },
+                },
+                select: {
+                    type: true,
+                    startDate: true,
+                    endDate: true,
+                    number: true,
+                },
+            })
+        ),
 });
 
 const feed = router({
