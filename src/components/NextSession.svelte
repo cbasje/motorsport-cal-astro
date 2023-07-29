@@ -4,7 +4,9 @@
     import { trpc } from "lib/trpc/client";
     import { getSessionTitle } from "../../lib/utils/sessions";
     import Time from "./Time.svelte";
+    import { onMount } from "svelte";
 
+    let now = new Date();
     export let roundId: string;
 
     const queryResult = useQuery(
@@ -12,21 +14,32 @@
         () =>
             trpc.sessions.getNextSessionByRoundId.query({
                 roundId,
-                now: new Date(),
+                now,
             }),
-        { refetchInterval: 5 * 60 * 1000, refetchIntervalInBackground: false }
+        { refetchOnWindowFocus: false }
     );
-    // const nextSession = round.sessions.find((s) => s.endDate.valueOf() > now);
+
+    onMount(() => {
+        const nowInterval = setInterval(() => {
+            now = new Date();
+        }, 5 * 60 * 1000);
+
+        return nowInterval;
+    });
 </script>
 
 <div class="next-session">
-    <Icon icon="ph:arrow-line-right-bold" />
-
     {#if $queryResult.isLoading}
         <span>Loading...</span>
         <!-- {:else if $queryResult.error}
-    <span>An error has occurred: {$queryResult.error.message}</span> -->
+        <span>An error has occurred: {$queryResult.error.message}</span> -->
     {:else if $queryResult.data}
+        {#if $queryResult.data.startDate.valueOf() >= now.valueOf()}
+            <Icon icon="ph:arrow-line-right-bold" />
+        {:else}
+            <Icon icon="ph:car-bold" />
+            <span>...</span>
+        {/if}
         <span>
             {getSessionTitle($queryResult.data.type, $queryResult.data.number)}
         </span>
