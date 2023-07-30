@@ -28,12 +28,14 @@
     });
 </script>
 
-<div class="next-session">
-    {#if $queryResult.isLoading}
+{#if $queryResult.isLoading}
+    <div class="next-session">
         <span>Loading...</span>
         <!-- {:else if $queryResult.error}
         <span>An error has occurred: {$queryResult.error.message}</span> -->
-    {:else if $queryResult.data}
+    </div>
+{:else if $queryResult.data}
+    <div class="next-session">
         {#if $queryResult.data.startDate.valueOf() >= now.valueOf()}
             <Icon icon="ph:arrow-line-right-bold" />
         {:else}
@@ -44,8 +46,8 @@
             {getSessionTitle($queryResult.data.type, $queryResult.data.number)}
         </span>
         <Time startDate={$queryResult.data.startDate} />
-    {/if}
-</div>
+    </div>
+{/if}
 
 <style lang="scss">
     .next-session {
