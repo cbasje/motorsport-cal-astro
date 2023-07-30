@@ -17,7 +17,9 @@ const now = Date.now();
 
 <a
     style={`--color-hue: var(--${round.series}-hue)`}
-    class={`round-header button ${round.endDate.valueOf() < now ? "past" : ""}`}
+    class={`round-header button ${
+        round.endDate && round.endDate.valueOf() < now ? "past" : ""
+    }`}
     href={link ?? "/"}
 >
     <div class="round-title">
@@ -83,9 +85,7 @@ const now = Date.now();
         }
 
         &.past {
-            .round-header {
-                opacity: 0.5;
-            }
+            opacity: 0.5;
         }
     }
 </style>
