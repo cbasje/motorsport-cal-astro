@@ -1,25 +1,37 @@
-import * as z from "zod"
-import { CompleteRound, RelatedRoundZ } from "./index"
+import * as z from "zod";
+import {
+    CompleteRound,
+    CompleteWeather,
+    RelatedRoundSchema,
+    RelatedWeatherSchema,
+} from "./index";
 
-export const CircuitZ = z.object({
-  id: z.string(),
-  created_at: z.date(),
-  title: z.string(),
-  wikipediaPageId: z.number().int().nullish(),
-  wikipediaTitle: z.string().nullish(),
-  lon: z.number().nullish(),
-  lat: z.number().nullish(),
-})
+export const CircuitSchema = z.object({
+    id: z.string(),
+    created_at: z.date(),
+    title: z.string(),
+    wikipediaPageId: z.number().int().nullish(),
+    wikipediaTitle: z.string().nullish(),
+    country: z.string().nullish(),
+    utcOffset: z.number().int().nullish(),
+    lon: z.number().nullish(),
+    lat: z.number().nullish(),
+});
 
-export interface CompleteCircuit extends z.infer<typeof CircuitZ> {
-  rounds: CompleteRound[]
+export interface CompleteCircuit extends z.infer<typeof CircuitSchema> {
+    rounds: CompleteRound[];
+    weather: CompleteWeather[];
 }
 
 /**
- * RelatedCircuitZ contains all relations on your model in addition to the scalars
+ * RelatedCircuitSchema contains all relations on your model in addition to the scalars
  *
  * NOTE: Lazy required in case of potential circular dependencies within schema
  */
-export const RelatedCircuitZ: z.ZodSchema<CompleteCircuit> = z.lazy(() => CircuitZ.extend({
-  rounds: RelatedRoundZ.array(),
-}))
+export const RelatedCircuitSchema: z.SchemaodSchema<CompleteCircuit> = z.lazy(
+    () =>
+        CircuitSchema.extend({
+            rounds: RelatedRoundSchema.array(),
+            weather: RelatedWeatherSchema.array(),
+        })
+);

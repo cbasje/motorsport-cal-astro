@@ -3,9 +3,13 @@ import superjson from "superjson";
 import { z } from "zod";
 import type { Context } from "./server";
 import { prisma } from "../prisma";
-import { SeriesIdZ, seriesIds } from "../types";
-import { NewCircuitZ, NewRoundZ, NewSessionZ } from "../types/api";
-import { CircuitZ } from "../types/prisma";
+import { SeriesIdSchema, seriesIds } from "../types";
+import {
+    NewCircuitSchema,
+    NewRoundSchema,
+    NewSessionSchema,
+} from "../types/api";
+import { CircuitSchema } from "../types/prisma";
 
 const t = initTRPC.context<Context>().create({
     transformer: superjson,
@@ -64,14 +68,16 @@ const circuits = router({
 
     deleteAll: loggedProcedure.mutation(() => prisma.circuit.deleteMany({})),
 
-    createCircuit: loggedProcedure.input(NewCircuitZ).mutation(({ input }) =>
-        prisma.circuit.create({
-            data: input,
-        })
-    ),
+    createCircuit: loggedProcedure
+        .input(NewCircuitSchema)
+        .mutation(({ input }) =>
+            prisma.circuit.create({
+                data: input,
+            })
+        ),
 
     updateMultiple: loggedProcedure
-        .input(z.array(CircuitZ))
+        .input(z.array(CircuitSchema))
         .mutation(({ input }) =>
             Promise.all(
                 input.map(async (row) => {
@@ -122,7 +128,7 @@ const rounds = router({
 
     deleteAll: loggedProcedure.mutation(() => prisma.round.deleteMany({})),
 
-    create: loggedProcedure.input(NewRoundZ).mutation(({ input }) =>
+    create: loggedProcedure.input(NewRoundSchema).mutation(({ input }) =>
         prisma.round.upsert({
             create: {
                 title: input.title,
@@ -180,7 +186,7 @@ const rounds = router({
     ),
 
     getNextRaces: loggedProcedure
-        .input(z.optional(z.array(SeriesIdZ)))
+        .input(z.optional(z.array(SeriesIdSchema)))
         .query(({ input }) =>
             Promise.all(
                 (input ?? seriesIds).map((series) =>
@@ -256,7 +262,7 @@ const sessions = router({
 
     deleteAll: loggedProcedure.mutation(() => prisma.session.deleteMany({})),
 
-    create: loggedProcedure.input(NewSessionZ).mutation(({ input }) =>
+    create: loggedProcedure.input(NewSessionSchema).mutation(({ input }) =>
         prisma.session.upsert({
             create: {
                 type: input.type,

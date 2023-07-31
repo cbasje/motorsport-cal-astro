@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { RoundZ, SessionZ } from "./prisma";
+import { RoundSchema, SessionSchema } from "./prisma";
 
 export const seriesIds = [
     "F1",
@@ -10,10 +10,10 @@ export const seriesIds = [
     "WEC",
     "F1A",
 ] as const;
-export const SeriesIdZ = z.enum(seriesIds);
-export type SeriesId = z.infer<typeof SeriesIdZ>;
+export const SeriesIdSchema = z.enum(seriesIds);
+export type SeriesId = z.infer<typeof SeriesIdSchema>;
 
-export const SessionTypeZ = z.enum([
+export const SessionTypeSchema = z.enum([
     "RACE",
     "SPRINT",
     "SPRINT_QUALIFYING",
@@ -21,7 +21,7 @@ export const SessionTypeZ = z.enum([
     "PRACTICE",
     "SHAKEDOWN",
 ]);
-export type SessionType = z.infer<typeof SessionTypeZ>;
+export type SessionType = z.infer<typeof SessionTypeSchema>;
 
 export enum CircuitTitle {
     Miami = "Miami International Autodrome",
@@ -71,8 +71,8 @@ export enum CircuitTitle {
     Fuji = "Fuji Speedway",
 }
 
-export const NextRaceZ = SessionZ.pick({
+export const NextRaceSchema = SessionSchema.pick({
     startDate: true,
     endDate: true,
-}).merge(z.object({ round: RoundZ.pick({ title: true, series: true }) }));
-export type NextRace = z.infer<typeof NextRaceZ>;
+}).merge(z.object({ round: RoundSchema.pick({ title: true, series: true }) }));
+export type NextRace = z.infer<typeof NextRaceSchema>;

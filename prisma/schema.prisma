@@ -5,7 +5,7 @@ generator client {
 // generator zod {
 //   provider    = "zod-prisma"
 //   output      = "../lib/types/prisma"
-//   modelSuffix = "Z"
+//   modelSuffix = "Schema"
 // }
 
 datasource db {
@@ -13,15 +13,27 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model Weather {
+  id        String   @id @default(uuid())
+  temp      Float
+  weatherId Int
+  dt        DateTime
+  circuit   Circuit? @relation(fields: [circuitId], references: [id])
+  circuitId String?
+}
+
 model Circuit {
-  id              String   @id @default(uuid())
-  created_at      DateTime @default(now()) @db.Timestamptz(6)
-  title           String   @unique
+  id              String    @id @default(uuid())
+  created_at      DateTime  @default(now()) @db.Timestamptz(6)
+  title           String    @unique
   wikipediaPageId Int?
   wikipediaTitle  String?
+  country         String?
+  utcOffset       Int?
   lon             Float?
   lat             Float?
   rounds          Round[]
+  weather         Weather[]
 }
 
 model Round {

@@ -3,11 +3,11 @@ const hour = 60 * minute;
 const day = 24 * hour;
 const week = 7 * day;
 
-const trackTime = (date: Date) => {
+export const trackTime = (date: Date) => {
     return 0;
 };
 
-const yourTime = (startDate: Date, endDate?: Date) => {
+export const yourTime = (startDate: Date, endDate?: Date) => {
     const yourTimeFormat = new Intl.DateTimeFormat("en-GB", {
         weekday: "short",
         hour: "numeric",
@@ -21,7 +21,7 @@ const yourTime = (startDate: Date, endDate?: Date) => {
     }
 };
 
-const relTime = (date: Date, now: number) => {
+export const relTime = (date: Date, now: number) => {
     const rel = date.valueOf() - now;
     const relTimeFormat = new Intl.RelativeTimeFormat("en-GB", {
         style: "long",
@@ -39,7 +39,7 @@ const relTime = (date: Date, now: number) => {
     }
 };
 
-const getWeekend = (weekOffset = 0) => {
+export const getWeekend = (weekOffset = 0) => {
     const now = new Date();
 
     const lastMonday = new Date();
@@ -56,5 +56,3 @@ const getWeekend = (weekOffset = 0) => {
 
     return [lastMonday, nextMonday];
 };
-
-export { trackTime, yourTime, relTime, getWeekend };
