@@ -65,35 +65,6 @@ const circuits = router({
             },
         })
     ),
-
-    deleteAll: loggedProcedure.mutation(() => prisma.circuit.deleteMany({})),
-
-    createCircuit: loggedProcedure
-        .input(NewCircuitSchema)
-        .mutation(({ input }) =>
-            prisma.circuit.create({
-                data: input,
-            })
-        ),
-
-    updateMultiple: loggedProcedure
-        .input(z.array(CircuitSchema))
-        .mutation(({ input }) =>
-            Promise.all(
-                input.map(async (row) => {
-                    return await prisma.circuit.update({
-                        data: {
-                            wikipediaPageId: row.wikipediaPageId,
-                            lat: row.lat,
-                            lon: row.lon,
-                        },
-                        where: {
-                            id: row.id,
-                        },
-                    });
-                })
-            )
-        ),
 });
 
 const rounds = router({
@@ -121,45 +92,6 @@ const rounds = router({
                 },
                 _count: {
                     select: { sessions: true },
-                },
-            },
-        })
-    ),
-
-    deleteAll: loggedProcedure.mutation(() => prisma.round.deleteMany({})),
-
-    create: loggedProcedure.input(NewRoundSchema).mutation(({ input }) =>
-        prisma.round.upsert({
-            create: {
-                title: input.title,
-                number: input.number,
-                season: input.season,
-                series: input.series,
-                link: input.link,
-                circuit: {
-                    connectOrCreate: {
-                        where: {
-                            title: input.circuitTitle,
-                        },
-                        create: {
-                            title: input.circuitTitle,
-                        },
-                    },
-                },
-            },
-            update: {
-                title: input.title,
-                number: input.number,
-                season: input.season,
-                series: input.series,
-                link: input.link,
-            },
-            where: {
-                uniqueRoundPerSeriesSeason: {
-                    title: input.title,
-                    number: input.number,
-                    season: input.season,
-                    series: input.series,
                 },
             },
         })
@@ -239,7 +171,7 @@ const rounds = router({
                     endDate: true,
                     circuit: {
                         select: {
-                            wikipediaTitle: true,
+                            title: true,
                         },
                     },
                 },
@@ -257,34 +189,6 @@ const sessions = router({
     getAll: loggedProcedure.query(() =>
         prisma.session.findMany({
             orderBy: { startDate: "desc" },
-        })
-    ),
-
-    deleteAll: loggedProcedure.mutation(() => prisma.session.deleteMany({})),
-
-    create: loggedProcedure.input(NewSessionSchema).mutation(({ input }) =>
-        prisma.session.upsert({
-            create: {
-                type: input.type,
-                number: input.number,
-                roundId: input.roundId,
-                startDate: input.startDate,
-                endDate: input.endDate,
-            },
-            update: {
-                type: input.type,
-                number: input.number,
-                roundId: input.roundId,
-                startDate: input.startDate,
-                endDate: input.endDate,
-            },
-            where: {
-                uniqueSessionPerRoundId: {
-                    type: input.type,
-                    number: input.number,
-                    roundId: input.roundId,
-                },
-            },
         })
     ),
 
