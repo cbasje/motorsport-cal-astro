@@ -43,7 +43,11 @@
             <span>...</span>
         {/if}
         <span>
-            {getSessionTitle($queryResult.data.type, $queryResult.data.number)}
+            {getSessionTitle(
+                $queryResult.data.round.series,
+                $queryResult.data.type,
+                $queryResult.data.number
+            )}
         </span>
         <Time
             startDate={$queryResult.data.startDate}

@@ -21,6 +21,7 @@ const round = await trpc.rounds.getOne.query(id ?? "");
                     {round.sessions.map((session) => (
                         <SessionCard
                             session={session}
+                            series={round.series}
                             timeZone={round.circuit.timezone ?? ""}
                         />
                     ))}

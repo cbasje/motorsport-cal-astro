@@ -303,6 +303,7 @@ const sessions = router({
                     number: true,
                     round: {
                         select: {
+                            series: true,
                             circuit: {
                                 select: {
                                     timezone: true,
