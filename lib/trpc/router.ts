@@ -1,15 +1,9 @@
 import { initTRPC } from "@trpc/server";
 import superjson from "superjson";
 import { z } from "zod";
-import type { Context } from "./server";
 import { prisma } from "../prisma";
 import { SeriesIdSchema, seriesIds } from "../types";
-import {
-    NewCircuitSchema,
-    NewRoundSchema,
-    NewSessionSchema,
-} from "../types/api";
-import { CircuitSchema } from "../types/prisma";
+import type { Context } from "./server";
 
 const t = initTRPC.context<Context>().create({
     transformer: superjson,
@@ -61,6 +55,23 @@ const circuits = router({
                 rounds: true,
                 _count: {
                     select: { rounds: true },
+                },
+            },
+        })
+    ),
+
+    getMapMarkers: loggedProcedure.query(() =>
+        prisma.circuit.findMany({
+            orderBy: { created_at: "asc" },
+            select: {
+                lat: true,
+                lon: true,
+                title: true,
+                rounds: {
+                    orderBy: { series: "asc" },
+                    select: {
+                        series: true,
+                    },
                 },
             },
         })

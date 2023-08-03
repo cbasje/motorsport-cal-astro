@@ -51,3 +51,16 @@ export const getSeriesTitleShort = (s: SeriesId) => {
     };
     return titles[s];
 };
+
+export const getSeriesColor = (s: SeriesId) => {
+    const titles: Record<SeriesId, string> = {
+        F1: "#F1545C",
+        F2: "#0097FF",
+        F3: "#B266ED",
+        FE: "#6481FF",
+        INDY: "#00B19D",
+        WEC: "#59A610",
+        F1A: "#E255A0",
+    };
+    return titles[s];
+};

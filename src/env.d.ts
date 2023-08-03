@@ -9,6 +9,8 @@ interface ImportMetaEnv {
     readonly F1A_API_KEY: string;
     readonly F2_API_KEY: string;
     readonly F3_API_KEY: string;
+
+    readonly MAP_API_KEY: string;
 }
 
 interface ImportMeta {
