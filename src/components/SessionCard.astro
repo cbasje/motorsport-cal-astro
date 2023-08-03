@@ -5,8 +5,9 @@ import Time from "./Time.svelte";
 
 interface Props {
     session: Session;
+    timeZone: string;
 }
-const { session } = Astro.props;
+const { session, timeZone } = Astro.props;
 ---
 
 <li
@@ -16,7 +17,12 @@ const { session } = Astro.props;
     <h3>
         {getSessionTitle(session.type, session.number)}
     </h3>
-    <Time startDate={session.startDate} endDate={session.endDate} client:idle />
+    <Time
+        startDate={session.startDate}
+        endDate={session.endDate}
+        timeZone={timeZone ?? undefined}
+        client:idle
+    />
 </li>
 
 <style lang="scss">

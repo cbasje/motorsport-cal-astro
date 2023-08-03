@@ -18,9 +18,8 @@ export interface CompleteWeather extends z.infer<typeof WeatherSchema> {
  *
  * NOTE: Lazy required in case of potential circular dependencies within schema
  */
-export const RelatedWeatherSchema: z.SchemaodSchema<CompleteWeather> = z.lazy(
-    () =>
-        WeatherSchema.extend({
-            circuit: RelatedCircuitSchema.nullish(),
-        })
+export const RelatedWeatherSchema: z.ZodSchema<CompleteWeather> = z.lazy(() =>
+    WeatherSchema.extend({
+        circuit: RelatedCircuitSchema.nullish(),
+    })
 );

@@ -45,7 +45,10 @@
         <span>
             {getSessionTitle($queryResult.data.type, $queryResult.data.number)}
         </span>
-        <Time startDate={$queryResult.data.startDate} />
+        <Time
+            startDate={$queryResult.data.startDate}
+            timeZone={$queryResult.data.round.circuit.timezone ?? undefined}
+        />
     </div>
 {/if}
 

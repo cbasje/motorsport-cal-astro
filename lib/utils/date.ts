@@ -3,11 +3,28 @@ const hour = 60 * minute;
 const day = 24 * hour;
 const week = 7 * day;
 
-export const trackTime = (date: Date) => {
-    return 0;
+export const trackTime = (
+    timeZone: string,
+    startDate: Date,
+    endDate?: Date
+) => {
+    // FIXME: language
+    const trackTimeFormat = new Intl.DateTimeFormat("en-GB", {
+        weekday: "short",
+        hour: "numeric",
+        minute: "numeric",
+        timeZone,
+    });
+
+    if (endDate) {
+        return trackTimeFormat.formatRange(startDate, endDate);
+    } else {
+        return trackTimeFormat.format(startDate);
+    }
 };
 
 export const yourTime = (startDate: Date, endDate?: Date) => {
+    // FIXME: language
     const yourTimeFormat = new Intl.DateTimeFormat("en-GB", {
         weekday: "short",
         hour: "numeric",

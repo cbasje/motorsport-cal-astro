@@ -301,6 +301,15 @@ const sessions = router({
                     startDate: true,
                     endDate: true,
                     number: true,
+                    round: {
+                        select: {
+                            circuit: {
+                                select: {
+                                    timezone: true,
+                                },
+                            },
+                        },
+                    },
                 },
             })
         ),

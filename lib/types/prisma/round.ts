@@ -30,7 +30,7 @@ export interface CompleteRound extends z.infer<typeof RoundSchema> {
  *
  * NOTE: Lazy required in case of potential circular dependencies within schema
  */
-export const RelatedRoundSchema: z.SchemaodSchema<CompleteRound> = z.lazy(() =>
+export const RelatedRoundSchema: z.ZodSchema<CompleteRound> = z.lazy(() =>
     RoundSchema.extend({
         circuit: RelatedCircuitSchema,
         sessions: RelatedSessionSchema.array(),

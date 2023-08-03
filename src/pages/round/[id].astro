@@ -19,7 +19,10 @@ const round = await trpc.rounds.getOne.query(id ?? "");
 
                 <ol role="list" class="session-list">
                     {round.sessions.map((session) => (
-                        <SessionCard session={session} />
+                        <SessionCard
+                            session={session}
+                            timeZone={round.circuit.timezone ?? ""}
+                        />
                     ))}
                 </ol>
             </>

@@ -13,6 +13,7 @@ export const CircuitSchema = z.object({
     wikipediaPageId: z.number().int().nullish(),
     wikipediaTitle: z.string().nullish(),
     country: z.string().nullish(),
+    timezone: z.string().nullish(),
     utcOffset: z.number().int().nullish(),
     lon: z.number().nullish(),
     lat: z.number().nullish(),
@@ -28,10 +29,9 @@ export interface CompleteCircuit extends z.infer<typeof CircuitSchema> {
  *
  * NOTE: Lazy required in case of potential circular dependencies within schema
  */
-export const RelatedCircuitSchema: z.SchemaodSchema<CompleteCircuit> = z.lazy(
-    () =>
-        CircuitSchema.extend({
-            rounds: RelatedRoundSchema.array(),
-            weather: RelatedWeatherSchema.array(),
-        })
+export const RelatedCircuitSchema: z.ZodSchema<CompleteCircuit> = z.lazy(() =>
+    CircuitSchema.extend({
+        rounds: RelatedRoundSchema.array(),
+        weather: RelatedWeatherSchema.array(),
+    })
 );

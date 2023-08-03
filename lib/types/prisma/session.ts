@@ -21,9 +21,8 @@ export interface CompleteSession extends z.infer<typeof SessionSchema> {
  *
  * NOTE: Lazy required in case of potential circular dependencies within schema
  */
-export const RelatedSessionSchema: z.SchemaodSchema<CompleteSession> = z.lazy(
-    () =>
-        SessionSchema.extend({
-            round: RelatedRoundSchema,
-        })
+export const RelatedSessionSchema: z.ZodSchema<CompleteSession> = z.lazy(() =>
+    SessionSchema.extend({
+        round: RelatedRoundSchema,
+    })
 );

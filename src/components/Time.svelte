@@ -2,6 +2,7 @@
     import { onMount } from "svelte";
     import { relTime, trackTime, yourTime } from "../../lib/utils/date";
 
+    export let timeZone: string | undefined = undefined;
     export let startDate: Date;
     export let endDate: Date | undefined = undefined;
 
@@ -21,11 +22,11 @@
 </script>
 
 <time datetime={startDate.toISOString()}>
-    {#if timeFormat === "track"}
-        {trackTime(startDate)}
-    {:else if timeFormat === "your"}
-        {yourTime(startDate, endDate)}
-    {:else}
+    {#if timeFormat === "track" && timeZone}
+        {trackTime(timeZone, startDate, endDate)}
+    {:else if timeFormat === "rel"}
         {relTime(startDate, now)}
+    {:else}
+        {yourTime(startDate, endDate)}
     {/if}
 </time>

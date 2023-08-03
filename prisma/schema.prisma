@@ -29,6 +29,7 @@ model Circuit {
   wikipediaPageId Int?
   wikipediaTitle  String?
   country         String?
+  timezone        String?
   utcOffset       Int?
   lon             Float?
   lat             Float?
