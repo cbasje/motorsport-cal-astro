@@ -1,22 +1,11 @@
 ---
+import MapTiler from "src/components/Map.astro";
 import { trpc } from "../../lib/trpc/client";
-import MapLeaflet from "../components/Map.astro";
 import MainLayout from "../layouts/main.astro";
 
 const circuits = await trpc.circuits.getMapMarkers.query();
-
-// type Marker = { lat: number; lon: number };
-// const markers: Marker[] = [
-//     { lat: 29.8283, lon: -96.5795 },
-//     { lat: 37.8283, lon: -90.5795 },
-//     { lat: 43.8283, lon: -102.5795 },
-//     { lat: 48.4, lon: -122.5795 },
-//     { lat: 43.6, lon: -79.5795 },
-//     { lat: 36.8283, lon: -100.5795 },
-//     { lat: 38.4, lon: -122.5795 },
-// ];
 ---
 
 <MainLayout>
-    <MapLeaflet markers={circuits} />
+    <MapTiler markers={circuits} />
 </MainLayout>
