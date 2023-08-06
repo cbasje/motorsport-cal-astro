@@ -11,12 +11,14 @@ interface Props {
 }
 const { markers } = Astro.props;
 
-const latitude = 51.505;
-const longitude = -0.09;
-const zoom = 3;
+const latitude = 47.93769444;
+const longitude = 0.22561111;
+const zoom = 2;
 // const tileLayer = "https://api.maptiler.com/maps/streets/style.json?key=" + import.meta.env.PUBLIC_MAP_API_KEY;
-const tileLayer = "https://demotiles.maplibre.org/style.json";
-const attribution = "";
+const tileLayer =
+    "https://api.maptiler.com/maps/2f9c2ed9-3ffa-479d-9e82-620c2be256d9/style.json?key=" +
+    process.env.PUBLIC_MAP_API_KEY;
+// const tileLayer = "https://demotiles.maplibre.org/style.json";
 const container = "map";
 ---
 
@@ -26,39 +28,37 @@ const container = "map";
     data-zoom={zoom}
     data-container={container}
     data-tiles={tileLayer}
-    data-attribution={attribution}
     data-markers={JSON.stringify(markers)}
 >
     <div id={container}></div>
     <script>
-        import { Map, Marker, Popup } from "maplibre-gl";
+        import { Map, Popup } from "maplibre-gl";
 
         class MapLibre extends HTMLElement {
             constructor() {
                 super();
 
-                const latlng = [
+                const latlng: [number, number] = [
                     Number(this.dataset.latitude),
                     Number(this.dataset.longitude),
                 ];
 
                 const map = new Map({
-                    container: this.dataset.container,
-                    style: this.dataset.tiles,
+                    container: this.dataset.container ?? "",
+                    style: this.dataset.tiles ?? "",
                     // attributionControl: false,
-                    customAttribution: this.dataset.attribution,
-                    center: latlng,
+                    center: latlng ?? [0, 0],
                     zoom: Number(this.dataset.zoom),
                 });
 
-                const loadImage = async (url, name) =>
+                const loadImage = async (url: string, name: string) =>
                     new Promise((resolve, reject) => {
                         map.loadImage(url, (error, image) => {
                             if (error) reject(error);
-                            map.addImage(name, image);
+                            if (image) map.addImage(name, image);
                         });
                     });
-                const loadAllImages = async (series) => {
+                const loadAllImages = async (series: string[]) => {
                     const seriesSet = new Set(series);
 
                     seriesSet.forEach(async (item) => {
@@ -67,7 +67,7 @@ const container = "map";
                 };
 
                 map.on("load", () => {
-                    const markers = JSON.parse(this.dataset.markers);
+                    const markers = JSON.parse(this.dataset.markers ?? "[]");
 
                     loadAllImages(
                         markers.map((m) =>
@@ -157,8 +157,10 @@ const container = "map";
 
 <style lang="scss">
     :global(main) {
-        height: 100vh;
+        position: fixed;
+        inset: 0;
         max-inline-size: unset;
+        padding: 0;
     }
 
     map-libre,
