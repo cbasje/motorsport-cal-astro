@@ -6,6 +6,6 @@ import MainLayout from "../layouts/main.astro";
 const circuits = await trpc.circuits.getMapMarkers.query();
 ---
 
-<MainLayout>
+<MainLayout title="World Map">
     <MapTiler markers={circuits} />
 </MainLayout>
