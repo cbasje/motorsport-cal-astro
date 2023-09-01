@@ -19,13 +19,10 @@ export default defineConfig({
             },
         }),
     ],
-    experimental: {
-        viewTransitions: true,
-    },
 
     site: import.meta.env.PROD
         ? "https://motorsport-cal-astro.fly.dev"
-        : "http://localhost:3000",
+        : "http://localhost:4321",
     vite: {
         resolve: {
             alias: {

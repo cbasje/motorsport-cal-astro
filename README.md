@@ -16,7 +16,7 @@ This is a website that shows motorsport events from around the world. Currently,
 | Command             | Action                                           |
 | :------------------ | :----------------------------------------------- |
 | `yarn`              | Installs dependencies                            |
-| `yarn dev`          | Starts local dev server at `localhost:3000`      |
+| `yarn dev`          | Starts local dev server at `localhost:4321`      |
 | `yarn build`        | Builds production site to `./dist/`              |
 | `yarn astro ...`    | Run CLI commands like `astro add`, `astro check` |
 | `yarn astro --help` | Get help using the Astro CLI                     |
