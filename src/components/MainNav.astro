@@ -1,0 +1,58 @@
+---
+const url = Astro.url;
+
+type Page = { href: string; title: string };
+const pages: Page[] = [
+    {
+        href: "/",
+        title: "Home",
+    },
+    {
+        href: "/map",
+        title: "Map",
+    },
+];
+---
+
+<nav transition:persist>
+    <ul>
+        {
+            pages.map((p) => (
+                <li>
+                    <a
+                        class="button"
+                        href={p.href}
+                        aria-current={p.href === url?.pathname}
+                    >
+                        {p.title}
+                    </a>
+                </li>
+            ))
+        }
+    </ul>
+</nav>
+
+<style lang="scss">
+    nav {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        position: fixed;
+        bottom: var(--size-6);
+        inset-inline: 0;
+        z-index: var(--layer-important);
+
+        ul {
+            list-style: none;
+            display: inline-flex;
+            flex-direction: row;
+            gap: var(--size-3);
+            flex-wrap: wrap;
+            padding-inline: var(--size-1);
+
+            > li {
+                padding: 0;
+            }
+        }
+    }
+</style>
