@@ -13,14 +13,7 @@ export const seriesIds = [
 export const SeriesIdSchema = z.enum(seriesIds);
 export type SeriesId = z.infer<typeof SeriesIdSchema>;
 
-export const SessionTypeSchema = z.enum([
-    "RACE",
-    "SPRINT",
-    "SPRINT_QUALIFYING",
-    "QUALIFYING",
-    "PRACTICE",
-    "SHAKEDOWN",
-]);
+export const SessionTypeSchema = z.enum(["R", "S", "SQ", "Q", "FP", "T"]);
 export type SessionType = z.infer<typeof SessionTypeSchema>;
 
 export enum CircuitTitle {

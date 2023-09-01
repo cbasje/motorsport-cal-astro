@@ -113,7 +113,7 @@ const rounds = router({
         prisma.session.findMany({
             orderBy: { startDate: "asc" },
             where: {
-                type: "RACE",
+                type: "R",
             },
             select: {
                 id: true,
@@ -137,7 +137,7 @@ const rounds = router({
                     prisma.session.findFirst({
                         orderBy: { startDate: "asc" },
                         where: {
-                            type: "RACE",
+                            type: "R",
                             endDate: {
                                 gte: new Date(),
                             },

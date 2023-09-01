@@ -77,10 +77,10 @@ enum SeriesId {
 }
 
 enum SessionType {
-  RACE
-  SPRINT
-  QUALIFYING
-  SPRINT_QUALIFYING
-  PRACTICE
-  SHAKEDOWN
+  R
+  S
+  SQ
+  Q
+  FP
+  T
 }

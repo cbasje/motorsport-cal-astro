@@ -7,20 +7,20 @@ export const getSessionTitle = (
     number: number
 ) => {
     const feederTitles: TitleRecords = {
-        RACE: "Feature Race",
-        SPRINT: "Sprint Race",
-        QUALIFYING: "Qualifying",
-        SPRINT_QUALIFYING: "",
-        PRACTICE: "Practice",
-        SHAKEDOWN: "Shakedown",
+        R: "Feature Race",
+        S: "Sprint Race",
+        Q: "Qualifying",
+        SQ: "",
+        FP: "Practice",
+        T: "Shakedown",
     };
     const defaultTitles: TitleRecords = {
-        RACE: "Race",
-        SPRINT: "Sprint",
-        QUALIFYING: "Qualifying",
-        SPRINT_QUALIFYING: "Sprint Qualifying",
-        PRACTICE: "Practice",
-        SHAKEDOWN: "Shakedown",
+        R: "Race",
+        S: "Sprint",
+        Q: "Qualifying",
+        SQ: "Sprint Qualifying",
+        FP: "Practice",
+        T: "Shakedown",
     };
 
     if (series === "F2" || series === "F3") {
