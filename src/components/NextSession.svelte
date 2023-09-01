@@ -1,7 +1,7 @@
 <script lang="ts">
     import Icon from "@iconify/svelte";
     import { useQuery } from "@sveltestack/svelte-query";
-    import { trpc } from "lib/trpc/client";
+    import { trpc } from "../../lib/trpc/client";
     import { getSessionTitle } from "../../lib/utils/sessions";
     import Time from "./Time.svelte";
     import { onMount } from "svelte";

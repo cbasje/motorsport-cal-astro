@@ -1,5 +1,6 @@
 import { z } from "zod";
-import { RoundSchema, SessionSchema } from "./prisma";
+import { SessionSchema } from "./prisma/session";
+import { RoundSchema } from "./prisma/round";
 
 export const seriesIds = [
     "F1",

@@ -1,11 +1,7 @@
 import { SeriesId } from "@prisma/client";
 import * as z from "zod";
-import {
-    CompleteCircuit,
-    CompleteSession,
-    RelatedCircuitSchema,
-    RelatedSessionSchema,
-} from "./index";
+import { RelatedCircuitSchema, type CompleteCircuit } from "./circuit";
+import { RelatedSessionSchema, type CompleteSession } from "./session";
 
 export const RoundSchema = z.object({
     id: z.string(),

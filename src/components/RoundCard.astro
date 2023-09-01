@@ -1,7 +1,7 @@
 ---
-import { Icon } from "astro-icon/components";
 import type { trpc } from "../../lib/trpc/client";
 import { getSeriesIcon, getSeriesTitleShort } from "../../lib/utils/series";
+import { Icon } from "astro-icon/components";
 import NextSessionWrapper from "../components/NextSessionWrapper.svelte";
 
 type Round = Awaited<ReturnType<typeof trpc.rounds.getWeekend.query>>[number];

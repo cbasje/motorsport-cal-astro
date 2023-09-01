@@ -1,5 +1,5 @@
 import * as z from "zod";
-import { CompleteCircuit, RelatedCircuitSchema } from "./index";
+import { RelatedCircuitSchema, type CompleteCircuit } from "./circuit";
 
 export const WeatherSchema = z.object({
     id: z.string(),

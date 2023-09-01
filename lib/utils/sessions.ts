@@ -1,4 +1,4 @@
-import type { SeriesId, SessionType } from "lib/types";
+import type { SeriesId, SessionType } from "../types";
 
 type TitleRecords = Record<SessionType, string>;
 export const getSessionTitle = (

@@ -1,6 +1,6 @@
 import { SessionType } from "@prisma/client";
 import * as z from "zod";
-import { CompleteRound, RelatedRoundSchema } from "./index";
+import { RelatedRoundSchema, type CompleteRound } from "./round";
 
 export const SessionSchema = z.object({
     id: z.string(),

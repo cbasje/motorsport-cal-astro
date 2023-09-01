@@ -1,10 +1,10 @@
+import { getWeekendDates } from "../utils/date";
 import { initTRPC } from "@trpc/server";
 import superjson from "superjson";
 import { z } from "zod";
 import { prisma } from "../prisma";
 import { SeriesIdSchema, seriesIds } from "../types";
 import type { Context } from "./server";
-import { getWeekendDates } from "lib/utils/date";
 
 const t = initTRPC.context<Context>().create({
     transformer: superjson,

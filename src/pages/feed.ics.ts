@@ -1,5 +1,5 @@
 import type { APIRoute } from "astro";
-import { DateArray, EventAttributes, createEvents } from "ics";
+import { type DateArray, type EventAttributes, createEvents } from "ics";
 import type { trpc } from "../../lib/trpc/client";
 import { appRouter } from "../../lib/trpc/router";
 import { getSeriesEmoji } from "../../lib/utils/series";
@@ -72,7 +72,7 @@ export const getFeed = async (
     return events;
 };
 
-export const get: APIRoute = async ({ request }) => {
+export const GET: APIRoute = async ({ request }) => {
     try {
         const caller = appRouter.createCaller({
             req: request,

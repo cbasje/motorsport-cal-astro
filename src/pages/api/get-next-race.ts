@@ -2,7 +2,7 @@ import type { APIRoute } from "astro";
 import type { SeriesId } from "../../../lib/types";
 import { appRouter } from "../../../lib/trpc/router";
 
-export const get: APIRoute = async ({ request }) => {
+export const GET: APIRoute = async ({ request }) => {
     try {
         const params = new URL(request.url).searchParams;
         const seriesIds = params.get("series")?.split(",") as SeriesId[];

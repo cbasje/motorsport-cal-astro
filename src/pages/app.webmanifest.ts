@@ -1,6 +1,6 @@
 import type { APIRoute } from "astro";
 
-export const get: APIRoute = async ({ request }) => {
+export const GET: APIRoute = async ({ request }) => {
     const manifest = {
         name: "Porpoise Motorsport Calendar",
         short_name: "Porpoise",

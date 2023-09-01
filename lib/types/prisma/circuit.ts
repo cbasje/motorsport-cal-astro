@@ -1,10 +1,6 @@
 import * as z from "zod";
-import {
-    CompleteRound,
-    CompleteWeather,
-    RelatedRoundSchema,
-    RelatedWeatherSchema,
-} from "./index";
+import { RelatedWeatherSchema, type CompleteWeather } from "./weather";
+import { RelatedRoundSchema, type CompleteRound } from "./round";
 
 export const CircuitSchema = z.object({
     id: z.string(),
