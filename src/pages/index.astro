@@ -1,6 +1,5 @@
 ---
 import { trpc } from "../../lib/trpc/client";
-import { getWeekend } from "../../lib/utils/date";
 import RoundCard from "../components/RoundCard.astro";
 import MainLayout from "../layouts/main.astro";
 
@@ -8,9 +7,7 @@ const url = Astro.request.url;
 const params = new URL(url).searchParams;
 
 const weekOffset = Number(params.get("offset"));
-const [startDate, endDate] = getWeekend(weekOffset);
-
-const weekends = await trpc.rounds.getWeekends.query({ startDate, endDate });
+const weekends = await trpc.rounds.getWeekend.query({ weekOffset });
 ---
 
 <MainLayout title="Homepage">

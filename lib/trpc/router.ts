@@ -4,6 +4,7 @@ import { z } from "zod";
 import { prisma } from "../prisma";
 import { SeriesIdSchema, seriesIds } from "../types";
 import type { Context } from "./server";
+import { getWeekendDates } from "lib/utils/date";
 
 const t = initTRPC.context<Context>().create({
     transformer: superjson,
@@ -159,17 +160,24 @@ const rounds = router({
             )
         ),
 
-    getWeekends: loggedProcedure
-        .input(z.object({ startDate: z.date(), endDate: z.date() }))
-        .query(({ input }) =>
-            prisma.round.findMany({
+    getWeekend: loggedProcedure
+        .input(
+            z.object({
+                weekOffset: z.number().int().min(-52).max(52).default(0),
+                now: z.date().optional(),
+                showSessions: z.boolean().optional().default(false),
+            })
+        )
+        .query(({ input }) => {
+            const [startDate, endDate] = getWeekendDates(input.weekOffset);
+            return prisma.round.findMany({
                 orderBy: { series: "asc" },
                 where: {
                     sessions: {
                         some: {
                             AND: {
-                                startDate: { gte: input.startDate },
-                                endDate: { lte: input.endDate },
+                                startDate: { gte: startDate },
+                                endDate: { lte: endDate },
                             },
                         },
                     },
@@ -185,9 +193,29 @@ const rounds = router({
                             title: true,
                         },
                     },
+                    sessions: input.showSessions
+                        ? {
+                              orderBy: {
+                                  startDate: "asc",
+                              },
+                              take: 1,
+                              where:
+                                  input.now !== undefined
+                                      ? {
+                                            endDate: { gte: input.now },
+                                        }
+                                      : undefined,
+                              select: {
+                                  type: true,
+                                  number: true,
+                                  startDate: true,
+                                  endDate: true,
+                              },
+                          }
+                        : false,
                 },
-            })
-        ),
+            });
+        }),
 });
 
 const sessions = router({

@@ -56,7 +56,7 @@ export const relTime = (date: Date, now: number) => {
     }
 };
 
-export const getWeekend = (weekOffset = 0) => {
+export const getWeekendDates = (weekOffset = 0) => {
     const now = new Date();
 
     const lastMonday = new Date();

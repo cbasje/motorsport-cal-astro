@@ -4,7 +4,7 @@ import type { trpc } from "../../lib/trpc/client";
 import { getSeriesIcon, getSeriesTitleShort } from "../../lib/utils/series";
 import NextSessionWrapper from "../components/NextSessionWrapper.svelte";
 
-type Round = Awaited<ReturnType<typeof trpc.rounds.getWeekends.query>>[number];
+type Round = Awaited<ReturnType<typeof trpc.rounds.getWeekend.query>>[number];
 interface Props {
     round: Round;
     showNextSession?: boolean;

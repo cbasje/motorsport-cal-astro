@@ -1,18 +1,16 @@
 import type { APIRoute } from "astro";
 import { appRouter } from "../../../lib/trpc/router";
-import { getWeekend } from "../../../lib/utils/date";
 
 export const get: APIRoute = async ({ request }) => {
     try {
         const params = new URL(request.url).searchParams;
         const weekOffset = Number(params.get("offset"));
-        const [startDate, endDate] = getWeekend(weekOffset);
 
         const caller = appRouter.createCaller({
             req: request,
             resHeaders: request.headers,
         });
-        const data = await caller.rounds.getWeekends({ startDate, endDate });
+        const data = await caller.rounds.getWeekend({ weekOffset });
 
         return new Response(
             JSON.stringify({
