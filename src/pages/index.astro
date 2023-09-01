@@ -13,7 +13,7 @@ const [startDate, endDate] = getWeekend(weekOffset);
 const weekends = await trpc.rounds.getWeekends.query({ startDate, endDate });
 ---
 
-<MainLayout>
+<MainLayout title="Homepage">
     <h1>
         {
             new Intl.RelativeTimeFormat("en-GB", {

@@ -4,7 +4,7 @@ import { ViewTransitions } from "astro:transitions";
 import "../styles/global.scss";
 
 interface Props {
-    title?: string;
+    title: string;
 }
 
 const { title } = Astro.props;
@@ -13,7 +13,8 @@ const { title } = Astro.props;
 <head>
     <meta charset="UTF-8" />
     <SEO
-        title={title ? `${title} | ` : "" + "Porpoise Motorsport Calendar"}
+        title={title}
+        titleTemplate="%s | Porpoise Motorsport Calendar"
         extend={{
             link: [
                 { rel: "shortcut icon", href: "/favicon.ico" },
