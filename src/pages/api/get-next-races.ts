@@ -11,7 +11,7 @@ export const GET: APIRoute = async ({ request }) => {
             req: request,
             resHeaders: request.headers,
         });
-        const data = await caller.rounds.getNextRaces(seriesIds);
+        const data = await caller.sessions.getNextRaces(seriesIds);
 
         return new Response(
             JSON.stringify({

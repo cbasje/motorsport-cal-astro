@@ -109,57 +109,6 @@ const rounds = router({
         })
     ),
 
-    getAllRaces: loggedProcedure.query(() =>
-        prisma.session.findMany({
-            orderBy: { startDate: "asc" },
-            where: {
-                type: "R",
-            },
-            select: {
-                id: true,
-                startDate: true,
-                endDate: true,
-                round: {
-                    select: {
-                        title: true,
-                        series: true,
-                    },
-                },
-            },
-        })
-    ),
-
-    getNextRaces: loggedProcedure
-        .input(z.optional(z.array(SeriesIdSchema)))
-        .query(({ input }) =>
-            Promise.all(
-                (input ?? seriesIds).map((series) =>
-                    prisma.session.findFirst({
-                        orderBy: { startDate: "asc" },
-                        where: {
-                            type: "R",
-                            endDate: {
-                                gte: new Date(),
-                            },
-                            round: {
-                                series,
-                            },
-                        },
-                        select: {
-                            startDate: true,
-                            endDate: true,
-                            round: {
-                                select: {
-                                    title: true,
-                                    series: true,
-                                },
-                            },
-                        },
-                    })
-                )
-            )
-        ),
-
     getWeekend: loggedProcedure
         .input(
             z.object({
@@ -231,13 +180,47 @@ const sessions = router({
         })
     ),
 
-    getNextSessionByRoundId: loggedProcedure
-        .input(z.object({ now: z.date(), roundId: z.string() }))
+    getNextRaces: loggedProcedure
+        .input(z.optional(z.array(SeriesIdSchema)))
+        .query(({ input }) =>
+            Promise.all(
+                (input ?? seriesIds).map((series) =>
+                    prisma.session.findFirst({
+                        orderBy: { startDate: "asc" },
+                        where: {
+                            type: "R",
+                            endDate: {
+                                gte: new Date(),
+                            },
+                            round: {
+                                series,
+                            },
+                        },
+                        select: {
+                            startDate: true,
+                            endDate: true,
+                            round: {
+                                select: {
+                                    title: true,
+                                    series: true,
+                                },
+                            },
+                        },
+                    })
+                )
+            )
+        ),
+
+    getNextSession: loggedProcedure
+        .input(z.object({ now: z.date(), roundId: z.string().optional() }))
         .query(({ input }) =>
             prisma.session.findFirst({
                 orderBy: { startDate: "asc" },
                 where: {
-                    AND: { roundId: input.roundId, endDate: { gt: input.now } },
+                    AND: {
+                        roundId: input.roundId,
+                        endDate: { gte: input.now },
+                    },
                 },
                 select: {
                     type: true,

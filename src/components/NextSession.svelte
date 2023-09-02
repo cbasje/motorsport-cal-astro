@@ -12,7 +12,7 @@
     const queryResult = useQuery(
         "nextSession",
         () =>
-            trpc.sessions.getNextSessionByRoundId.query({
+            trpc.sessions.getNextSession.query({
                 roundId,
                 now,
             }),
