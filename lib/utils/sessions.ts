@@ -3,7 +3,7 @@ import type { SeriesId, SessionType } from "../types";
 type TitleRecords = Record<SessionType, string>;
 export const getSessionTitle = (
     series: SeriesId,
-    s: SessionType,
+    type: SessionType,
     number: number
 ) => {
     const feederTitles: TitleRecords = {
@@ -24,8 +24,8 @@ export const getSessionTitle = (
     };
 
     if (series === "F2" || series === "F3") {
-        return `${feederTitles[s]} ${number > 0 ? number : ""}`;
+        return `${feederTitles[type]} ${number > 0 ? number : ""}`;
     } else {
-        return `${defaultTitles[s]} ${number > 0 ? number : ""}`;
+        return `${defaultTitles[type]} ${number > 0 ? number : ""}`;
     }
 };

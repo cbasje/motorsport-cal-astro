@@ -33,13 +33,6 @@ export const GET: APIRoute = async ({ params }) => {
         style: `color: ${getSeriesColor(series.at(0) as SeriesId)}`,
     });
 
-    // let svg: string;
-    // if (series && series.length === 1) {
-    //     svg = svgSingle(getSeriesColor(series.at(0) as SeriesId));
-    // } else {
-    //     svg = svgMultiple(series.map((s) => getSeriesColor(s as SeriesId)));
-    // }
-
     const png = sharp(Buffer.from(svg)).png();
     const response = await png.toBuffer();
 

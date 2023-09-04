@@ -3,6 +3,7 @@ import { type DateArray, type EventAttributes, createEvents } from "ics";
 import type { trpc } from "../../lib/trpc/client";
 import { appRouter } from "../../lib/trpc/router";
 import { getSeriesEmoji } from "../../lib/utils/series";
+import { getSessionTitle } from "lib/utils/sessions";
 
 const TITLE = "Motorsport Calendar";
 const PRODUCT = "benjamiin..";
@@ -36,11 +37,14 @@ export const getFeed = async (
             continue;
         }
 
-        const type = session.type ? ` - ${session.type}` : "";
-        const number = session.number !== 0 ? ` ${session.number}` : "";
+        const type = getSessionTitle(
+            session.round.series,
+            session.type,
+            session.number
+        );
         const title = `${getSeriesEmoji(session.round.series)} ${
             session.round.series
-        } ${session.round.title}${type}${number}`;
+        } ${session.round.title} - ${type}`;
 
         events.push({
             calName: TITLE,

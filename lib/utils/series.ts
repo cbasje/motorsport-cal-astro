@@ -10,7 +10,7 @@ export const getSeriesIcon = (s: SeriesId) => {
         WEC: "stopwatch",
         F1A: "girl",
     };
-    return titles[s];
+    return titles[s] ?? "police-car-light";
 };
 
 export const getSeriesEmoji = (s: SeriesId) => {
