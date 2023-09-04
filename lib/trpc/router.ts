@@ -212,14 +212,21 @@ const sessions = router({
         ),
 
     getNextSession: loggedProcedure
-        .input(z.object({ now: z.date(), roundId: z.string().optional() }))
-        .query(({ input }) =>
-            prisma.session.findFirst({
+        .input(
+            z.object({
+                weekOffset: z.number().int().min(-52).max(52).default(0),
+                now: z.date().optional(),
+                roundId: z.string().optional(),
+            })
+        )
+        .query(({ input }) => {
+            const [startDate, endDate] = getWeekendDates(input.weekOffset);
+            return prisma.session.findFirst({
                 orderBy: { startDate: "asc" },
                 where: {
                     AND: {
                         roundId: input.roundId,
-                        endDate: { gte: input.now },
+                        endDate: { gte: input.now ?? startDate, lte: endDate },
                     },
                 },
                 select: {
@@ -238,8 +245,8 @@ const sessions = router({
                         },
                     },
                 },
-            })
-        ),
+            });
+        }),
 });
 
 const feed = router({
