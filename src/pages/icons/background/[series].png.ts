@@ -56,8 +56,7 @@ const generateGrid = (icons: string[]) => {
             const xPos = x * spacingX + spacingX / 2 + xOffset;
             const yPos = y * spacingY + spacingY / 2 + yOffset;
 
-            // const size = Math.random() * 48 + 32; // Random size between 32 and 80
-            const size = noiseBetween(x, y, 96, 32); // Random size between 32 and 80
+            const size = noiseBetween(x, y, 96, 48); // Random size between 32 and 80
             const rotate = randomBetween(15, -15);
 
             // Add path element for the custom SVG path to outpur
