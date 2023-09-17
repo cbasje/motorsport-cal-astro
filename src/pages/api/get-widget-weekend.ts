@@ -1,5 +1,5 @@
 import type { APIRoute } from "astro";
-import { appRouter } from "../../../lib/trpc/router";
+import { appRouter } from "lib/trpc/router";
 
 export const GET: APIRoute = async ({ request }) => {
     try {

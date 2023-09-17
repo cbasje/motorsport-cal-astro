@@ -1,5 +1,5 @@
 <script lang="ts">
-    import type { NextRace } from "../../lib/types";
+    import type { NextRace } from "lib/types";
 
     export let nextRace: NextRace;
 

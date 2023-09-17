@@ -1,6 +1,6 @@
 <script lang="ts">
+    import { relTime, trackTime, yourTime } from "lib/utils/date";
     import { onMount } from "svelte";
-    import { relTime, trackTime, yourTime } from "../../lib/utils/date";
 
     export let timeZone: string | undefined = undefined;
     export let startDate: Date;

@@ -1,8 +1,8 @@
 import type { APIRoute } from "astro";
 import { type DateArray, type EventAttributes, createEvents } from "ics";
-import type { trpc } from "../../lib/trpc/client";
-import { appRouter } from "../../lib/trpc/router";
-import { getSeriesEmoji } from "../../lib/utils/series";
+import type { trpc } from "lib/trpc/client";
+import { appRouter } from "lib/trpc/router";
+import { getSeriesEmoji } from "lib/utils/series";
 import { getSessionTitle } from "lib/utils/sessions";
 
 const TITLE = "Motorsport Calendar";

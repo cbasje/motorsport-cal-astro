@@ -3,8 +3,8 @@ import { getIconData, iconToSVG, replaceIDs } from "@iconify/utils";
 import type { APIRoute } from "astro";
 import sharp from "sharp";
 import { createNoise2D } from "simplex-noise";
-import type { SeriesId } from "../../../../lib/types";
-import { getSeriesIcon } from "../../../../lib/utils/series";
+import type { SeriesId } from "lib/types";
+import { getSeriesIcon } from "lib/utils/series";
 
 // Define the size of the grid
 const cols = 4;

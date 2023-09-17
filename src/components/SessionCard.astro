@@ -1,8 +1,8 @@
 ---
 import type { Session } from "@prisma/client";
-import { getSessionTitle } from "../../lib/utils/sessions";
+import type { SeriesId } from "lib/types";
+import { getSessionTitle } from "lib/utils/sessions";
 import Time from "./Time.svelte";
-import type { SeriesId } from "../../lib/types";
 
 interface Props {
     session: Session;

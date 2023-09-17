@@ -1,7 +1,7 @@
 import type { APIRoute } from "astro";
 import sharp from "sharp";
-import { getSeriesColor } from "../../../../lib/utils/series";
-import type { SeriesId } from "../../../../lib/types";
+import { getSeriesColor } from "lib/utils/series";
+import type { SeriesId } from "lib/types";
 
 const svgSingle = (
     color?: string

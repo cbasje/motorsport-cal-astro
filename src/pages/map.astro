@@ -1,6 +1,6 @@
 ---
 import MapTiler from "src/components/Map.astro";
-import { trpc } from "../../lib/trpc/client";
+import { trpc } from "lib/trpc/client";
 import MainLayout from "../layouts/main.astro";
 
 const circuits = await trpc.circuits.getMapMarkers.query();

@@ -2,8 +2,8 @@ import { icons } from "@iconify-json/fluent-emoji-high-contrast";
 import { getIconData, iconToHTML, iconToSVG, replaceIDs } from "@iconify/utils";
 import type { APIRoute } from "astro";
 import sharp from "sharp";
-import type { SeriesId } from "../../../../lib/types";
-import { getSeriesColor, getSeriesIcon } from "../../../../lib/utils/series";
+import type { SeriesId } from "lib/types";
+import { getSeriesColor, getSeriesIcon } from "lib/utils/series";
 
 export const GET: APIRoute = async ({ params }) => {
     const series = params.series?.split("-");

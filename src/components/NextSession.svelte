@@ -1,10 +1,10 @@
 <script lang="ts">
     import Icon from "@iconify/svelte";
     import { useQuery } from "@sveltestack/svelte-query";
-    import { trpc } from "../../lib/trpc/client";
-    import { getSessionTitle } from "../../lib/utils/sessions";
-    import Time from "./Time.svelte";
+    import { trpc } from "lib/trpc/client";
+    import { getSessionTitle } from "lib/utils/sessions";
     import { onMount } from "svelte";
+    import Time from "./Time.svelte";
 
     let now = new Date();
     export let roundId: string;

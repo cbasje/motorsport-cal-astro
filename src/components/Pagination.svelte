@@ -1,6 +1,5 @@
 <script lang="ts">
-    import Icon from "@iconify/svelte";
-    import { onRefresh } from "../../lib/scroll-pagination";
+    import { onRefresh } from "lib/scroll-pagination";
 
     const refreshing1 = onRefresh(
         () =>
