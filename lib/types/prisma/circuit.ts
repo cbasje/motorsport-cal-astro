@@ -7,6 +7,7 @@ export const CircuitSchema = z.object({
     created_at: z.date(),
     title: z.string(),
     wikipediaPageId: z.number().int(),
+    locality: z.string().nullish(),
     country: z.string().nullish(),
     timezone: z.string().nullish(),
     utcOffset: z.number().int().nullish(),

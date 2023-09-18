@@ -27,6 +27,7 @@ model Circuit {
   created_at      DateTime  @default(now()) @db.Timestamptz(6)
   title           String    @unique
   wikipediaPageId Int       @unique
+  locality        String?
   country         String?
   timezone        String?
   utcOffset       Int?

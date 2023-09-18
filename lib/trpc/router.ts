@@ -140,6 +140,7 @@ const rounds = router({
                     circuit: {
                         select: {
                             title: true,
+                            country: true,
                         },
                     },
                     sessions: input.showSessions

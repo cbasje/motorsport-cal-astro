@@ -1,7 +1,8 @@
 ---
-import type { trpc } from "../../lib/trpc/client";
-import { getSeriesIcon, getSeriesTitleShort } from "../../lib/utils/series";
 import { Icon } from "astro-icon/components";
+import type { trpc } from "lib/trpc/client";
+import { getCircuitTitle } from "lib/utils/circuit";
+import { getSeriesIcon, getSeriesTitleShort } from "lib/utils/series";
 import NextSessionWrapper from "../components/NextSessionWrapper.svelte";
 
 type Round = Awaited<ReturnType<typeof trpc.rounds.getWeekend.query>>[number];
@@ -22,13 +23,19 @@ const now = Date.now();
     }`}
     href={link ?? "/"}
 >
+    <Icon name={`fluent-emoji-high-contrast:${getSeriesIcon(round.series)}`} />
+
     <div class="round-title">
-        <Icon
-            name={`fluent-emoji-high-contrast:${getSeriesIcon(round.series)}`}
-        />
         <h2>
-            {getSeriesTitleShort(round.series)}
-            {round.title}
+            {getSeriesTitleShort(round.series)}{" "}
+            {
+                getCircuitTitle(
+                    round.series,
+                    round.circuit.title,
+                    round.circuit.country,
+                    round.circuit.locality
+                ) ?? round.title
+            }
         </h2>
         <div>
             {round.circuit.title}
@@ -62,25 +69,25 @@ const now = Date.now();
         flex-direction: column;
         align-items: flex-start;
         gap: var(--size-3);
-        padding: var(--size-4);
+        padding: var(--size-5);
 
         isolation: isolate;
         position: relative;
         overflow: hidden;
 
-        > .round-title > :global([data-icon]) {
+        > :global([data-icon]) {
             color: var(--color-6);
             font-size: 12rem;
 
             position: absolute;
-            top: -3rem;
-            right: -2.5rem;
+            top: calc(50% - 6rem);
+            right: -1.5rem;
             z-index: -1;
 
             transition: all 140ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
         }
 
-        &:hover > .round-title > :global([data-icon]) {
+        &:hover > :global([data-icon]) {
             color: var(--color-5);
         }
 
