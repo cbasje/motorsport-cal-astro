@@ -1,57 +1,106 @@
 ---
+import { Icon } from "astro-icon/components";
 const url = Astro.url;
 
-type Page = { href: string; title: string };
+type Page = { href: string; icon: string; title: string };
 const pages: Page[] = [
     {
         href: "/",
+        icon: "home",
         title: "Home",
     },
     {
         href: "/map",
+        icon: "map",
         title: "Map",
     },
 ];
 ---
 
 <nav transition:persist>
+    <div class="visually-hidden"></div>
+
     <ul>
         {
             pages.map((p) => (
                 <li>
                     <a
-                        class="button"
                         href={p.href}
-                        aria-current={p.href === url?.pathname}
+                        aria-current={p.href === url?.pathname ? "page" : false}
                     >
-                        {p.title}
+                        <Icon name={"lucide:" + p.icon} />
+                        <div class="visually-hidden">{p.title}</div>
                     </a>
                 </li>
             ))
         }
     </ul>
+
+    <a href="#this-weekend" class="button">
+        <Icon name="lucide:arrow-up" />
+        <div class="visually-hidden">Back to top</div>
+    </a>
 </nav>
 
 <style lang="scss">
     nav {
         display: flex;
         flex-direction: row;
-        justify-content: center;
+        justify-content: space-between;
         position: fixed;
-        bottom: var(--size-6);
+        bottom: env(safe-area-inset-bottom, 0);
         inset-inline: 0;
+        padding: 0 var(--size-3) var(--size-5);
         z-index: var(--layer-important);
+
+        :global([data-icon]) {
+            width: 1.5rem;
+            height: 1.5rem;
+        }
 
         ul {
             list-style: none;
             display: inline-flex;
             flex-direction: row;
-            gap: var(--size-3);
+            gap: 0px;
             flex-wrap: wrap;
-            padding-inline: var(--size-1);
+            background: var(--surface-1);
+            border: var(--surface-2) var(--border-size-3) solid;
+            border-radius: var(--radius-4);
+            padding: 0.375rem;
 
             > li {
-                padding: 0;
+                padding: 0.25rem;
+
+                a {
+                    padding: 0.625rem 0.75rem;
+                    color: var(--text-1);
+                    border-radius: 1.125rem;
+
+                    &[aria-current="page"] {
+                        background: var(--color-5);
+                        color: var(--text-on-accent);
+                    }
+                }
+            }
+        }
+
+        a {
+            display: block;
+
+            &.button {
+                width: auto;
+                height: calc(3.5rem + (var(--border-size-3) * 2));
+                aspect-ratio: 1;
+                padding: var(--size-3);
+
+                background-color: var(--surface-1);
+                border-color: var(--surface-2);
+                box-shadow: var(--surface-2) 0 var(--border-size-3) 0;
+
+                &:active {
+                    box-shadow: var(--surface-2) 0px 0px 0px;
+                }
             }
         }
     }

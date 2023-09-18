@@ -32,9 +32,6 @@ const round = await trpc.rounds.getOne.query(id ?? "");
 </MainLayout>
 
 <style lang="scss" define:vars={{ "color-hue": `var(--${round?.series}-hue)` }}>
-    .round-header {
-    }
-
     .session-list {
         list-style: none;
         padding: 0;

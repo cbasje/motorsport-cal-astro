@@ -1,0 +1,61 @@
+---
+import { Icon } from "astro-icon/components";
+---
+
+<nav>
+    <ul>
+        <li>
+            <Icon name="lucide:list-filter" />
+        </li>
+        <li>
+            <Icon name="lucide:clock" />
+        </li>
+    </ul>
+
+    <ul>
+        <li>
+            <Icon name="lucide:share" />
+        </li>
+        <li>
+            <Icon name="lucide:bell" />
+        </li>
+        <li>
+            <Icon name="lucide:alert-octagon" />
+        </li>
+    </ul>
+</nav>
+
+<style lang="scss">
+    nav {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        position: fixed;
+        top: env(safe-area-inset-top, 0);
+        inset-inline: 0;
+        padding: var(--size-5) var(--size-3) 0;
+        z-index: var(--layer-important);
+
+        :global([data-icon]) {
+            width: 1.5rem;
+            height: 1.5rem;
+        }
+
+        ul {
+            list-style: none;
+            display: inline-flex;
+            flex-direction: row;
+            gap: var(--size-5);
+            flex-wrap: wrap;
+            padding-inline: var(--size-1);
+            background: var(--surface-1);
+            border: var(--surface-2) var(--border-size-3) solid;
+            border-radius: var(--radius-4);
+            padding: var(--size-3) var(--size-4);
+
+            > li {
+                padding: 0;
+            }
+        }
+    }
+</style>

@@ -46,21 +46,21 @@
         <span class="countdown" aria-hidden="true">
             <span style="--value: {days}" />
         </span>
-        <span class="visually-hidden">{days}</span>
+        <div class="visually-hidden">{days}</div>
         days
     </div>
     <div>
         <span class="countdown" aria-hidden="true">
             <span style="--value: {hours}" />
         </span>
-        <span class="visually-hidden">{hours}</span>
+        <div class="visually-hidden">{hours}</div>
         hours
     </div>
     <div>
         <span class="countdown" aria-hidden="true">
             <span style="--value: {mins}" />
         </span>
-        <span class="visually-hidden">{mins}</span>
+        <div class="visually-hidden">{mins}</div>
         mins
     </div>
 </div>

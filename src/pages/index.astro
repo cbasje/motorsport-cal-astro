@@ -2,6 +2,7 @@
 import { trpc } from "lib/trpc/client";
 import RoundCard from "../components/RoundCard.astro";
 import MainLayout from "../layouts/main.astro";
+import IndexNav from "src/components/IndexNav.astro";
 
 const url = Astro.request.url;
 const params = new URL(url).searchParams;
@@ -11,7 +12,9 @@ const weekends = await trpc.rounds.getWeekend.query({ weekOffset });
 ---
 
 <MainLayout title="Homepage">
-    <h1>
+    <IndexNav />
+
+    <h1 id="this-weekend">
         {
             new Intl.RelativeTimeFormat("en-GB", {
                 numeric: "auto",
@@ -21,7 +24,10 @@ const weekends = await trpc.rounds.getWeekend.query({ weekOffset });
     <ul class="round-list" role="list">
         {
             weekends.map((round) => (
-                <li transition:name={`round-${round.id}`}>
+                <li
+                    id={`round-${round.id}`}
+                    transition:name={`round-${round.id}`}
+                >
                     <RoundCard
                         link={`/round/${round.id}`}
                         {round}
