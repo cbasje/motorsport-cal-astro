@@ -20,7 +20,8 @@ const svgMultiple = (colors?: string[]) =>
 </svg>`;
 
 export const GET: APIRoute = async ({ params }) => {
-    const series = params.series?.split("-");
+    const seriesSet = new Set(params.series?.split("-"));
+    const series = [...seriesSet];
 
     if (series && series.length === 1)
         return new Response(

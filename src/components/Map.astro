@@ -19,18 +19,16 @@ const tileLayer =
     "https://api.maptiler.com/maps/2f9c2ed9-3ffa-479d-9e82-620c2be256d9/style.json?key=" +
     process.env.PUBLIC_MAP_API_KEY;
 // const tileLayer = "https://demotiles.maplibre.org/style.json";
-const container = "map";
 ---
 
 <map-libre
     data-latitude={latitude}
     data-longitude={longitude}
     data-zoom={zoom}
-    data-container={container}
     data-tiles={tileLayer}
     data-markers={JSON.stringify(markers)}
 >
-    <div id={container}></div>
+    <div id="map"></div>
     <script>
         import { Map, Popup } from "maplibre-gl";
 
@@ -44,7 +42,7 @@ const container = "map";
                 ];
 
                 const map = new Map({
-                    container: this.dataset.container ?? "",
+                    container: "map",
                     style: this.dataset.tiles ?? "",
                     // attributionControl: false,
                     center: latlng ?? [0, 0],
@@ -157,7 +155,7 @@ const container = "map";
 </map-libre>
 
 <style lang="scss">
-    :global(main) {
+    :global(main:has(#map)) {
         position: fixed;
         inset: 0;
         max-inline-size: unset;

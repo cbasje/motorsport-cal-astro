@@ -94,7 +94,8 @@ const iconsToHTML = (
 };
 
 export const GET: APIRoute = async ({ params }) => {
-    const series = params.series?.split("-");
+    const seriesSet = new Set(params.series?.split("-"));
+    const series = [...seriesSet];
 
     if (!series || !series.length)
         return new Response(undefined, {

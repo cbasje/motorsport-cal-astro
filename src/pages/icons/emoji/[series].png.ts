@@ -6,7 +6,8 @@ import type { SeriesId } from "lib/types";
 import { getSeriesColor, getSeriesIcon } from "lib/utils/series";
 
 export const GET: APIRoute = async ({ params }) => {
-    const series = params.series?.split("-");
+    const seriesSet = new Set(params.series?.split("-"));
+    const series = [...seriesSet];
 
     if (!series || !series.length)
         return new Response(undefined, {
