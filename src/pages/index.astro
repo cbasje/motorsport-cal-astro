@@ -3,6 +3,7 @@ import { trpc } from "lib/trpc/client";
 import RoundCard from "../components/RoundCard.astro";
 import MainLayout from "../layouts/main.astro";
 import IndexNav from "src/components/IndexNav.astro";
+import { Icon } from "astro-icon/components";
 
 const url = Astro.request.url;
 const params = new URL(url).searchParams;
@@ -14,32 +15,43 @@ const weekends = await trpc.rounds.getWeekend.query({ weekOffset });
 <MainLayout title="Homepage">
     <IndexNav />
 
-    <h1 id="this-weekend">
-        {
-            new Intl.RelativeTimeFormat("en-GB", {
-                numeric: "auto",
-            }).format(weekOffset, "week")
-        }
-    </h1>
-    <ul class="round-list" role="list">
-        {
-            weekends.map((round) => (
-                <li
-                    id={`round-${round.id}`}
-                    transition:name={`round-${round.id}`}
-                >
-                    <RoundCard
-                        link={`/round/${round.id}`}
-                        {round}
-                        showNextSession
-                    />
-                </li>
-            ))
-        }
-    </ul>
-    <a href={`?offset=${weekOffset - 1}`}>Previous</a>
-    <a href={`?offset=${weekOffset + 1}`}>Next</a>
-    {weekOffset !== 0 && <a href={`?offset=0`}>Back to This week</a>}
+    <a href={`?offset=${weekOffset - 1}`} class="btn btn-surface">
+        <Icon name="lucide:chevron-up" />
+        <span>Previous</span>
+    </a>
+    <section>
+        <h1 id="this-weekend">
+            {
+                new Intl.RelativeTimeFormat("en-GB", {
+                    numeric: "auto",
+                }).format(weekOffset, "week")
+            }
+        </h1>
+        <ul class="round-list" role="list">
+            {
+                weekends?.length ? (
+                    weekends.map((round) => (
+                        <li
+                            id={`round-${round.id}`}
+                            transition:name={`round-${round.id}`}
+                        >
+                            <RoundCard
+                                link={`/round/${round.id}`}
+                                {round}
+                                showNextSession
+                            />
+                        </li>
+                    ))
+                ) : (
+                    <div>Nothing here!</div>
+                )
+            }
+        </ul>
+    </section>
+    <a href={`?offset=${weekOffset + 1}`} class="btn btn-surface">
+        <Icon name="lucide:chevron-down" />
+        <span>Next</span>
+    </a>
 </MainLayout>
 
 <style lang="scss">
