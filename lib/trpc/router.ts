@@ -141,6 +141,7 @@ const rounds = router({
                         select: {
                             title: true,
                             country: true,
+                            locality: true,
                         },
                     },
                     sessions: input.showSessions

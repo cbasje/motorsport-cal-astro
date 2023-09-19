@@ -7,7 +7,7 @@ const regionNames = new Intl.DisplayNames(undefined, { type: "region" });
 export const getCircuitTitle = (
     series: SeriesId,
     circuitTitle: string,
-    countryCode: string,
+    countryCode: string | null,
     locality: z.infer<typeof CircuitSchema.shape.locality>
 ) => {
     if (series === "INDY") {

@@ -36,8 +36,8 @@ const pages: Page[] = [
         }
     </ul>
 
-    <!-- <a href="#this-weekend" class="button"> -->
-    <a href="/?offset=0" class="button">
+    <!-- <a href="#this-weekend" class="btn btn-surface"> -->
+    <a href="/?offset=0" class="btn btn-surface">
         <Icon name="lucide:arrow-up" />
         <div class="visually-hidden">Back to top</div>
     </a>
@@ -91,20 +91,11 @@ const pages: Page[] = [
         a {
             display: block;
 
-            &.button {
+            &.btn {
                 width: auto;
                 height: calc(3.5rem + (var(--border-size-2) * 2));
                 aspect-ratio: 1;
                 padding: var(--size-3);
-
-                color: var(--text-1);
-                background-color: var(--surface-1);
-                border-color: var(--surface-2);
-                box-shadow: var(--surface-2) 0 var(--border-size-2) 0;
-
-                &:active {
-                    box-shadow: var(--surface-2) 0px 0px 0px;
-                }
             }
         }
     }

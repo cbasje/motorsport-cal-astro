@@ -18,7 +18,7 @@ const now = Date.now();
 
 <a
     style={`--color-hue: var(--${round.series}-hue)`}
-    class={`round-header button ${
+    class={`round-header btn btn-color ${
         round.endDate && round.endDate.valueOf() < now ? "past" : ""
     }`}
     href={link ?? "/"}
@@ -44,8 +44,8 @@ const now = Date.now();
 
     {showNextSession && <NextSessionWrapper roundId={round.id} client:idle />}
 </a>
-<!-- FIXME: doesn't work with ViewTransitions?
-<script>
+<!-- FIXME: doesn't work with ViewTransitions? -->
+<!-- <script>
     async function goBack() {
         console.log("l");
         if (navigation.canGoBack) {
