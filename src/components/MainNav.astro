@@ -49,7 +49,8 @@ const pages: Page[] = [
         justify-content: space-between;
         position: fixed;
         bottom: env(safe-area-inset-bottom, 0);
-        inset-inline: 0;
+        left: env(safe-area-inset-left, 0);
+        right: env(safe-area-inset-right, 0);
         padding: 0 var(--size-3) var(--size-5);
         z-index: var(--layer-important);
 
@@ -65,7 +66,7 @@ const pages: Page[] = [
             gap: 0px;
             flex-wrap: wrap;
             background: var(--surface-1);
-            border: var(--surface-2) var(--border-size-3) solid;
+            border: var(--surface-2) var(--border-size-2) solid;
             border-radius: var(--radius-4);
             padding: 0.375rem;
 
@@ -88,15 +89,16 @@ const pages: Page[] = [
         a {
             display: block;
 
-            &.button {
+            &[href="#this-weekend"] {
                 width: auto;
-                height: calc(3.5rem + (var(--border-size-3) * 2));
+                height: calc(3.5rem + (var(--border-size-2) * 2));
                 aspect-ratio: 1;
                 padding: var(--size-3);
 
+                color: var(--text-1);
                 background-color: var(--surface-1);
                 border-color: var(--surface-2);
-                box-shadow: var(--surface-2) 0 var(--border-size-3) 0;
+                box-shadow: var(--surface-2) 0 var(--border-size-2) 0;
 
                 &:active {
                     box-shadow: var(--surface-2) 0px 0px 0px;

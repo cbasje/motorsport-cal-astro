@@ -32,7 +32,8 @@ import { Icon } from "astro-icon/components";
         justify-content: space-between;
         position: fixed;
         top: env(safe-area-inset-top, 0);
-        inset-inline: 0;
+        left: env(safe-area-inset-left, 0);
+        right: env(safe-area-inset-right, 0);
         padding: var(--size-5) var(--size-3) 0;
         z-index: var(--layer-important);
 
@@ -49,7 +50,7 @@ import { Icon } from "astro-icon/components";
             flex-wrap: wrap;
             padding-inline: var(--size-1);
             background: var(--surface-1);
-            border: var(--surface-2) var(--border-size-3) solid;
+            border: var(--surface-2) var(--border-size-2) solid;
             border-radius: var(--radius-4);
             padding: var(--size-3) var(--size-4);
 

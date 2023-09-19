@@ -29,11 +29,11 @@
 </script>
 
 {#if $queryResult.isLoading}
-    <div class="next-session">
+    <!-- <div class="next-session">
         <span>Loading...</span>
-        <!-- {:else if $queryResult.error}
-        <span>An error has occurred: {$queryResult.error.message}</span> -->
-    </div>
+{:else if $queryResult.error}
+        <span>An error has occurred: {$queryResult.error.message}</span>
+    </div> -->
 {:else if $queryResult.data}
     <div class="next-session">
         {#if $queryResult.data.startDate.valueOf() >= now.valueOf()}

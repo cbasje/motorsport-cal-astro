@@ -7,5 +7,5 @@ const circuits = await trpc.circuits.getMapMarkers.query();
 ---
 
 <MainLayout title="World Map">
-    <MapTiler markers={circuits} />
+    <MapTiler markers={circuits} client:only />
 </MainLayout>

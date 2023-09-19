@@ -9,7 +9,7 @@ const { id } = Astro.params;
 const round = await trpc.rounds.getOne.query(id ?? "");
 ---
 
-<MainLayout>
+<MainLayout title={round?.title}>
     {
         round && (
             <>

@@ -62,7 +62,8 @@ const container = "map";
                     const seriesSet = new Set(series);
 
                     seriesSet.forEach(async (item) => {
-                        await loadImage(`icons/pin/${item}.png`, item);
+                        if (item)
+                            await loadImage(`icons/pin/${item}.png`, item);
                     });
                 };
 

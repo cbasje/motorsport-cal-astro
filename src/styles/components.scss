@@ -46,8 +46,8 @@ main {
     background: var(--color-5);
     color: var(--text-on-accent);
     border-radius: var(--radius-4);
-    border: var(--color-3) var(--border-size-3) solid;
-    box-shadow: var(--color-3) 0px var(--border-size-3) 0px;
+    border: var(--color-3) var(--border-size-2) solid;
+    box-shadow: var(--color-3) 0px var(--border-size-2) 0px;
 
     // @media (--media){
     transition: all 140ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
@@ -60,7 +60,7 @@ main {
     }
 
     &:active {
-        translate: 0px var(--border-size-3);
+        translate: 0px var(--border-size-2);
         box-shadow: var(--color-3) 0px 0px 0px;
     }
 }

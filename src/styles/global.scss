@@ -15,7 +15,15 @@
 
 @layer theming {
     @layer sizes {
-        @import "open-props/borders";
+        :root {
+            --border-size-1: 1px;
+            --border-size-2: 2px;
+            --border-size-3: 3px;
+            --border-size-4: 5px;
+            --border-size-5: 10px;
+            --border-size-6: 25px;
+        }
+
         @import "open-props/sizes";
     }
 
