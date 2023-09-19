@@ -43,6 +43,9 @@ main {
 }
 
 :where(.button) {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     background: var(--color-5);
     color: var(--text-on-accent);
     border-radius: var(--radius-4);

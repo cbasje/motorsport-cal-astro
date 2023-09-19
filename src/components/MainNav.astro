@@ -36,7 +36,8 @@ const pages: Page[] = [
         }
     </ul>
 
-    <a href="#this-weekend" class="button">
+    <!-- <a href="#this-weekend" class="button"> -->
+    <a href="/?offset=0" class="button">
         <Icon name="lucide:arrow-up" />
         <div class="visually-hidden">Back to top</div>
     </a>
@@ -47,6 +48,7 @@ const pages: Page[] = [
         display: flex;
         flex-direction: row;
         justify-content: space-between;
+        align-items: center;
         position: fixed;
         bottom: env(safe-area-inset-bottom, 0);
         left: env(safe-area-inset-left, 0);
@@ -63,7 +65,7 @@ const pages: Page[] = [
             list-style: none;
             display: inline-flex;
             flex-direction: row;
-            gap: 0px;
+            gap: var(--size-1);
             flex-wrap: wrap;
             background: var(--surface-1);
             border: var(--surface-2) var(--border-size-2) solid;
@@ -74,7 +76,7 @@ const pages: Page[] = [
                 padding: 0.25rem;
 
                 a {
-                    padding: 0.625rem 0.75rem;
+                    padding: 0.875rem 1rem;
                     color: var(--text-1);
                     border-radius: 1.125rem;
 
@@ -89,7 +91,7 @@ const pages: Page[] = [
         a {
             display: block;
 
-            &[href="#this-weekend"] {
+            &.button {
                 width: auto;
                 height: calc(3.5rem + (var(--border-size-2) * 2));
                 aspect-ratio: 1;

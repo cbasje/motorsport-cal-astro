@@ -1,6 +1,13 @@
-:where(*) {
+:root {
+    color-scheme: dark;
+
     --gray-hue: var(--arc-hue, 40);
     --gray-chroma: 0.0025;
+
+    --color-hue: var(--arc-hue, 40);
+}
+
+:where(*) {
     --surface-1: var(--gray-14);
     --surface-2: var(--gray-13);
     --surface-3: var(--gray-12);
@@ -10,7 +17,6 @@
     --text-3: var(--gray-4);
     --text-on-accent: var(--gray-0);
 
-    --color-hue: var(--arc-hue, 40);
     --accent-1: var(--color-3);
     --accent-2: var(--color-4);
 }
