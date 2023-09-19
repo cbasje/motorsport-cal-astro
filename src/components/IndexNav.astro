@@ -1,26 +1,35 @@
 ---
 import { Icon } from "astro-icon/components";
+import TimeFormatButton from "./TimeFormatButton.svelte";
 ---
 
 <nav>
     <ul>
         <li>
-            <Icon name="lucide:list-filter" />
+            <button>
+                <Icon name="lucide:list-filter" />
+            </button>
         </li>
         <li>
-            <Icon name="lucide:clock" />
+            <TimeFormatButton client:load />
         </li>
     </ul>
 
     <ul>
         <li>
-            <Icon name="lucide:share" />
+            <button>
+                <Icon name="lucide:share" />
+            </button>
         </li>
         <li>
-            <Icon name="lucide:bell" />
+            <button>
+                <Icon name="lucide:bell" />
+            </button>
         </li>
         <li>
-            <Icon name="lucide:alert-octagon" />
+            <button>
+                <Icon name="lucide:alert-octagon" />
+            </button>
         </li>
     </ul>
 </nav>
@@ -37,7 +46,7 @@ import { Icon } from "astro-icon/components";
         padding: var(--size-5) var(--size-3) 0;
         z-index: var(--layer-important);
 
-        :global([data-icon]) {
+        :global(:is([data-icon], .iconify)) {
             width: 1.5rem;
             height: 1.5rem;
         }
@@ -46,16 +55,21 @@ import { Icon } from "astro-icon/components";
             list-style: none;
             display: inline-flex;
             flex-direction: row;
-            gap: var(--size-5);
+            gap: 0;
             flex-wrap: wrap;
             padding-inline: var(--size-1);
             background: var(--surface-1);
             border: var(--surface-2) var(--border-size-2) solid;
             border-radius: var(--radius-4);
-            padding: var(--size-3) var(--size-4);
+            padding: 0.25rem 0.5rem;
 
             > li {
                 padding: 0;
+
+                :global(button) {
+                    padding: 0.75rem;
+                    background: transparent;
+                }
             }
         }
     }

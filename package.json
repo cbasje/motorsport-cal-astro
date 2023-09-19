@@ -33,6 +33,7 @@
         "astro-seo": "^0.8.0",
         "ics": "^3.1.0",
         "maplibre-gl": "^3.2.1",
+        "nanostores": "^0.9.3",
         "prisma": "^5.2.0",
         "sharp": "^0.32.4",
         "simplex-noise": "^4.0.1",
