@@ -4,7 +4,7 @@ import type { APIRoute } from "astro";
 import sharp from "sharp";
 import { createNoise2D } from "simplex-noise";
 import type { SeriesId } from "lib/types";
-import { getSeriesIcon } from "lib/utils/series";
+import { getSeriesIcon, getSeriesSecondaryColor } from "lib/utils/series";
 
 // Define the size of the grid
 const cols = 4;
@@ -125,7 +125,7 @@ export const GET: APIRoute = async ({ params }) => {
     const svg = iconsToHTML(
         renderData.map((d) => replaceIDs(d)),
         {
-            style: `color: rgba(0,0,0,0.15)`,
+            style: `color: rgba(0,0,0,0.125)`,
         }
     );
 

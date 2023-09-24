@@ -54,13 +54,25 @@ export const getSeriesTitleShort = (s: SeriesId) => {
 
 export const getSeriesColor = (s: SeriesId) => {
     const colors: Record<SeriesId, string> = {
-        F1: "#F75B65",
-        F2: "#00A2FE",
-        F3: "#BC70EE",
-        FE: "#6C8DFE",
-        INDY: "#00BAA8",
-        WEC: "#60B01A",
-        F1A: "#E95DA9",
+        F1: "#FF3555",
+        F2: "#00A1FE",
+        F3: "#C75CFE",
+        FE: "#6283FE",
+        INDY: "#00C3AC",
+        WEC: "#46B613",
+        F1A: "#FD3BAD",
+    };
+    return colors[s];
+};
+export const getSeriesSecondaryColor = (s: SeriesId) => {
+    const colors: Record<SeriesId, string> = {
+        F1: "#FF0041",
+        F2: "#0090FE",
+        F3: "#B943FA",
+        FE: "#536FFE",
+        INDY: "#00B49D",
+        WEC: "#2BA711",
+        F1A: "#EF099F",
     };
     return colors[s];
 };

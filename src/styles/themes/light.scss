@@ -1,10 +1,10 @@
 :root {
     color-scheme: light;
 
-    --gray-hue: var(--arc-hue, 40);
+    --gray-hue: var(--arc-hue, 285);
     --gray-chroma: 0.0025;
 
-    --color-hue: var(--arc-hue, 40);
+    --color-hue: var(--arc-hue, 285);
 }
 
 :where(*) {
