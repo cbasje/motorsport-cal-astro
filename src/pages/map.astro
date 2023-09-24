@@ -3,9 +3,11 @@ import MapTiler from "src/components/Map.astro";
 import { trpc } from "lib/trpc/client";
 import MainLayout from "../layouts/main.astro";
 
+const { pathname } = Astro.url;
+
 const circuits = await trpc.circuits.getMapMarkers.query();
 ---
 
-<MainLayout title="World Map">
+<MainLayout title="World Map" path={pathname}>
     <MapTiler markers={circuits} />
 </MainLayout>

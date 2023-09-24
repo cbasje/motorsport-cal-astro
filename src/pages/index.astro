@@ -5,6 +5,7 @@ import MainLayout from "../layouts/main.astro";
 import IndexNav from "src/components/IndexNav.astro";
 import { Icon } from "astro-icon/components";
 
+const { pathname } = Astro.url;
 const url = Astro.request.url;
 const params = new URL(url).searchParams;
 
@@ -14,7 +15,7 @@ const weekends = await trpc.rounds.getWeekend.query({ weekOffset });
 const now = Date.now();
 ---
 
-<MainLayout title="Homepage">
+<MainLayout title="Homepage" path={pathname}>
     <IndexNav />
 
     <a href={`?offset=${weekOffset - 1}`} class="btn btn-surface">

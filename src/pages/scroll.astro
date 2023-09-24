@@ -1,9 +1,11 @@
 ---
 import Pagination from "src/components/Pagination.svelte";
 import MainLayout from "src/layouts/main.astro";
+
+const { pathname } = Astro.url;
 ---
 
-<MainLayout title="Scroll Test">
+<MainLayout title="Scroll Test" path={pathname}>
     <div class="container">
         <Pagination client:idle>
             <div slot="1">

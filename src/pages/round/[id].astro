@@ -4,12 +4,13 @@ import RoundCard from "../../components/RoundCard.astro";
 import SessionCard from "../../components/SessionCard.astro";
 import MainLayout from "../../layouts/main.astro";
 
+const { pathname } = Astro.url;
 const { id } = Astro.params;
 
 const round = await trpc.rounds.getOne.query(id ?? "");
 ---
 
-<MainLayout title={round?.title}>
+<MainLayout title={round?.title} path={pathname}>
     {
         round && (
             <>

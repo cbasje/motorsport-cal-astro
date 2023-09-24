@@ -1,6 +1,5 @@
 ---
 import { Icon } from "astro-icon/components";
-const url = Astro.url;
 
 type Page = { href: string; icon: string; title: string };
 const pages: Page[] = [
@@ -15,6 +14,11 @@ const pages: Page[] = [
         title: "Map",
     },
 ];
+
+interface Props {
+    path: (typeof pages)[number]["href"];
+}
+const { path } = Astro.props;
 ---
 
 <nav transition:persist>
@@ -26,7 +30,7 @@ const pages: Page[] = [
                 <li>
                     <a
                         href={p.href}
-                        aria-current={p.href === url?.pathname ? "page" : false}
+                        aria-current={p.href === path ? "page" : false}
                     >
                         <Icon name={"lucide:" + p.icon} />
                         <div class="visually-hidden">{p.title}</div>
@@ -36,7 +40,7 @@ const pages: Page[] = [
         }
     </ul>
 
-    <!-- <a href="#this-weekend" class="btn btn-surface"> -->
+    <!-- TODO: <a href="#this-weekend" class="btn btn-surface"> -->
     <a href="/?offset=0" class="btn btn-surface">
         <Icon name="lucide:arrow-up" />
         <div class="visually-hidden">Back to top</div>
