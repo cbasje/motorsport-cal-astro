@@ -10,6 +10,8 @@ const params = new URL(url).searchParams;
 
 const weekOffset = Number(params.get("offset"));
 const weekends = await trpc.rounds.getWeekend.query({ weekOffset });
+
+const now = Date.now();
 ---
 
 <MainLayout title="Homepage">
@@ -34,12 +36,29 @@ const weekends = await trpc.rounds.getWeekend.query({ weekOffset });
                         <li
                             id={`round-${round.id}`}
                             transition:name={`round-${round.id}`}
+                            style={`--color-hue: var(--${round.series}-hue)`}
+                            class={
+                                round.endDate && round.endDate.valueOf() < now
+                                    ? "past"
+                                    : ""
+                            }
                         >
                             <RoundCard
                                 link={`/round/${round.id}`}
                                 {round}
                                 showNextSession
                             />
+
+                            <div class="stack-wrapper" aria-hidden="true">
+                                {[...Array(round._count.sessions)].map(
+                                    (_n, i) => (
+                                        <div
+                                            data-index={i}
+                                            transition:name={`sessions-${i}-${round.id}`}
+                                        />
+                                    )
+                                )}
+                            </div>
                         </li>
                     ))
                 ) : (
@@ -70,6 +89,39 @@ const weekends = await trpc.rounds.getWeekend.query({ weekOffset });
         > li {
             padding: 0;
             max-inline-size: unset;
+            position: relative;
+        }
+        :global(.past) {
+            opacity: 0.5;
+        }
+    }
+
+    .stack-wrapper {
+        display: grid;
+        grid-template-rows: 1fr;
+        grid-template-columns: 1fr;
+        position: absolute;
+        flex-grow: 1;
+        inset-inline: 0.5rem;
+        inset-block: 1.25rem -1.25rem;
+        z-index: -1;
+        isolation: isolate;
+
+        div {
+            grid-area: 1/1;
+            border-radius: var(--radius-4);
+
+            &:nth-child(1) {
+                margin-block-end: 0.5rem;
+                background: var(--color-4);
+                border: var(--color-2) var(--border-size-2) solid;
+                z-index: 1;
+            }
+            &:not(:nth-child(1)) {
+                margin-inline: 0.75rem;
+                background: var(--color-3);
+                border: var(--color-1) var(--border-size-2) solid;
+            }
         }
     }
 </style>

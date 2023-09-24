@@ -12,27 +12,12 @@ interface Props {
 const { session, series, timeZone } = Astro.props;
 ---
 
-<li
-    class={session.endDate.valueOf() < Date.now() ? "past" : ""}
-    role="listitem"
->
-    <h3>
-        {getSessionTitle(series, session.type, session.number)}
-    </h3>
-    <Time
-        startDate={session.startDate}
-        endDate={session.endDate}
-        timeZone={timeZone ?? undefined}
-        client:idle
-    />
-</li>
-
-<style lang="scss">
-    li {
-        padding: 0;
-
-        &.past {
-            opacity: 0.5;
-        }
-    }
-</style>
+<h3>
+    {getSessionTitle(series, session.type, session.number)}
+</h3>
+<Time
+    startDate={session.startDate}
+    endDate={session.endDate}
+    timeZone={timeZone ?? undefined}
+    client:idle
+/>

@@ -163,7 +163,12 @@ const rounds = router({
                                   endDate: true,
                               },
                           }
-                        : false,
+                        : undefined,
+                    _count: {
+                        select: {
+                            sessions: true,
+                        },
+                    },
                 },
             });
         }),

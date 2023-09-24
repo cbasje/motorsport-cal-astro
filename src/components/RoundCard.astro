@@ -12,17 +12,9 @@ interface Props {
     link?: string;
 }
 const { round, showNextSession, link } = Astro.props;
-
-const now = Date.now();
 ---
 
-<a
-    style={`--color-hue: var(--${round.series}-hue)`}
-    class={`round-header btn btn-color ${
-        round.endDate && round.endDate.valueOf() < now ? "past" : ""
-    }`}
-    href={link ?? "/"}
->
+<a class="round-header btn btn-color" href={link ?? "/"}>
     <Icon name={`fluent-emoji-high-contrast:${getSeriesIcon(round.series)}`} />
 
     <div class="round-title">
@@ -70,6 +62,7 @@ const now = Date.now();
         align-items: flex-start;
         gap: var(--size-3);
         padding: var(--size-5);
+        z-index: 10;
 
         box-shadow: none;
 

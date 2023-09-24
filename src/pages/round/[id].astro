@@ -18,12 +18,22 @@ const round = await trpc.rounds.getOne.query(id ?? "");
                 </div>
 
                 <ol role="list" class="session-list">
-                    {round.sessions.map((session) => (
-                        <SessionCard
-                            session={session}
-                            series={round.series}
-                            timeZone={round.circuit.timezone ?? ""}
-                        />
+                    {round.sessions.map((session, i) => (
+                        <li
+                            transition:name={`sessions-${i}-${round.id}`}
+                            class={
+                                session.endDate.valueOf() < Date.now()
+                                    ? "past"
+                                    : ""
+                            }
+                            role="listitem"
+                        >
+                            <SessionCard
+                                session={session}
+                                series={round.series}
+                                timeZone={round.circuit.timezone ?? ""}
+                            />
+                        </li>
                     ))}
                 </ol>
             </>
@@ -34,6 +44,22 @@ const round = await trpc.rounds.getOne.query(id ?? "");
 <style lang="scss" define:vars={{ "color-hue": `var(--${round?.series}-hue)` }}>
     .session-list {
         list-style: none;
+        display: flex;
+        flex-direction: column;
+        gap: var(--size-2);
+        margin-inline: var(--size-3);
         padding: 0;
+
+        > li {
+            padding: var(--size-4);
+            background: var(--color-4);
+            color: var(--text-on-accent);
+            border: var(--color-2) var(--border-size-2) solid;
+            border-radius: var(--radius-4);
+            max-inline-size: none;
+        }
+        :global(.past) {
+            opacity: 0.5;
+        }
     }
 </style>
