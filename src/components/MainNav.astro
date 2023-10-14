@@ -21,7 +21,7 @@ interface Props {
 const { path } = Astro.props;
 ---
 
-<nav transition:persist>
+<nav transition:persist class="nav bottom-nav">
     <div class="visually-hidden"></div>
 
     <ul>
@@ -46,61 +46,3 @@ const { path } = Astro.props;
         <div class="visually-hidden">Back to top</div>
     </a>
 </nav>
-
-<style lang="scss">
-    nav {
-        display: flex;
-        flex-direction: row;
-        justify-content: space-between;
-        align-items: center;
-        position: fixed;
-        bottom: env(safe-area-inset-bottom, 0);
-        left: env(safe-area-inset-left, 0);
-        right: env(safe-area-inset-right, 0);
-        padding: 0 var(--size-3) var(--size-5);
-        z-index: var(--layer-important);
-
-        :global([data-icon]) {
-            width: 1.5rem;
-            height: 1.5rem;
-        }
-
-        ul {
-            list-style: none;
-            display: inline-flex;
-            flex-direction: row;
-            gap: var(--size-1);
-            flex-wrap: wrap;
-            background: var(--surface-1);
-            border: var(--surface-2) var(--border-size-2) solid;
-            border-radius: var(--radius-4);
-            padding: 0.375rem;
-
-            > li {
-                padding: 0.25rem;
-
-                a {
-                    padding: 0.875rem 1rem;
-                    color: var(--text-1);
-                    border-radius: 1.125rem;
-
-                    &[aria-current="page"] {
-                        background: var(--color-5);
-                        color: var(--text-on-accent);
-                    }
-                }
-            }
-        }
-
-        a {
-            display: block;
-
-            &.btn {
-                width: auto;
-                height: calc(3.5rem + (var(--border-size-2) * 2));
-                aspect-ratio: 1;
-                padding: var(--size-3);
-            }
-        }
-    }
-</style>
