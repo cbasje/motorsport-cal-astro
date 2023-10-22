@@ -26,8 +26,8 @@ export default defineConfig({
     vite: {
         resolve: {
             alias: {
-                ".prisma/client/index-browser":
-                    "./node_modules/.prisma/client/index-browser.js",
+                ".prisma/client/index":
+                    "/app/node_modules/.prisma/client/index.js",
             },
         },
     },

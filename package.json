@@ -9,13 +9,13 @@
     "scripts": {
         "dev": "astro dev",
         "dev:db": "fly proxy 5432 -a motorsport-cal-db",
-        "start": "bun ./dist/server/entry.mjs",
+        "start": "node ./dist/server/entry.mjs",
         "build": "astro build",
         "postinstall": "prisma generate",
         "preview": "astro preview",
         "astro": "astro",
-        "migrate:dev": "yarn prisma migrate dev",
-        "migrate:deploy": "yarn prisma migrate deploy",
+        "migrate:dev": "prisma migrate dev",
+        "migrate:deploy": "prisma migrate deploy",
         "deploy": "fly deploy --remote-only"
     },
     "dependencies": {
@@ -24,7 +24,6 @@
         "@iconify-json/fluent-emoji-high-contrast": "^1.1.9",
         "@iconify-json/lucide": "^1.1.128",
         "@iconify-json/ph": "^1.1.5",
-        "@matthewp/astro-fastify": "^3.0.0",
         "@prisma/client": "^5.2.0",
         "@sveltestack/svelte-query": "^1.6.0",
         "@trpc/client": "^10.41.0",

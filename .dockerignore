@@ -4,6 +4,7 @@
 
 # dependencies
 **/node_modules
+!**/node_modules/.prisma
 
 # logs
 **/npm-debug.log*
