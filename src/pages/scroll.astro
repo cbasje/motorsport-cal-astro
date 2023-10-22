@@ -81,7 +81,7 @@ const { pathname } = Astro.url;
     </div>
 </MainLayout>
 
-<style lang="scss">
+<style lang="postcss">
     body,
     html {
         /* don't make this min-height otherwise the #scroll-area won't get the scrollbar */
@@ -92,14 +92,14 @@ const { pathname } = Astro.url;
 
     /* create a container to layout our nav and scroll area */
     .container {
-        // display: grid;
+         /* display: grid; */
         grid-template-columns: 1fr;
 
         /* the navbar is auto sized and the scroll area takes the remaining height */
         grid-template-rows: auto 1fr;
 
         /* needed to make the scroll area have the scrollbar */
-        // height: 100%;
+         /* height: 100%; */
 
         :global(.main) {
             display: flex;
@@ -109,7 +109,7 @@ const { pathname } = Astro.url;
             > :global(.text) {
                 display: flex;
                 gap: var(--size-3);
-                // padding: var(--size-3);
+                 /* padding: var(--size-3); */
                 flex-direction: column;
                 align-items: stretch;
                 min-height: 100vh;
@@ -132,8 +132,8 @@ const { pathname } = Astro.url;
             --y: calc(var(--offset, 0px) + var(--initial));
 
             /* take the spinner out of document flow and place it relative to scroll area */
-            // position: absolute;
-            // inset: auto 0;
+             /* position: absolute; */
+             /* inset: auto 0; */
 
             /* center the containing icon */
             display: grid;

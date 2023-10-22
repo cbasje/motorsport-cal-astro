@@ -1,0 +1,24 @@
+@media (--OSlight) {
+    :root {
+        color-scheme: light;
+
+        --gray-hue: var(--arc-hue, 285);
+        --gray-chroma: 0.0025;
+
+        --color-hue: var(--arc-hue, 285);
+    }
+
+    :where(*) {
+        --surface-1: var(--gray-0);
+        --surface-2: var(--gray-1);
+        --surface-3: var(--gray-2);
+        --surface-4: var(--gray-3);
+        --text-1: var(--gray-12);
+        --text-2: var(--gray-10);
+        --text-3: var(--gray-8);
+        --text-on-accent: var(--gray-0);
+
+        --accent-1: var(--color-4);
+        --accent-2: var(--color-3);
+    }
+}

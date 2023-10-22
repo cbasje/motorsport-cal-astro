@@ -42,15 +42,26 @@ main {
     }
 }
 
+a:not(.btn) {
+    color: var(--accent-1);
+    text-decoration: underline wavy;
+}
+a,
+button,
+input {
+    text-shadow: none;
+    outline-color: var(--accent-1);
+    outline-offset: var(--size-1);
+}
 :where(.btn) {
     display: flex;
     justify-content: center;
     align-items: center;
     border-radius: var(--radius-4);
 
-    // @media (--media){
+    /* @media (--media){ */
     transition: all 140ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
-    // }
+    /* } */
 
     &:hover {
         text-decoration: none;
@@ -101,7 +112,7 @@ main {
     right: env(safe-area-inset-right, 0);
     z-index: var(--layer-important);
 
-    :global(:is([data-icon], .iconify)) {
+    :is([data-icon], .iconify) {
         width: 1.5rem;
         height: 1.5rem;
     }
@@ -129,7 +140,7 @@ main {
         > li {
             padding: 0;
 
-            :global(button) {
+            button {
                 padding: 0.75rem;
                 background: transparent;
             }

@@ -7,7 +7,7 @@ This is a website that shows motorsport events from around the world. Currently,
 -   Site generator: [Astro](https://astro.build/)
 -   Interactive framework: [Svelte](https://docs.astro.build/en/guides/integrations-guide/svelte/)
 -   Deployment: [Fly.io](https://fly.io/)
--   Styling: [SCSS](https://sass-lang.com/documentation/syntax) + [open-props](https://open-props.style/)
+-   Styling: [PostCSS](https://postcss.org/) + [open-props](https://open-props.style/)
 -   Icons: [Phosphor Icons](https://phosphoricons.com/)
 -   Server: [tRPC](https://trpc.io/)
 

@@ -1,11 +1,23 @@
-@layer normalize {
-    @import "open-props/normalize";
-    @import "open-props/zindex";
-}
+@import "open-props/normalize" layer(normalize);
+@import "open-props/zindex" layer(normalize);
+
+@import "open-props/easings" layer(base);
+
+@import "open-props/sizes" layer(theming.sizes);
+
+@import "open-props/fonts" layer(fonts);
+@import "./fonts.postcss" layer(fonts);
+
+@import "themes/global.postcss" layer(global);
+
+@import "./oklch.postcss" layer(themes);
+@import "./themes/light.postcss" layer(themes);
+@import "./themes/dark.postcss" layer(themes);
+
+/* @import "open-props/buttons" layer(components); */
+@import "./components.postcss" layer(components);
 
 @layer base {
-    @import "open-props/easings";
-
     :is(.visually-hidden, .sr-only) {
         block-size: 0;
         inline-size: 0;
@@ -23,35 +35,7 @@
             --border-size-5: 10px;
             --border-size-6: 25px;
         }
-
-        @import "open-props/sizes";
     }
-
-    @layer fonts {
-        @import "open-props/fonts";
-        @import "./fonts.scss";
-    }
-
-    @layer global {
-        @import "./themes/global.scss";
-    }
-
-    @layer themes {
-        @import "./oklch.scss";
-
-        @media (--OSlight) {
-            @import "./themes/light.scss";
-        }
-        @media (--OSdark) {
-            @import "./themes/dark.scss";
-        }
-    }
-}
-
-@layer components {
-    // @import "open-props/buttons";
-
-    @import "./components.scss";
 }
 
 @layer overrides {
@@ -104,19 +88,8 @@
         color: inherit;
     }
     p {
-        // margin: 0 0 1.5em;
+        /* margin: 0 0 1.5em; */
         line-height: var(--font-lineheight-3);
-    }
-    a:not(.btn) {
-        color: var(--accent-1);
-        text-decoration: underline wavy;
-    }
-    a,
-    button,
-    input {
-        text-shadow: none;
-        outline-color: var(--accent-1);
-        outline-offset: var(--size-1);
     }
     ::selection {
         background-color: var(--accent-2);

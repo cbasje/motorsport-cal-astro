@@ -65,7 +65,7 @@
     </div>
 </div>
 
-<style lang="scss">
+<style lang="postcss">
     h1 {
         font-size: var(--font-size-5);
         line-height: var(--font-lineheight-3);

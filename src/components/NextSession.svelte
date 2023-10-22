@@ -56,7 +56,7 @@
     </div>
 {/if}
 
-<style lang="scss">
+<style lang="postcss">
     .next-session {
         background: var(--gray-0);
         color: var(--color-7);
