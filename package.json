@@ -19,7 +19,7 @@
         "deploy": "fly deploy --remote-only"
     },
     "dependencies": {
-        "@astrojs/node": "^6.0.0",
+        "@astrojs/node": "^6.0.3",
         "@astrojs/svelte": "^4.0.0",
         "@iconify-json/fluent-emoji-high-contrast": "^1.1.9",
         "@iconify-json/lucide": "^1.1.128",
@@ -27,8 +27,8 @@
         "@matthewp/astro-fastify": "^3.0.0",
         "@prisma/client": "^5.2.0",
         "@sveltestack/svelte-query": "^1.6.0",
-        "@trpc/client": "^10.38.1",
-        "@trpc/server": "^10.38.1",
+        "@trpc/client": "^10.41.0",
+        "@trpc/server": "^10.41.0",
         "astro": "latest",
         "astro-icon": "^1.0.0-next.2",
         "astro-seo": "^0.8.0",
@@ -37,7 +37,7 @@
         "nanostores": "^0.9.3",
         "open-props": "^1.6.8",
         "prisma": "^5.2.0",
-        "sharp": "^0.32.4",
+        "sharp": "0.33.0-alpha.9",
         "simplex-noise": "^4.0.1",
         "superjson": "^1.12.3",
         "svelte": "^4.2.0",
