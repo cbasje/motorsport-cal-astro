@@ -1,12 +1,12 @@
 # syntax = docker/dockerfile:1
 
-# Adjust NODE_VERSION as desired
-ARG NODE_VERSION=18.17.1
-FROM node:${NODE_VERSION}-slim as base
+# Adjust BUN_VERSION as desired
+ARG BUN_VERSION=1.0.0
+FROM oven/bun:${BUN_VERSION} as base
 
-LABEL fly_launch_runtime="Node.js/Prisma"
+LABEL fly_launch_runtime="Bun"
 
-# Node.js/Prisma app lives here
+# Bun app lives here
 WORKDIR /app
 
 # Set production environment
@@ -18,36 +18,33 @@ FROM base as build
 
 # Install packages needed to build node modules
 RUN apt-get update -qq && \
-    apt-get install -y build-essential openssl pkg-config python-is-python3
+    apt-get install -y build-essential pkg-config python-is-python3
 
 # Install node modules
-COPY --link package-lock.json package.json ./
-RUN npm ci --include=dev --legacy-peer-deps
-
-# Generate Prisma Client
-COPY --link prisma .
-ARG DATABASE_PW
-ENV DATABASE_URL "postgres://postgres:${DATABASE_PW}@motorsport-cal-db.flycast:5432?sslmode=disable"
-RUN npx prisma migrate deploy
-RUN npx prisma generate
+COPY --link bun.lockb package.json ./
+RUN bun install
 
 # Copy application code
 COPY --link . .
 
 # Build application
-RUN npm run build
+RUN bun --bun run build
 
 # Remove development dependencies
-RUN npm prune --omit=dev --legacy-peer-deps
+RUN rm -rf node_modules && \
+    bun install --ci
+
+# Apply Prisma migration
+ARG DATABASE_PW
+ENV DATABASE_URL "postgres://postgres:${DATABASE_PW}@motorsport-cal-db.flycast:5432?sslmode=disable"
+RUN bun --bun run migrate:deploy
+
+# Generate prisma
+RUN bun --bun run postinstall
 
 
 # Final stage for app image
 FROM base
-
-# Install packages needed for deployment
-RUN apt-get update -qq && \
-    apt-get install --no-install-recommends -y openssl && \
-    rm -rf /var/lib/apt/lists /var/cache/apt/archives
 
 # Copy built application
 COPY --from=build /app /app
@@ -56,4 +53,4 @@ COPY --from=build /app /app
 EXPOSE 8080
 ENV HOST=0.0.0.0
 ENV PORT=8080
-CMD npm run start
+CMD bun --bun run start
