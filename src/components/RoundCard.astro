@@ -14,7 +14,7 @@ interface Props {
 const { round, showNextSession, link } = Astro.props;
 ---
 
-<a class="round-header btn btn-color" href={link ?? "/"}>
+<button is="back-button" data-link={link} class="round-header btn btn-color">
     <Icon name={`fluent-emoji-high-contrast:${getSeriesIcon(round.series)}`} />
 
     <div class="round-title">
@@ -35,21 +35,9 @@ const { round, showNextSession, link } = Astro.props;
     </div>
 
     {showNextSession && <NextSessionWrapper roundId={round.id} client:idle />}
-</a>
-<!-- FIXME: doesn't work with ViewTransitions? -->
-<!-- <script>
-    async function goBack() {
-        console.log("l");
-        if (navigation.canGoBack) {
-            await navigation.back();
-        }
-    }
+</button>
 
-    const anchors = document.querySelectorAll<HTMLAnchorElement>(
-        ".round-header:not([href])"
-    );
-    anchors.forEach((a) => a.addEventListener("click", goBack));
-</script> -->
+<script src="../../lib/button-component.ts"></script>
 
 <style lang="postcss">
     .round-header {
@@ -58,6 +46,7 @@ const { round, showNextSession, link } = Astro.props;
         }
 
         display: flex;
+        width: 100%;
         flex-direction: column;
         align-items: flex-start;
         gap: var(--size-3);

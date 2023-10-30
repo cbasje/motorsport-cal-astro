@@ -11,7 +11,6 @@ const config = {
             files: ["./node_modules/open-props/media.min.css"],
         }),
         postcssCustomMedia({ preserve: true }),
-        // postcssPresetEnv,
         postcssNested(),
         autoprefixer(),
         cssnano(),
