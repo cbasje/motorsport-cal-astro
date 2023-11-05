@@ -59,6 +59,10 @@ const { round, showNextSession, link } = Astro.props;
         position: relative;
         overflow: hidden;
 
+        .round-title {
+            text-align: start;
+        }
+
         > :global([data-icon]) {
             color: var(--color-6);
             font-size: 12rem;
