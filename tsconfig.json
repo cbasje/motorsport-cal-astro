@@ -1,8 +1,15 @@
 {
-    "extends": "astro/tsconfigs/strict",
-    "compilerOptions": {
-        "baseUrl": ".",
-        "types": ["bun-types"]
-    },
-    "exclude": ["node_modules/**"]
+	"extends": "astro/tsconfigs/strict",
+	"compilerOptions": {
+		"types": ["bun-types"],
+		"baseUrl": ".",
+		"paths": {
+			"$components/*": ["src/components/*"],
+			"$layouts/*": ["src/layouts/*"],
+			"$pages/*": ["src/pages/*"],
+			"$db/*": ["src/db/*"],
+			"$lib/*": ["src/lib/*"]
+		}
+	},
+	"exclude": ["node_modules", "dist", "functions"]
 }
