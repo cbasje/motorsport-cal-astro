@@ -5,6 +5,8 @@ import {
 	type NewSession,
 	seriesIds,
 	sessionTypes,
+	type NewRound,
+	type Round,
 } from "$db/schema";
 import { fakerEN } from "@faker-js/faker";
 import { drizzle } from "drizzle-orm/bun-sqlite";
@@ -42,43 +44,49 @@ async function createCircuit() {
 	return result.id;
 }
 
-async function createRound(circuitId: number) {
+async function createRounds(circuitId: number) {
 	console.log("Creating round...");
 
-	const title = fakerEN.company.name() + " Grand Prix";
-	const start = fakerEN.date.soon();
-	const end = fakerEN.date.soon({ refDate: start });
+	const newRounds: Array<NewRound> = [];
+	for (let i = 0; i < 2; i++) {
+		const title = fakerEN.company.name() + " Grand Prix";
+		const start = fakerEN.date.future();
+		const end = fakerEN.date.soon({ refDate: start });
 
-	const [result] = await db
-		.insert(rounds)
-		.values({
-			number: 0,
+		newRounds.push({
+			number: i,
 			title,
 			season: start.getFullYear().toString(),
 			circuitId,
 			series: pickRandom(seriesIds),
 			start,
 			end,
-		})
-		.returning({ id: rounds.id });
-	return result.id;
+		});
+	}
+
+	return await db
+		.insert(rounds)
+		.values(newRounds)
+		.returning({ id: rounds.id, start: rounds.start });
 }
 
-async function createSessions(roundId: number) {
+async function createSessions(rounds: Pick<Round, "id" | "start">[]) {
 	console.log("Creating sessions...");
 
 	const newSessions: Array<NewSession> = [];
-	for (const [i, type] of sessionTypes.entries()) {
-		const start = fakerEN.date.soon();
-		const end = fakerEN.date.soon({ refDate: start });
+	for (const r of rounds) {
+		for (const [i, type] of sessionTypes.entries()) {
+			const start = fakerEN.date.soon({ refDate: r.start ?? undefined });
+			const end = fakerEN.date.soon({ refDate: r.start ?? undefined });
 
-		newSessions.push({
-			number: i,
-			start,
-			end,
-			roundId,
-			type,
-		});
+			newSessions.push({
+				number: i,
+				start,
+				end,
+				roundId: r.id,
+				type,
+			});
+		}
 	}
 
 	await db.insert(sessions).values(newSessions);
@@ -86,8 +94,8 @@ async function createSessions(roundId: number) {
 
 async function main() {
 	const circuitId = await createCircuit();
-	const roundId = await createRound(circuitId);
-	await createSessions(roundId);
+	const rounds = await createRounds(circuitId);
+	await createSessions(rounds);
 }
 
 try {
