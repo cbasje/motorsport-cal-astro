@@ -1,44 +1,44 @@
 <script lang="ts">
     import { onRefresh } from "$lib/scroll-pagination";
 
-    const refreshing1 = onRefresh(
+    const refreshingU = onRefresh(
         () =>
             new Promise<void>((resolve, reject) => {
-                console.log("ref1 ⬆️");
+                console.log("refU ⬆️");
                 setTimeout(() => {
                     resolve();
                 }, 3000);
             }),
-        "ptf-1",
+        "ptf-u",
         1
     );
-    const refreshing2 = onRefresh(
+    const refreshingD = onRefresh(
         () =>
             new Promise<void>((resolve, reject) => {
-                console.log("ref2 ⬇️");
+                console.log("refD ⬇️");
                 setTimeout(() => {
                     resolve();
                 }, 1000);
             }),
-        "ptf-2",
+        "ptf-d",
         -1
     );
 </script>
 
 <!-- this is the pull to refresh spinner -->
 <div class="main" id="scroll-area">
-    <div id="ptf-1" class="pull-to-refresh">
+    <div id="ptf-u" class="pull-to-refresh">
         <div class="ptr-icon" />
     </div>
     <div class="text">
-        {#if !$refreshing1}
-            <slot name="1" />
+        {#if !$refreshingU}
+            <slot name="U" />
         {/if}
-        {#if !$refreshing2}
-            <slot name="2" />
+        {#if !$refreshingD}
+            <slot name="D" />
         {/if}
     </div>
-    <div id="ptf-2" class="pull-to-refresh">
+    <div id="ptf-d" class="pull-to-refresh">
         <div class="ptr-icon" />
     </div>
 </div>
