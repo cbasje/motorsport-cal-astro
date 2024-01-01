@@ -1,16 +1,16 @@
 ---
-import { trpc } from "lib/trpc/client";
-import RoundCard from "../components/RoundCard.astro";
-import MainLayout from "../layouts/main.astro";
-import IndexNav from "src/components/IndexNav.astro";
+import RoundCard from "$components/RoundCard.astro";
+import MainLayout from "$layouts/main.astro";
+import IndexNav from "$components/IndexNav.astro";
 import { Icon } from "astro-icon/components";
+import * as rounds from '$db/round-repository';
 
 const { pathname } = Astro.url;
 const url = Astro.request.url;
 const params = new URL(url).searchParams;
 
 const weekOffset = Number(params.get("offset"));
-const weekends = await trpc.rounds.getWeekend.query({ weekOffset });
+const weekends = await rounds.getWeekend({ weekOffset });
 
 const now = Date.now();
 ---
@@ -19,7 +19,7 @@ const now = Date.now();
     <IndexNav />
 
     <a href={`?offset=${weekOffset - 1}`} class="btn btn-surface">
-        <Icon name="lucide:chevron-up" />
+        <Icon name="chevron-up" />
         <span>Previous</span>
     </a>
     <section>
@@ -39,19 +39,19 @@ const now = Date.now();
                             transition:name={`round-${round.id}`}
                             style={`--color-hue: var(--${round.series}-hue)`}
                             class={
-                                round.endDate && round.endDate.valueOf() < now
+                                round.end && round.end.valueOf() < now
                                     ? "past"
                                     : ""
                             }
                         >
                             <RoundCard
+                                round={round}
                                 link={`/round/${round.id}`}
-                                {round}
                                 showNextSession
                             />
 
                             <div class="stack-wrapper" aria-hidden="true">
-                                {[...Array(round._count.sessions)].map(
+                                {[...Array(round.sessionCount)].map(
                                     (_n, i) => (
                                         <div
                                             data-index={i}
@@ -69,7 +69,7 @@ const now = Date.now();
         </ul>
     </section>
     <a href={`?offset=${weekOffset + 1}`} class="btn btn-surface">
-        <Icon name="lucide:chevron-down" />
+        <Icon name="chevron-down" />
         <span>Next</span>
     </a>
 </MainLayout>

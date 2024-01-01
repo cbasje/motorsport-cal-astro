@@ -1,5 +1,5 @@
 <script lang="ts">
-    import type { NextRace } from "lib/types";
+    import * as sessions from '$db/session-repository'
 
     export let nextRace: NextRace;
 
@@ -20,14 +20,14 @@
     $: {
         days =
             new Date(
-                nextRace.startDate.valueOf() - currentDate.valueOf()
+                nextRace.start.valueOf() - current.valueOf()
             ).getDate() - 1;
         hours =
             new Date(
-                nextRace.startDate.valueOf() - currentDate.valueOf()
+                nextRace.start.valueOf() - current.valueOf()
             ).getHours() - 1;
         mins = new Date(
-            nextRace.startDate.valueOf() - currentDate.valueOf()
+            nextRace.start.valueOf() - current.valueOf()
         ).getMinutes();
     }
 </script>

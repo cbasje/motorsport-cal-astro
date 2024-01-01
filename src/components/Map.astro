@@ -1,10 +1,9 @@
 ---
+import * as circuits from '$db/circuit-repository';
 import "maplibre-gl/dist/maplibre-gl.css";
-import type { trpc } from "lib/trpc/client";
 
-// type Marker = { lat?: number; lon?: number };
 type Marker = Awaited<
-    ReturnType<typeof trpc.circuits.getMapMarkers.query>
+    ReturnType<typeof circuits.getMapMarkers>
 >[number];
 interface Props {
     markers: Marker[];

@@ -1,9 +1,7 @@
 <script lang="ts">
-    import Icon from "@iconify/svelte";
-    import type { SeriesId } from "lib/types";
-    import { seriesIds } from "lib/types";
-    import { getSeriesIcon, getSeriesTitle } from "lib/utils/series";
+    import { getSeriesIcon, getSeriesTitle } from "$lib/utils/series";
     import { onMount } from "svelte";
+    import { seriesIds, type SeriesId } from "$db/schema";
 
     export let series: SeriesId[];
     let seriesCopy: SeriesId[];
@@ -20,7 +18,8 @@
 <div class="multi-select">
     <fieldset aria-label="Filters for series">
         <label for="all" aria-label="Show all series" class="clear-all">
-            <Icon icon="ph:list-checks-bold" />
+            <!-- <Icon icon="ph:list-checks-bold" /> -->
+			<slot name="icon-show-all" />
             <span>All</span>
             <input
                 id="all"
@@ -33,10 +32,11 @@
         <div class="divider horizontal" aria-hidden />
         {#each seriesIds as s}
             <label for={s}>
-                <Icon
-                    icon="fluent-emoji-high-contrast:{getSeriesIcon(s)}"
-                    style="--color-hue: var(--{s}-hue)"
-                />
+				<!-- <Icon
+					icon="fluent-emoji-high-contrast:{getSeriesIcon(s)}"
+					style="--color-hue: var(--{s}-hue)"
+				/> -->
+				<slot name="icon-series" series={s} />
                 <span>{getSeriesTitle(s)}</span>
                 <input
                     id={s}

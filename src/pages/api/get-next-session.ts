@@ -1,13 +1,16 @@
 import type { APIRoute } from "astro";
 import * as sessions from "$db/session-repository";
-import type { SeriesId } from "$db/schema";
 
 export const GET: APIRoute = async ({ request }) => {
 	try {
 		const params = new URL(request.url).searchParams;
-		const seriesIds = params.get("series")?.split(",") as SeriesId[];
+		const roundId = params.get("roundId");
+		const now = params.get("now");
 
-		const data = await sessions.getNextRaces(seriesIds);
+		const data = await sessions.getNextSession({
+			roundId: roundId ? Number(roundId) : undefined,
+			now: now ? new Date(now) : undefined,
+		});
 
 		return new Response(
 			JSON.stringify({

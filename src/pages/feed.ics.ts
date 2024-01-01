@@ -1,110 +1,95 @@
 import type { APIRoute } from "astro";
 import { type DateArray, type EventAttributes, createEvents } from "ics";
-import type { trpc } from "lib/trpc/client";
-import { appRouter } from "lib/trpc/router";
-import { getSeriesEmoji } from "lib/utils/series";
-import { getSessionTitle } from "lib/utils/sessions";
+import { getSeriesEmoji } from "$lib/utils/series";
+import { getSessionTitle } from "$lib/utils/sessions";
+import * as feed from "$db/feed-repository";
+
+type Session = Awaited<ReturnType<typeof feed.getAllSessions>>[number];
 
 const TITLE = "Motorsport Calendar";
 const PRODUCT = "benjamiin..";
 
 const getCalDate = (date: Date): DateArray => {
-    // const arr = DateTime.fromJSDate(date, { zone: "utc" })
-    //     .toFormat("yyyy-M-d-H-m")
-    //     .split("-")
-    //     .map((s: string) => Number(s));
-    return [
-        date.getFullYear(),
-        date.getMonth() + 1,
-        date.getDate(),
-        date.getHours(),
-        date.getMinutes(),
-    ];
+	return [
+		date.getFullYear(),
+		date.getMonth() + 1,
+		date.getDate(),
+		date.getHours(),
+		date.getMinutes(),
+	];
 };
 
-type AllSessions = Awaited<ReturnType<typeof trpc.feed.getAllSessions.query>>;
-
-export const getFeed = async (
-    items: AllSessions
+export const generateFeed = async (
+	items: Session[]
 ): Promise<EventAttributes[]> => {
-    let events: EventAttributes[] = [];
+	let events: EventAttributes[] = [];
 
-    for (const session of items) {
-        const { round } = session;
-        const { circuit } = round;
+	for (const session of items) {
+		if (!session.start || !session.end) {
+			continue;
+		}
 
-        if (!session.startDate || !session.endDate || !round || !circuit) {
-            continue;
-        }
+		const type = getSessionTitle(
+			session.series,
+			session.type,
+			session.number
+		);
+		const title = `${getSeriesEmoji(session.series)} ${session.series} ${
+			session.roundTitle
+		} - ${type}`;
 
-        const type = getSessionTitle(
-            session.round.series,
-            session.type,
-            session.number
-        );
-        const title = `${getSeriesEmoji(session.round.series)} ${
-            session.round.series
-        } ${session.round.title} - ${type}`;
+		events.push({
+			calName: TITLE,
+			productId: PRODUCT,
+			title,
+			startInputType: "utc",
+			start: getCalDate(session.start),
+			end: getCalDate(session.end),
+			description: `It is time for the ${session.series} ${
+				session.roundTitle
+			}!${
+				session.link &&
+				` Watch this race and its sessions via this link: ${session.link}`
+			}`,
+			// htmlContent:
+			// 	'<!DOCTYPE html><html><body><p>This is<br>test<br>html code.</p></body></html>',
+			location: session.circuitTitle ?? undefined,
+			url: session.link ?? undefined,
+			geo:
+				session.lon && session.lat
+					? { lon: session.lon, lat: session.lat }
+					: undefined,
+		});
+	}
 
-        events.push({
-            calName: TITLE,
-            productId: PRODUCT,
-            title,
-            startInputType: "utc",
-            start: getCalDate(session.startDate),
-            end: getCalDate(session.endDate),
-            description: `It is time for the ${session.round.series} ${
-                session.round.title
-            }!${
-                round.link &&
-                ` Watch this race and its sessions via this link: ${round.link}`
-            }`,
-            // htmlContent:
-            // 	'<!DOCTYPE html><html><body><p>This is<br>test<br>html code.</p></body></html>',
-            location: round.circuit.title,
-            url:
-                round.link !== "" && round.link !== null
-                    ? round.link
-                    : undefined,
-            geo:
-                circuit.lon && circuit.lat
-                    ? { lon: circuit.lon, lat: circuit.lat }
-                    : undefined,
-        });
-    }
-
-    return events;
+	return events;
 };
 
-export const GET: APIRoute = async ({ request }) => {
-    try {
-        const caller = appRouter.createCaller({
-            req: request,
-            resHeaders: request.headers,
-        });
-        const sessions = await caller.feed.getAllSessions();
+export const GET: APIRoute = async () => {
+	try {
+		const sessions = await feed.getAllSessions();
 
-        const events = await getFeed(sessions);
-        const feed = await new Promise<string>((resolve, reject) => {
-            createEvents(events, (error: Error | undefined, value: string) => {
-                if (error) {
-                    reject(error);
-                    console.error(error);
-                }
-                resolve(value);
-            });
-        });
+		const events = await generateFeed(sessions);
+		const eventFeed = await new Promise<string>((resolve, reject) => {
+			createEvents(events, (error: Error | undefined, value: string) => {
+				if (error) {
+					reject(error);
+					console.error(error);
+				}
+				resolve(value);
+			});
+		});
 
-        return new Response(feed, {
-            status: 200,
-            headers: {
-                "Content-Type": "text/calendar",
-            },
-        });
-    } catch (error) {
-        console.error(error);
-        return new Response(null, {
-            status: 500,
-        });
-    }
+		return new Response(eventFeed, {
+			status: 200,
+			headers: {
+				"Content-Type": "text/calendar",
+			},
+		});
+	} catch (error) {
+		console.error(error);
+		return new Response(null, {
+			status: 500,
+		});
+	}
 };

@@ -1,12 +1,11 @@
 ---
-import type { Session } from "@prisma/client";
-import type { SeriesId } from "lib/types";
-import { getSessionTitle } from "lib/utils/sessions";
+import type { SeriesId, Session } from "$db/schema";
+import { getSessionTitle } from "$lib/utils/sessions";
 import Time from "./Time.svelte";
 
 interface Props {
     session: Session;
-    series: SeriesId;
+    series: SeriesId | null;
     timeZone: string;
 }
 const { session, series, timeZone } = Astro.props;
@@ -16,8 +15,8 @@ const { session, series, timeZone } = Astro.props;
     {getSessionTitle(series, session.type, session.number)}
 </h3>
 <Time
-    startDate={session.startDate}
-    endDate={session.endDate}
+    start={session.start}
+    end={session.end}
     timeZone={timeZone ?? undefined}
     client:idle
 />

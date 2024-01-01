@@ -21,12 +21,5 @@ pnpm-debug.log*
 # macOS-specific files
 .DS_Store
 
-# Local Netlify folder
-.netlify
-
-# Local Vercel folder
-.vercel
-
 # Development database
-prisma-dev/dev.db
-prisma-dev/dev.db-journal
+sqlite.db

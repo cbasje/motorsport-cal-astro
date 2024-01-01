@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { onRefresh } from "lib/scroll-pagination";
+    import { onRefresh } from "$lib/scroll-pagination";
 
     const refreshing1 = onRefresh(
         () =>

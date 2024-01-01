@@ -7,9 +7,12 @@
 
     const queryClient = new QueryClient();
 
-    export let roundId: string;
+    export let roundId: number;
 </script>
 
 <QueryClientProvider client={queryClient}>
-    <NextSession {roundId} />
+    <NextSession {roundId}>
+		<slot name="icon-future" slot="icon-future" />
+		<slot name="icon-now" slot="icon-now" />
+	</NextSession>
 </QueryClientProvider>
