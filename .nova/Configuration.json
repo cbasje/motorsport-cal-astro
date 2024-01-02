@@ -1,4 +1,7 @@
 {
   "workspace.color" : 6,
-  "workspace.name" : "porpoise"
+  "workspace.name" : "porpoise",
+  "workspace.preview_append_paths" : false,
+  "workspace.preview_type" : "custom",
+  "workspace.preview_url" : "http:\/\/localhost:3000"
 }

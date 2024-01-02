@@ -32,6 +32,6 @@ export default defineConfig({
 	],
 
 	site: import.meta.env.PROD
-		? "https://motorsport-cal-astro.fly.dev"
+		? "https://motorsport.benjami.in"
 		: "http://localhost:3000",
 });
