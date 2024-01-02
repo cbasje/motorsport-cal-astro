@@ -13,9 +13,6 @@ export default defineConfig({
 		svelte(),
 		icon({
 			include: {
-				// FIXME:
-				// ph: ["*"],
-				// lucide: ["*"],
 				"fluent-emoji-high-contrast": ["*"],
 			},
 			svgoOptions: {
