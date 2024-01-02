@@ -1,8 +1,18 @@
-import { drizzle } from "drizzle-orm/bun-sqlite";
-import { Database } from "bun:sqlite";
-import { migrate } from "drizzle-orm/bun-sqlite/migrator";
+import { drizzle } from "drizzle-orm/node-postgres";
+import { migrate } from "drizzle-orm/node-postgres/migrator";
+import postgres from "pg";
 
-const sqlite = new Database(process.env.DATABASE_URL);
-export const db = drizzle(sqlite);
+export const connectionString = process.env.DATABASE_URL ?? "";
 
-migrate(db, { migrationsFolder: "./drizzle/migrations" });
+// Disable prefetch as it is not supported for "Transaction" pool mode
+export const pool = new postgres.Pool({
+	connectionString,
+});
+export const db = drizzle(pool);
+
+// This will run migrations on the database, skipping the ones already applied for migrations
+const migrationPool = new postgres.Pool({
+	connectionString,
+	max: 1,
+});
+migrate(drizzle(migrationPool), { migrationsFolder: "./drizzle/migrations" });

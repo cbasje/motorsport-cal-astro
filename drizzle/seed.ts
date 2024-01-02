@@ -9,12 +9,15 @@ import {
 	type Round,
 } from "$db/schema";
 import { fakerEN } from "@faker-js/faker";
-import { drizzle } from "drizzle-orm/bun-sqlite";
 import { exit } from "node:process";
-import { Database } from "bun:sqlite";
+import { drizzle } from "drizzle-orm/node-postgres";
+import postgres from "pg";
 
-const sqlite = new Database(process.env.DATABASE_URL);
-export const db = drizzle(sqlite);
+// Disable prefetch as it is not supported for "Transaction" pool mode
+export const pool = new postgres.Pool({
+	connectionString: process.env.DATABASE_URL ?? "",
+});
+export const db = drizzle(pool);
 
 const pickRandom = <T extends Readonly<any[]>>(
 	input: T

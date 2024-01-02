@@ -1,12 +1,12 @@
 {
   "version": "5",
-  "dialect": "sqlite",
+  "dialect": "pg",
   "entries": [
     {
       "idx": 0,
       "version": "5",
-      "when": 1704121162134,
-      "tag": "0000_flimsy_the_initiative",
+      "when": 1704167201997,
+      "tag": "0000_dark_mindworm",
       "breakpoints": true
     }
   ]

@@ -1,5 +1,12 @@
 import { relations } from "drizzle-orm";
-import { real, integer, sqliteTable, text } from "drizzle-orm/sqlite-core";
+import {
+	real,
+	integer,
+	pgTable,
+	text,
+	timestamp,
+	serial,
+} from "drizzle-orm/pg-core";
 
 export const seriesIds = [
 	"F1",
@@ -15,12 +22,12 @@ export type SeriesId = (typeof seriesIds)[number];
 export const sessionTypes = ["R", "S", "SQ", "Q", "FP", "T"] as const;
 export type SessionType = (typeof sessionTypes)[number];
 
-export const weather = sqliteTable("weather", {
-	id: integer("id", { mode: "number" }).primaryKey({ autoIncrement: true }),
+export const weather = pgTable("weather", {
+	id: serial("id").primaryKey(),
 	temp: real("temp").notNull(),
-	weatherId: integer("weather_id", { mode: "number" }).notNull(),
-	dt: integer("dt", { mode: "timestamp" }).notNull(),
-	circuitId: integer("circuit_id", { mode: "number" }).notNull(),
+	weatherId: integer("weather_id").notNull(),
+	dt: timestamp("dt").notNull(),
+	circuitId: integer("circuit_id").notNull(),
 });
 
 const weatherRelations = relations(weather, ({ one }) => ({
@@ -33,14 +40,14 @@ const weatherRelations = relations(weather, ({ one }) => ({
 export type Weather = typeof weather.$inferSelect;
 export type NewWeather = typeof weather.$inferInsert;
 
-export const circuits = sqliteTable("circuits", {
-	id: integer("id", { mode: "number" }).primaryKey({ autoIncrement: true }),
+export const circuits = pgTable("circuits", {
+	id: serial("id").primaryKey(),
 	title: text("title").notNull().unique(),
-	wikipediaPageId: integer("wikipedia_page_id", { mode: "number" }).unique(),
+	wikipediaPageId: integer("wikipedia_page_id").unique(),
 	locality: text("locality"),
 	country: text("country"),
 	timezone: text("timezone"),
-	utcOffset: integer("utc_offset", { mode: "number" }),
+	utcOffset: integer("utc_offset"),
 	lon: real("lon"),
 	lat: real("lat"),
 });
@@ -53,15 +60,15 @@ const circuitRelations = relations(circuits, ({ many }) => ({
 export type Circuit = typeof circuits.$inferSelect;
 export type NewCircuit = typeof circuits.$inferInsert;
 
-export const rounds = sqliteTable("rounds", {
-	id: integer("id", { mode: "number" }).primaryKey({ autoIncrement: true }),
-	number: integer("number", { mode: "number" }).default(0).notNull(),
+export const rounds = pgTable("rounds", {
+	id: serial("id").primaryKey(),
+	number: integer("number").default(0).notNull(),
 	title: text("title").notNull(),
 	season: text("season").notNull(),
 	link: text("link"),
-	start: integer("start", { mode: "timestamp" }),
-	end: integer("end", { mode: "timestamp" }),
-	circuitId: integer("circuit_id", { mode: "number" }).notNull(),
+	start: timestamp("start"),
+	end: timestamp("end"),
+	circuitId: integer("circuit_id").notNull(),
 	series: text("series").$type<SeriesId>(),
 });
 
@@ -76,12 +83,12 @@ const roundRelations = relations(rounds, ({ one, many }) => ({
 export type Round = typeof rounds.$inferSelect;
 export type NewRound = typeof rounds.$inferInsert;
 
-export const sessions = sqliteTable("sessions", {
-	id: integer("id", { mode: "number" }).primaryKey({ autoIncrement: true }),
-	number: integer("number", { mode: "number" }).default(0).notNull(),
-	start: integer("start", { mode: "timestamp" }).notNull(),
-	end: integer("end", { mode: "timestamp" }).notNull(),
-	roundId: integer("round_id", { mode: "number" }).notNull(),
+export const sessions = pgTable("sessions", {
+	id: serial("id").primaryKey(),
+	number: integer("number").default(0).notNull(),
+	start: timestamp("start").notNull(),
+	end: timestamp("end").notNull(),
+	roundId: integer("round_id").notNull(),
 	type: text("type").$type<SessionType>(),
 });
 
