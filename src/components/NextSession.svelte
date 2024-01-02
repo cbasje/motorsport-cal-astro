@@ -26,6 +26,7 @@
         async () => {
             const res = await fetch(url, { method: "GET" });
 			const {data}= (await res.json());
+			if (!data) return undefined;
 			return {
 				...data,
 				start: data.start ? new Date(data.start) : undefined,

@@ -70,8 +70,45 @@ export const getNextSession = async (input: {
 				lte(sessions.end, end)
 			)
 		)
-		.orderBy(asc(sessions.start));
+		.orderBy(asc(sessions.start))
+		.limit(1);
 	return first;
+};
+
+export const getNextSessionWidget = async () => {
+	return await db.transaction(async (tx) => {
+		const [nextSession] = await tx
+			.select({
+				type: sessions.type,
+				number: sessions.number,
+				start: sessions.start,
+				end: sessions.end,
+				series: rounds.series,
+			})
+			.from(sessions)
+			.leftJoin(rounds, eq(sessions.roundId, rounds.id))
+			.orderBy(asc(sessions.start))
+			.limit(1);
+
+		const millis = Date.now() - nextSession.start.valueOf();
+		const weekOffset = Math.floor(millis / (7 * 24 * 60 * 60));
+
+		const [start, end] = getWeekendDates(weekOffset);
+		const nextRounds = await tx
+			.select({
+				series: rounds.series,
+			})
+			.from(rounds)
+			.where(and(gte(rounds.end, start), lte(rounds.end, end)))
+			.limit(1);
+
+		return {
+			firstRound: nextRounds.at(0),
+			session: nextSession,
+			weekOffset,
+			series: nextRounds.map((r) => r.series),
+		};
+	});
 };
 
 export const getSessionsByRoundId = async (id: number) => {

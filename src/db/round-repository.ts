@@ -31,30 +31,29 @@ export const getAll = async () => {
 	return await db.select().from(rounds).orderBy(asc(rounds.series));
 };
 
-export const getWeekend = async (input: { weekOffset: number; now?: Date }) => {
+export const getWeekends = async (input: {
+	startOffset: number | undefined;
+	endOffset: number | undefined;
+}) => {
 	const schema = z.object({
-		weekOffset: z.number().int().min(-52).max(52).default(0),
-		now: z.date().optional(),
-		showSessions: z.boolean().optional().default(false),
+		startOffset: z.number().int().min(-52).max(52).default(0),
+		endOffset: z.number().int().min(-52).max(52).default(0),
 	});
 
-	const [start, end] = getWeekendDates(input.weekOffset);
-	const w = await db
+	const [start, end] = getWeekendDates(input.startOffset, input.endOffset);
+	return await db
 		.select({
 			id: rounds.id,
 			title: rounds.title,
 			series: rounds.series,
 			start: rounds.start,
 			end: rounds.end,
-			sessionCount: sql<number>`count(${sessions.id})`,
 			country: circuits.country,
 			locality: circuits.locality,
 			circuitTitle: circuits.title,
 		})
 		.from(rounds)
-		.leftJoin(sessions, eq(rounds.id, sessions.roundId))
 		.leftJoin(circuits, eq(rounds.circuitId, circuits.id))
 		.where(and(gte(rounds.start, start), lte(rounds.end, end)))
 		.orderBy(asc(rounds.series));
-	return w;
 };

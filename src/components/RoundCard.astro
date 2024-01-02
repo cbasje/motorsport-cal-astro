@@ -5,7 +5,7 @@ import { getSeriesIcon, getSeriesTitleShort } from "$lib/utils/series";
 import NextSessionWrapper from "$components/NextSessionWrapper.svelte";
 import * as rounds from '$db/round-repository';
 
-type Round = Awaited<ReturnType<typeof rounds.getWeekend>>[number];
+type Round = Awaited<ReturnType<typeof rounds.getWeekends>>[number];
 interface Props {
     round: Round;
     showNextSession?: boolean;

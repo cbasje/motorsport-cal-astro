@@ -1,24 +1,14 @@
 import type { APIRoute } from "astro";
-import * as rounds from "$db/round-repository";
 import * as sessions from "$db/session-repository";
 
 export const GET: APIRoute = async () => {
 	try {
-		const now = new Date();
-		const [weekend, session] = await Promise.all([
-			rounds.getWeekend({
-				weekOffset: 0,
-				now,
-			}),
-			sessions.getNextSession({
-				now,
-			}),
-		]);
+		const data = await sessions.getNextSessionWidget();
 
 		return new Response(
 			JSON.stringify({
 				success: true,
-				data: { rounds: weekend, session },
+				data,
 			})
 		);
 	} catch (error) {

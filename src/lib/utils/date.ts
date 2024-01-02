@@ -52,7 +52,7 @@ export const relTime = (date: Date, now: number) => {
 	}
 };
 
-export const getWeekendDates = (weekOffset = 0) => {
+export const getWeekendDates = (start = 0, end?: number) => {
 	const now = new Date();
 
 	const lastMonday = new Date();
@@ -61,8 +61,8 @@ export const getWeekendDates = (weekOffset = 0) => {
 	const day = now.getDay();
 	const diff = (day + 7 - 1) % 7; // Calculate the difference from Monday (1) to the current day
 
-	lastMonday.setDate(now.getDate() - diff + 7 * weekOffset);
-	nextMonday.setDate(now.getDate() - diff + 7 * (weekOffset + 1));
+	lastMonday.setDate(now.getDate() - diff + 7 * start);
+	nextMonday.setDate(now.getDate() - diff + 7 * ((end ?? start) + 1));
 
 	lastMonday.setHours(12, 0, 0, 0);
 	nextMonday.setHours(12, 0, 0, 0);
