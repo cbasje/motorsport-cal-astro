@@ -3,8 +3,8 @@ import type { Circuit, SeriesId } from "$db/schema";
 const regionNames = new Intl.DisplayNames(undefined, { type: "region" });
 
 export const getCircuitTitle = (
-	series: SeriesId,
-	circuitTitle: string,
+	series: SeriesId | null,
+	circuitTitle: string | null,
 	countryCode: string | null,
 	locality: Circuit["locality"]
 ) => {

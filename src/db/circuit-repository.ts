@@ -1,6 +1,6 @@
 import { db } from "$db/drizzle";
-import { circuits } from "./schema";
-import { eq } from "drizzle-orm";
+import { circuits, rounds, type SeriesId } from "./schema";
+import { eq, sql } from "drizzle-orm";
 
 // FIXME: log!
 
@@ -23,6 +23,9 @@ export const getMapMarkers = async () => {
 			lat: circuits.lat,
 			lon: circuits.lon,
 			title: circuits.title,
+			series: sql<SeriesId[]>`${db
+				.select({ series: sql`json_agg(${rounds.series})` })
+				.from(rounds)}`.as("series"),
 		})
 		.from(circuits);
 };

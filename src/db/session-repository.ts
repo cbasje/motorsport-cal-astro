@@ -87,11 +87,12 @@ export const getNextSessionWidget = async () => {
 			})
 			.from(sessions)
 			.leftJoin(rounds, eq(sessions.roundId, rounds.id))
+			.where(gte(sessions.end, new Date()))
 			.orderBy(asc(sessions.start))
 			.limit(1);
 
-		const millis = Date.now() - nextSession.start.valueOf();
-		const weekOffset = Math.floor(millis / (7 * 24 * 60 * 60));
+		const millis = nextSession.start.valueOf() - Date.now();
+		const weekOffset = Math.floor(millis / (7 * 24 * 60 * 60 * 1000));
 
 		const [start, end] = getWeekendDates(weekOffset);
 		const nextRounds = await tx
