@@ -1,12 +1,12 @@
 <script lang="ts">
-    import { timeFormat } from "lib/stores/dateStore";
-    import { relTime, trackTime, yourTime } from "lib/utils/date";
+    import { timeFormat } from "$lib/stores/dateStore";
+    import { relTime, trackTime, yourTime } from "$lib/utils/date";
     import { onMount } from "svelte";
 
     export let timeZone: string | undefined = undefined;
-    export let startDate: Date;
-    export let endDate: Date | undefined = undefined;
-
+    export let start: Date;
+    export let end: Date | undefined = undefined;
+	
     let now = Date.now();
 
     // FIXME: can this be in store?
@@ -19,12 +19,12 @@
     });
 </script>
 
-<time datetime={startDate.toISOString()}>
+<time datetime={start.toISOString()}>
     {#if $timeFormat === "track" && timeZone}
-        {trackTime(timeZone, startDate, endDate)}
+        {trackTime(timeZone, start, end)}
     {:else if $timeFormat === "rel"}
-        {relTime(startDate, now)}
+        {relTime(start, now)}
     {:else}
-        {yourTime(startDate, endDate)}
+        {yourTime(start, end)}
     {/if}
 </time>

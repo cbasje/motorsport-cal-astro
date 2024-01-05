@@ -1,34 +1,34 @@
-import node from "@astrojs/node";
 import svelte from "@astrojs/svelte";
 import icon from "astro-icon";
 import { defineConfig } from "astro/config";
+import bun from "./adapter/index";
 
 export default defineConfig({
-    output: "server",
-    adapter: node({
-        mode: "standalone",
-    }),
-    integrations: [
-        svelte(),
-        icon({
-            include: {
-                // FIXME:
-                ph: ["*"],
-                lucide: ["*"],
-                "fluent-emoji-high-contrast": ["*"],
-            },
-        }),
-    ],
+	output: "server",
+	adapter: bun({
+		port: 3000,
+	}),
 
-    site: import.meta.env.PROD
-        ? "https://motorsport-cal-astro.fly.dev"
-        : "http://localhost:4321",
-    vite: {
-        resolve: {
-            alias: {
-                ".prisma/client/index":
-                    "/app/node_modules/.prisma/client/index.js",
-            },
-        },
-    },
+	integrations: [
+		svelte(),
+		icon({
+			include: {
+				"fluent-emoji-high-contrast": ["*"],
+			},
+			svgoOptions: {
+				plugins: [
+					{
+						name: "convertColors",
+						params: {
+							currentColor: true,
+						},
+					},
+				],
+			},
+		}),
+	],
+
+	site: import.meta.env.PROD
+		? "https://motorsport.benjami.in"
+		: "http://localhost:3000",
 });

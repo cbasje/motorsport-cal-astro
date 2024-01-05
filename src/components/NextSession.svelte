@@ -1,21 +1,38 @@
 <script lang="ts">
-    import Icon from "@iconify/svelte";
     import { useQuery } from "@sveltestack/svelte-query";
-    import { trpc } from "lib/trpc/client";
-    import { getSessionTitle } from "lib/utils/sessions";
+    import { getSessionTitle } from "$lib/utils/sessions";
     import { onMount } from "svelte";
     import Time from "./Time.svelte";
+    import type { Circuit, Round, Session } from "$db/schema";
+	
+	type NextSession = {
+		type: Session['type'],
+		start: Session['start'],
+		end: Session['end'],
+		number: Session['number'],
+		series: Round['series'],
+		timezone: Circuit['timezone'],
+	};
 
     let now = new Date();
-    export let roundId: string;
+    export let roundId: number;
+	
+	const url = new URL('/api/get-next-session', 'http://localhost:3000');
+	url.searchParams.set('now', now.toISOString());
+	url.searchParams.set('roundId', String(roundId));
 
     const queryResult = useQuery(
         "nextSession",
-        () =>
-            trpc.sessions.getNextSession.query({
-                roundId,
-                now,
-            }),
+        async () => {
+            const res = await fetch(url, { method: "GET" });
+			const {data}= (await res.json());
+			if (!data) return undefined;
+			return {
+				...data,
+				start: data.start ? new Date(data.start) : undefined,
+				end: data.end ? new Date(data.end) : undefined,
+			}as NextSession
+		},
         { refetchOnWindowFocus: false }
     );
 
@@ -36,22 +53,22 @@
     </div> -->
 {:else if $queryResult.data}
     <div class="next-session">
-        {#if $queryResult.data.startDate.valueOf() >= now.valueOf()}
-            <Icon icon="ph:arrow-line-right-bold" />
+        {#if $queryResult.data.start.valueOf() >= now.valueOf()}
+			<slot name="icon-future" />
         {:else}
-            <Icon icon="ph:car-bold" />
+			<slot name="icon-now" />
             <span>...</span>
         {/if}
         <span>
             {getSessionTitle(
-                $queryResult.data.round.series,
+                $queryResult.data.series,
                 $queryResult.data.type,
                 $queryResult.data.number
             )}
         </span>
         <Time
-            startDate={$queryResult.data.startDate}
-            timeZone={$queryResult.data.round.circuit.timezone ?? undefined}
+            start={$queryResult.data.start}
+            timeZone={$queryResult.data.timezone ?? undefined}
         />
     </div>
 {/if}

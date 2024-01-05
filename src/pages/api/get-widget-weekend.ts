@@ -1,37 +1,35 @@
 import type { APIRoute } from "astro";
-import { appRouter } from "lib/trpc/router";
+import * as sessions from "$db/session-repository";
 
-export const GET: APIRoute = async ({ request }) => {
-    try {
-        const now = new Date();
-        const caller = appRouter.createCaller({
-            req: request,
-            resHeaders: request.headers,
-        });
-        const [rounds, session] = await Promise.all([
-            caller.rounds.getWeekend({
-                weekOffset: 0,
-                now,
-            }),
-            caller.sessions.getNextSession({
-                now,
-            }),
-        ]);
+export const GET: APIRoute = async () => {
+	try {
+		const data = await sessions.getNextSessionWidget();
 
-        return new Response(
-            JSON.stringify({
-                success: true,
-                data: { rounds, session },
-            })
-        );
-    } catch (error) {
-        let message = "Error";
-        if (error instanceof Error) {
-            message = error.message;
-        }
-        console.error("🚨", message);
-        return new Response(JSON.stringify({ success: false, message }), {
-            status: 500,
-        });
-    }
+		return new Response(
+			JSON.stringify({
+				success: true,
+				data,
+				h: {
+					session: {
+						type: "FP",
+						number: 4,
+						start: "2024-04-14T18:14:36.075Z",
+						end: "2024-04-15T06:52:10.228Z",
+						series: "F2",
+					},
+					weekOffset: -14742,
+					series: [],
+				},
+			})
+		);
+	} catch (error) {
+		let message = "Error";
+		if (error instanceof Error) {
+			message = error.message;
+		}
+		console.error("🚨", message);
+		return new Response(JSON.stringify({ success: false, message }), {
+			status: 500,
+		});
+	}
 };

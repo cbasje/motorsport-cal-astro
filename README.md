@@ -9,7 +9,6 @@ This is a website that shows motorsport events from around the world. Currently,
 -   Deployment: [Fly.io](https://fly.io/)
 -   Styling: [PostCSS](https://postcss.org/) + [open-props](https://open-props.style/)
 -   Icons: [Phosphor Icons](https://phosphoricons.com/)
--   Server: [tRPC](https://trpc.io/)
 
 ## Development
 

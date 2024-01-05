@@ -1,0 +1,12 @@
+{
+  "actions" : {
+    "build" : {
+      "enabled" : true,
+      "script" : "bun --bun run build"
+    },
+    "run" : {
+      "enabled" : true,
+      "script" : "bun --bun run dev"
+    }
+  }
+}

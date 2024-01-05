@@ -1,11 +1,11 @@
 ---
 import { Icon } from "astro-icon/components";
-import type { trpc } from "lib/trpc/client";
-import { getCircuitTitle } from "lib/utils/circuit";
-import { getSeriesIcon, getSeriesTitleShort } from "lib/utils/series";
-import NextSessionWrapper from "../components/NextSessionWrapper.svelte";
+import { getCircuitTitle } from "$lib/utils/circuit";
+import { getSeriesIcon, getSeriesTitleShort } from "$lib/utils/series";
+import NextSessionWrapper from "$components/NextSessionWrapper.svelte";
+import * as rounds from '$db/round-repository';
 
-type Round = Awaited<ReturnType<typeof trpc.rounds.getWeekend.query>>[number];
+type Round = Awaited<ReturnType<typeof rounds.getWeekends>>[number];
 interface Props {
     round: Round;
     showNextSession?: boolean;
@@ -23,21 +23,26 @@ const { round, showNextSession, link } = Astro.props;
             {
                 getCircuitTitle(
                     round.series,
-                    round.circuit.title,
-                    round.circuit.country,
-                    round.circuit.locality
+                    round.title,
+                    round.country,
+                    round.locality
                 ) ?? round.title
             }
         </h2>
         <div>
-            {round.circuit.title}
+            {round.circuitTitle}
         </div>
     </div>
 
-    {showNextSession && <NextSessionWrapper roundId={round.id} client:idle />}
+    {showNextSession &&
+		<NextSessionWrapper roundId={round.id} client:idle>
+			<Icon name="arrow-right" slot="icon-future" />
+			<Icon name="car" slot="icon-now" />
+		</NextSessionWrapper>
+	}
 </button>
 
-<script src="../../lib/button-component.ts"></script>
+<script src="../lib/button-component.ts"></script>
 
 <style lang="postcss">
     .round-header {

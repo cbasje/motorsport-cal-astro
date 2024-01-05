@@ -1,29 +1,33 @@
 ---
-import { trpc } from "lib/trpc/client";
-import RoundCard from "../../components/RoundCard.astro";
-import SessionCard from "../../components/SessionCard.astro";
-import MainLayout from "../../layouts/main.astro";
+import RoundCard from "$components/RoundCard.astro";
+import SessionCard from "$components/SessionCard.astro";
+import MainLayout from "$layouts/main.astro";
+import * as rounds from "$db/round-repository";
+import * as sessions from "$db/session-repository";
 
 const { pathname } = Astro.url;
 const { id } = Astro.params;
 
-const round = await trpc.rounds.getOne.query(id ?? "");
+if (!id) return new Response(undefined, {status:404});
+
+const round = await rounds.getOne(Number(id));
+const sessionsByRound = await sessions.getSessionsByRoundId(Number(id));
 ---
 
-<MainLayout title={round?.title} path={pathname}>
+<MainLayout title={round.title ?? 'Undefined Round'} path={pathname}>
     {
         round && (
             <>
                 <div transition:name={`round-${round.id}`}>
-                    <RoundCard {round} />
+                    <RoundCard round={round} />
                 </div>
 
                 <ol role="list" class="session-list">
-                    {round.sessions.map((session, i) => (
+                    {sessionsByRound.map((session, i) => (
                         <li
                             transition:name={`sessions-${i}-${round.id}`}
                             class={
-                                session.endDate.valueOf() < Date.now()
+                                session.end.valueOf() < Date.now()
                                     ? "past"
                                     : ""
                             }
@@ -32,7 +36,7 @@ const round = await trpc.rounds.getOne.query(id ?? "");
                             <SessionCard
                                 session={session}
                                 series={round.series}
-                                timeZone={round.circuit.timezone ?? ""}
+                                timeZone={round.timezone ?? ""}
                             />
                         </li>
                     ))}

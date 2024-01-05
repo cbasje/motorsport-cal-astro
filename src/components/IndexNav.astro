@@ -7,23 +7,25 @@ import TimeFormatButton from "./TimeFormatButton.svelte";
     <ul>
         <li>
             <button>
-                <Icon name="lucide:list-filter" />
+                <Icon name="filter" />
             </button>
         </li>
         <li>
-            <TimeFormatButton client:load />
+            <TimeFormatButton client:load>
+				<Icon name="clock" />
+			</TimeFormatButton>
         </li>
     </ul>
 
     <ul>
         <li>
             <button>
-                <Icon name="lucide:bell" />
+                <Icon name="bell" />
             </button>
         </li>
         <li>
             <button>
-                <Icon name="lucide:alert-octagon" />
+                <Icon name="alert-diamond" />
             </button>
         </li>
     </ul>
