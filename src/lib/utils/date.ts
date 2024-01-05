@@ -3,13 +3,19 @@ const hour = 60 * minute;
 const day = 24 * hour;
 const week = 7 * day;
 
+export const isValidDate = (input: Date | string | null | undefined) => {
+	const date = typeof input === "string" ? new Date(input) : input;
+	if (date === undefined || date === null || isNaN(date.valueOf())) return false;
+	return true;
+};
+
 export const trackTime = (timeZone: string, start: Date, end?: Date) => {
 	// FIXME: language
 	const trackTimeFormat = new Intl.DateTimeFormat("en-GB", {
 		weekday: "short",
 		hour: "numeric",
 		minute: "numeric",
-		timeZone,
+		timeZone
 	});
 
 	if (end) {
@@ -24,7 +30,7 @@ export const yourTime = (start: Date, end?: Date) => {
 	const yourTimeFormat = new Intl.DateTimeFormat("en-GB", {
 		weekday: "short",
 		hour: "numeric",
-		minute: "numeric",
+		minute: "numeric"
 	});
 
 	if (end) {
@@ -38,7 +44,7 @@ export const relTime = (date: Date, now: number) => {
 	const rel = date.valueOf() - now;
 	const relTimeFormat = new Intl.RelativeTimeFormat("en-GB", {
 		style: "long",
-		numeric: "auto",
+		numeric: "auto"
 	});
 
 	if (Math.abs(rel) > week) {

@@ -1,22 +1,7 @@
 import { relations } from "drizzle-orm";
-import {
-	real,
-	integer,
-	pgTable,
-	text,
-	timestamp,
-	serial,
-} from "drizzle-orm/pg-core";
+import { integer, pgTable, real, serial, text, timestamp } from "drizzle-orm/pg-core";
 
-export const seriesIds = [
-	"F1",
-	"F2",
-	"F3",
-	"FE",
-	"INDY",
-	"WEC",
-	"F1A",
-] as const;
+export const seriesIds = ["F1", "F2", "F3", "FE", "INDY", "WEC", "F1A"] as const;
 export type SeriesId = (typeof seriesIds)[number];
 
 export const sessionTypes = ["R", "S", "SQ", "Q", "FP", "T"] as const;
@@ -27,18 +12,15 @@ export const weather = pgTable("weather", {
 	temp: real("temp").notNull(),
 	weatherId: integer("weather_id").notNull(),
 	dt: timestamp("dt").notNull(),
-	circuitId: integer("circuit_id").notNull(),
+	circuitId: integer("circuit_id").notNull()
 });
 
-const weatherRelations = relations(weather, ({ one }) => ({
+export const weatherRelations = relations(weather, ({ one }) => ({
 	circuit: one(circuits, {
 		fields: [weather.circuitId],
-		references: [circuits.id],
-	}),
+		references: [circuits.id]
+	})
 }));
-
-export type Weather = typeof weather.$inferSelect;
-export type NewWeather = typeof weather.$inferInsert;
 
 export const circuits = pgTable("circuits", {
 	id: serial("id").primaryKey(),
@@ -49,16 +31,13 @@ export const circuits = pgTable("circuits", {
 	timezone: text("timezone"),
 	utcOffset: integer("utc_offset"),
 	lon: real("lon"),
-	lat: real("lat"),
+	lat: real("lat")
 });
 
-const circuitRelations = relations(circuits, ({ many }) => ({
+export const circuitRelations = relations(circuits, ({ many }) => ({
 	rounds: many(rounds),
-	weather: many(weather),
+	weather: many(weather)
 }));
-
-export type Circuit = typeof circuits.$inferSelect;
-export type NewCircuit = typeof circuits.$inferInsert;
 
 export const rounds = pgTable("rounds", {
 	id: serial("id").primaryKey(),
@@ -69,19 +48,16 @@ export const rounds = pgTable("rounds", {
 	start: timestamp("start"),
 	end: timestamp("end"),
 	circuitId: integer("circuit_id").notNull(),
-	series: text("series").$type<SeriesId>(),
+	series: text("series").$type<SeriesId>()
 });
 
-const roundRelations = relations(rounds, ({ one, many }) => ({
+export const roundRelations = relations(rounds, ({ one, many }) => ({
 	circuit: one(circuits, {
 		fields: [rounds.circuitId],
-		references: [circuits.id],
+		references: [circuits.id]
 	}),
-	sessions: many(sessions),
+	sessions: many(sessions)
 }));
-
-export type Round = typeof rounds.$inferSelect;
-export type NewRound = typeof rounds.$inferInsert;
 
 export const sessions = pgTable("sessions", {
 	id: serial("id").primaryKey(),
@@ -89,15 +65,12 @@ export const sessions = pgTable("sessions", {
 	start: timestamp("start").notNull(),
 	end: timestamp("end").notNull(),
 	roundId: integer("round_id").notNull(),
-	type: text("type").$type<SessionType>(),
+	type: text("type").$type<SessionType>()
 });
 
-const sessionRelations = relations(sessions, ({ one }) => ({
+export const sessionRelations = relations(sessions, ({ one }) => ({
 	round: one(rounds, {
 		fields: [sessions.roundId],
-		references: [rounds.id],
-	}),
+		references: [rounds.id]
+	})
 }));
-
-export type Session = typeof sessions.$inferSelect;
-export type NewSession = typeof sessions.$inferInsert;

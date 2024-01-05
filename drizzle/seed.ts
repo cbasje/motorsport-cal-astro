@@ -1,27 +1,17 @@
-import {
-	circuits,
-	rounds,
-	sessions,
-	type NewSession,
-	seriesIds,
-	sessionTypes,
-	type NewRound,
-	type Round,
-} from "$db/schema";
+import { circuits, rounds, sessions, seriesIds, sessionTypes } from "$db/schema";
 import { fakerEN } from "@faker-js/faker";
 import { exit } from "node:process";
 import { drizzle } from "drizzle-orm/node-postgres";
 import postgres from "pg";
+import type { NewRound, NewSession, Round } from "$db/types";
 
 // Disable prefetch as it is not supported for "Transaction" pool mode
 export const pool = new postgres.Pool({
-	connectionString: process.env.DATABASE_URL ?? "",
+	connectionString: process.env.DATABASE_URL ?? ""
 });
-export const db = drizzle(pool);
+const db = drizzle(pool);
 
-const pickRandom = <T extends Readonly<any[]>>(
-	input: T
-): T[number] | undefined => {
+const pickRandom = <T extends Readonly<any[]>>(input: T): T[number] | undefined => {
 	const rnd = Math.round(Math.random() * (input.length - 1));
 	return input.at(rnd);
 };
@@ -40,7 +30,7 @@ async function createCircuit() {
 			country: l.countryCode("alpha-2"),
 			timezone: l.timeZone(),
 			lat: l.latitude(),
-			lon: l.longitude(),
+			lon: l.longitude()
 			// TODO; utcOffset
 		})
 		.returning({ id: circuits.id });
@@ -57,13 +47,14 @@ async function createRounds(circuitId: number) {
 		const end = fakerEN.date.soon({ refDate: start });
 
 		newRounds.push({
+			circuitTitle: "",
 			number: i,
 			title,
 			season: start.getFullYear().toString(),
 			circuitId,
 			series: pickRandom(seriesIds),
 			start,
-			end,
+			end
 		});
 	}
 
@@ -87,7 +78,7 @@ async function createSessions(rounds: Pick<Round, "id" | "start">[]) {
 				start,
 				end,
 				roundId: r.id,
-				type,
+				type
 			});
 		}
 	}
