@@ -1,0 +1,3 @@
+[submodule "src/hunter"]
+	path = src/hunter
+	url = https://github.com/cbasje/porpoise-hunter
