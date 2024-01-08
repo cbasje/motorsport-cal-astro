@@ -1,3 +1,4 @@
+import { main as deleteSeason } from "../../../hunter/src/controllers/delete-season";
 import { main as scrapeGeocoding } from "../../../hunter/src/controllers/geocoding";
 import { main as resetDatabase } from "../../../hunter/src/controllers/reset-database";
 import { main as scrape } from "../../../hunter/src/controllers/scraper";
@@ -16,15 +17,15 @@ export const GET: APIRoute = async ({ request, params }) => {
 
 				break;
 			case "wikipedia":
-				await scrapeWikipedia();
+				data = await scrapeWikipedia();
 
 				break;
 			case "weather":
-				await scrapeWeather();
+				data = await scrapeWeather();
 
 				break;
 			case "geocode":
-				await scrapeGeocoding();
+				data = await scrapeGeocoding();
 
 				break;
 			case "delete-season":
@@ -34,19 +35,19 @@ export const GET: APIRoute = async ({ request, params }) => {
 				const year = (query.get("year") ?? String(new Date().getFullYear() - 1)) as string;
 				const includeCurrent = query.get("include_current") === "true";
 
-				// await deleteSeason(year, includeCurrent);
+				data = await deleteSeason(year, includeCurrent);
 
 				break;
 			case "reset-database":
 				// { query: t.Object({ sure: t.String() }) };
 				const sure = query.get("sure") === "true";
 
-				await resetDatabase(sure);
+				data = await resetDatabase(sure);
 
 				break;
 		}
 
-		return new Response(JSON.stringify({ success: true, data }), {
+		return new Response(JSON.stringify(data), {
 			status: 200,
 			headers: { "Content-Type": "application/json" }
 		});
