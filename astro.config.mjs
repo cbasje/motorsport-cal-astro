@@ -13,7 +13,15 @@ export default defineConfig({
 		svelte(),
 		icon({
 			include: {
-				"fluent-emoji-high-contrast": ["*"]
+				"fluent-emoji-high-contrast": [
+					"dashing-away",
+					"boy",
+					"baby",
+					"battery",
+					"eagle",
+					"stopwatch",
+					"girl"
+				]
 			},
 			svgoOptions: {
 				plugins: [
