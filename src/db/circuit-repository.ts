@@ -1,5 +1,5 @@
 import { db } from "$db/drizzle";
-import { eq, sql } from "drizzle-orm";
+import { and, eq, ilike, sql } from "drizzle-orm";
 import { circuits, rounds } from "./schema";
 import type { SeriesId } from "./types";
 
@@ -22,7 +22,13 @@ export const getMapMarkers = async () => {
 			title: circuits.title,
 			series: sql<SeriesId[]>`${db
 				.select({ series: sql`json_agg(${rounds.series})` })
-				.from(rounds)}`.as("series")
+				.from(rounds)
+				.where(
+					and(
+						eq(rounds.circuitId, circuits.id),
+						ilike(rounds.season, `%${new Date().getFullYear().toString()}%`)
+					)
+				)}`.as("series")
 		})
 		.from(circuits);
 };
