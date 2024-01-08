@@ -7,19 +7,8 @@ export const GET: APIRoute = async () => {
 
 		return new Response(
 			JSON.stringify({
-				success: true,
-				data,
-				h: {
-					session: {
-						type: "FP",
-						number: 4,
-						start: "2024-04-14T18:14:36.075Z",
-						end: "2024-04-15T06:52:10.228Z",
-						series: "F2"
-					},
-					weekOffset: -14742,
-					series: []
-				}
+				success: data !== undefined,
+				data
 			})
 		);
 	} catch (error) {

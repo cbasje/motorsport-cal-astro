@@ -88,6 +88,8 @@ export const getNextSessionWidget = async () => {
 			.orderBy(asc(sessions.start))
 			.limit(1);
 
+		if (!nextSession) return;
+
 		const millis = nextSession.start.valueOf() - Date.now();
 		const weekOffset = Math.floor(millis / (7 * 24 * 60 * 60 * 1000));
 
@@ -99,6 +101,8 @@ export const getNextSessionWidget = async () => {
 			.from(rounds)
 			.where(and(gte(rounds.end, start), lte(rounds.end, end)))
 			.limit(1);
+
+		if (nextRounds.length === 0) return;
 
 		return {
 			firstRound: nextRounds.at(0),
