@@ -1,7 +1,7 @@
 ---
 import MapTiler from "$components/Map.astro";
 import MainLayout from "$layouts/main.astro";
-import * as circuits from "$db/circuit-repository"
+import * as circuits from "$db/circuit-repository";
 
 const { pathname } = Astro.url;
 
@@ -9,5 +9,5 @@ const markers = await circuits.getMapMarkers();
 ---
 
 <MainLayout title="World Map" path={pathname}>
-    <MapTiler markers={markers} />
+	<MapTiler markers={markers} />
 </MainLayout>

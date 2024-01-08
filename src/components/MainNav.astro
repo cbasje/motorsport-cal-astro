@@ -3,46 +3,43 @@ import { Icon } from "astro-icon/components";
 
 type Page = { href: string; icon: string; title: string };
 const pages: Page[] = [
-    {
-        href: "/",
-        icon: "home",
-        title: "Home",
-    },
-    {
-        href: "/map",
-        icon: "map",
-        title: "Map",
-    },
+	{
+		href: "/",
+		icon: "home",
+		title: "Home"
+	},
+	{
+		href: "/map",
+		icon: "map",
+		title: "Map"
+	}
 ];
 
 interface Props {
-    path: (typeof pages)[number]["href"];
+	path: (typeof pages)[number]["href"];
 }
 const { path } = Astro.props;
 ---
 
 <nav transition:persist class="nav bottom-nav">
-    <div class="visually-hidden"></div>
+	<div class="visually-hidden"></div>
 
-    <ul>
-        {
-            pages.map((p) => (
-                <li>
-                    <a
-                        href={p.href}
-                        aria-current={p.href === path ? "page" : false}
-                    >
-                        <Icon name={p.icon} />
-                        <div class="visually-hidden">{p.title}</div>
-                    </a>
-                </li>
-            ))
-        }
-    </ul>
+	<ul>
+		{
+			pages.map((p) => (
+				<li>
+					<a href={p.href} aria-current={p.href === path ? "page" : false}>
+						<Icon name={p.icon} />
+						<div class="visually-hidden">{p.title}</div>
+					</a>
+				</li>
+			))
+		}
+	</ul>
 
-    <!-- TODO: <a href="#this-weekend" class="btn btn-surface"> -->
-    <a href="/?offset=0" class="btn btn-surface">
-        <Icon name="arrow-up" />
-        <div class="visually-hidden">Back to top</div>
-    </a>
+	<!-- TODO: <a href="#this-weekend" class="btn btn-surface"> -->
+	<a href="/?offset=0" class="btn btn-surface">
+		<Icon name="arrow-up" />
+		<div class="visually-hidden">Back to top</div>
+	</a>
 </nav>

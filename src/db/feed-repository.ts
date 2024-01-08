@@ -16,7 +16,7 @@ export const getAllSessions = async () => {
 			link: rounds.link,
 			circuitTitle: circuits.title,
 			lat: circuits.lat,
-			lon: circuits.lon,
+			lon: circuits.lon
 		})
 		.from(sessions)
 		.leftJoin(rounds, eq(sessions.roundId, rounds.id))

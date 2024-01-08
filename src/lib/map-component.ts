@@ -15,7 +15,7 @@ class MapLibre extends HTMLElement {
 
 		const latlng: [number, number] = [
 			Number(this.dataset.latitude),
-			Number(this.dataset.longitude),
+			Number(this.dataset.longitude)
 		];
 
 		const map = new Map({
@@ -23,7 +23,7 @@ class MapLibre extends HTMLElement {
 			style: this.dataset.tiles ?? "",
 			// attributionControl: false,
 			center: latlng ?? [0, 0],
-			zoom: Number(this.dataset.zoom),
+			zoom: Number(this.dataset.zoom)
 		});
 
 		const loadImage = async (url: string, name: string) =>
@@ -55,14 +55,12 @@ class MapLibre extends HTMLElement {
 								type: "Feature",
 								geometry: {
 									type: "Point",
-									coordinates: [m.lon, m.lat],
+									coordinates: [m.lon, m.lat]
 								},
 								properties: {
-									description: `<h4>${
-										m.title
-									}</h4><p>${m.series.join(", ")}</p>`,
-									icon: m.series.join("-"),
-								},
+									description: `<h4>${m.title}</h4><p>${m.series.join(", ")}</p>`,
+									icon: m.series.join("-")
+								}
 							};
 						})
 					}
@@ -77,18 +75,15 @@ class MapLibre extends HTMLElement {
 						"icon-image": "{icon}",
 						"icon-size": 0.5,
 						"icon-offset": [0, -16],
-						"icon-overlap": "always",
-					},
+						"icon-overlap": "always"
+					}
 				});
 
 				// When a click event occurs on a feature in the circuits layer, open a popup at the
 				// location of the feature, with description HTML from its properties.
 				map.on("click", "circuits", (e) => {
-					let [x, y] = (
-						e.features?.at(0)?.geometry as Point
-					).coordinates.slice();
-					const description =
-						e.features?.at(0)?.properties.description;
+					let [x, y] = (e.features?.at(0)?.geometry as Point).coordinates.slice();
+					const description = e.features?.at(0)?.properties.description;
 
 					// Ensure that if the map is zoomed out such that multiple
 					// copies of the feature are visible, the popup appears
@@ -97,10 +92,7 @@ class MapLibre extends HTMLElement {
 						x += e.lngLat.lng > x ? 360 : -360;
 					}
 
-					new Popup()
-						.setLngLat([x, y])
-						.setHTML(description)
-						.addTo(map);
+					new Popup().setLngLat([x, y]).setHTML(description).addTo(map);
 				});
 
 				// Change the cursor to a pointer when the mouse is over the circuits layer.

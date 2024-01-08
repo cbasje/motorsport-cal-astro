@@ -1,6 +1,6 @@
-import type { APIRoute } from "astro";
+import type { SeriesId } from "$db/types";
 import { getSeriesColor } from "$lib/utils/series";
-import type { SeriesId } from "$db/schema";
+import type { APIRoute } from "astro";
 
 const svgSingle = (
 	color?: string
@@ -24,27 +24,21 @@ export const GET: APIRoute = async ({ params }) => {
 	const series = [...seriesSet];
 
 	if (series && series.length === 1)
-		return new Response(
-			svgSingle(getSeriesColor(series.at(0) as SeriesId)),
-			{
-				status: 200,
-				headers: {
-					"Content-Type": "image/svg+xml",
-				},
+		return new Response(svgSingle(getSeriesColor(series.at(0) as SeriesId)), {
+			status: 200,
+			headers: {
+				"Content-Type": "image/svg+xml"
 			}
-		);
+		});
 	else if (series && series.length > 1)
-		return new Response(
-			svgMultiple(series.map((s) => getSeriesColor(s as SeriesId))),
-			{
-				status: 200,
-				headers: {
-					"Content-Type": "image/svg+xml",
-				},
+		return new Response(svgMultiple(series.map((s) => getSeriesColor(s as SeriesId))), {
+			status: 200,
+			headers: {
+				"Content-Type": "image/svg+xml"
 			}
-		);
+		});
 	else
 		return new Response(undefined, {
-			status: 404,
+			status: 404
 		});
 };

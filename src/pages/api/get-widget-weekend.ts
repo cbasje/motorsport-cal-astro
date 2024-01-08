@@ -15,11 +15,11 @@ export const GET: APIRoute = async () => {
 						number: 4,
 						start: "2024-04-14T18:14:36.075Z",
 						end: "2024-04-15T06:52:10.228Z",
-						series: "F2",
+						series: "F2"
 					},
 					weekOffset: -14742,
-					series: [],
-				},
+					series: []
+				}
 			})
 		);
 	} catch (error) {
@@ -29,7 +29,7 @@ export const GET: APIRoute = async () => {
 		}
 		console.error("🚨", message);
 		return new Response(JSON.stringify({ success: false, message }), {
-			status: 500,
+			status: 500
 		});
 	}
 };

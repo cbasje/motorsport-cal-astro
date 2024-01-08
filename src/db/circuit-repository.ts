@@ -6,11 +6,7 @@ import type { SeriesId } from "./types";
 // FIXME: log!
 
 export const getOne = async (id: number) => {
-	const [first] = await db
-		.select()
-		.from(circuits)
-		.where(eq(circuits.id, id))
-		.limit(1);
+	const [first] = await db.select().from(circuits).where(eq(circuits.id, id)).limit(1);
 	return first;
 };
 
@@ -26,7 +22,7 @@ export const getMapMarkers = async () => {
 			title: circuits.title,
 			series: sql<SeriesId[]>`${db
 				.select({ series: sql`json_agg(${rounds.series})` })
-				.from(rounds)}`.as("series"),
+				.from(rounds)}`.as("series")
 		})
 		.from(circuits);
 };

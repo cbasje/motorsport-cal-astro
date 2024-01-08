@@ -1,22 +1,17 @@
 ---
-import type { SeriesId, Session } from "$db/schema";
+import type { Session, SeriesId } from "$db/types";
 import { getSessionTitle } from "$lib/utils/sessions";
 import Time from "./Time.svelte";
 
 interface Props {
-    session: Pick<Session, 'type'|'number'|'start'|'end'>;
-    series: SeriesId | null;
-    timeZone: string;
+	session: Pick<Session, "type" | "number" | "start" | "end">;
+	series: SeriesId | null;
+	timeZone: string;
 }
 const { session, series, timeZone } = Astro.props;
 ---
 
 <h3>
-    {getSessionTitle(series, session.type, session.number)}
+	{getSessionTitle(series, session.type, session.number)}
 </h3>
-<Time
-    start={session.start}
-    end={session.end}
-    timeZone={timeZone ?? undefined}
-    client:idle
-/>
+<Time start={session.start} end={session.end} timeZone={timeZone ?? undefined} client:idle />

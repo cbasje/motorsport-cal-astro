@@ -15,13 +15,13 @@ export const GET: APIRoute = async ({ request }) => {
 		return new Response(
 			JSON.stringify({
 				success: true,
-				data,
+				data
 			})
 		);
 	} catch (error) {
 		console.error(error);
 		return new Response(JSON.stringify({ success: false, reason: error }), {
-			status: 500,
+			status: 500
 		});
 	}
 };

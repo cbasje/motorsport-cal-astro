@@ -1,4 +1,4 @@
-import type { SeriesId } from "$db/schema";
+import type { SeriesId } from "$db/types";
 
 export const getSeriesIcon = (s: SeriesId | null) => {
 	const titles: Record<SeriesId, string> = {
@@ -8,7 +8,7 @@ export const getSeriesIcon = (s: SeriesId | null) => {
 		FE: "battery",
 		INDY: "eagle",
 		WEC: "stopwatch",
-		F1A: "girl",
+		F1A: "girl"
 	};
 	return (s && titles[s]) ?? "police-car-light";
 };
@@ -21,7 +21,7 @@ export const getSeriesEmoji = (s: SeriesId | null) => {
 		FE: "🔋",
 		INDY: "🦅",
 		WEC: "⏱️",
-		F1A: "👧🏻",
+		F1A: "👧🏻"
 	};
 	return (s && titles[s]) ?? "🚨";
 };
@@ -34,7 +34,7 @@ export const getSeriesTitle = (s: SeriesId | null) => {
 		FE: "Formula E",
 		INDY: "IndyCar",
 		WEC: "WEC",
-		F1A: "F1 Academy",
+		F1A: "F1 Academy"
 	};
 	return (s && titles[s]) ?? "Error";
 };
@@ -47,7 +47,7 @@ export const getSeriesTitleShort = (s: SeriesId | null) => {
 		FE: "FE",
 		INDY: "Indy",
 		WEC: "WEC",
-		F1A: "F1A",
+		F1A: "F1A"
 	};
 	return (s && titles[s]) ?? "Err";
 };
@@ -60,7 +60,7 @@ export const getSeriesColor = (s: SeriesId | null) => {
 		FE: "#6283FE",
 		INDY: "#00C3AC",
 		WEC: "#46B613",
-		F1A: "#FD3BAD",
+		F1A: "#FD3BAD"
 	};
 	return (s && colors[s]) ?? "#000";
 };
@@ -72,7 +72,7 @@ export const getSeriesSecondaryColor = (s: SeriesId) => {
 		FE: "#536FFE",
 		INDY: "#00B49D",
 		WEC: "#2BA711",
-		F1A: "#EF099F",
+		F1A: "#EF099F"
 	};
 	return (s && colors[s]) ?? "#000";
 };

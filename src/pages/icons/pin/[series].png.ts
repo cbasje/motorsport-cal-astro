@@ -1,7 +1,7 @@
+import type { SeriesId } from "$db/types";
+import { getSeriesColor } from "$lib/utils/series";
 import type { APIRoute } from "astro";
 import sharp from "sharp";
-import { getSeriesColor } from "$lib/utils/series";
-import type { SeriesId } from "$db/schema";
 
 const svgSingle = (
 	color?: string
@@ -26,7 +26,7 @@ export const GET: APIRoute = async ({ params }) => {
 
 	if (!series || !series.length)
 		return new Response(undefined, {
-			status: 404,
+			status: 404
 		});
 
 	let svg: string;
@@ -43,7 +43,7 @@ export const GET: APIRoute = async ({ params }) => {
 		status: 200,
 		headers: {
 			"Content-Type": "image/png",
-			"Cache-Control": "s-maxage=1, stale-while-revalidate=59",
-		},
+			"Cache-Control": "s-maxage=1, stale-while-revalidate=59"
+		}
 	});
 };

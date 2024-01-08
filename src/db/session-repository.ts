@@ -1,17 +1,14 @@
 import { db } from "$db/drizzle";
-import { z } from "zod";
-import { seriesIds, sessions, type SeriesId, rounds, circuits } from "./schema";
-import { eq, desc, asc, and, gte, lte, inArray } from "drizzle-orm";
 import { getWeekendDates } from "$lib/utils/date";
+import { and, asc, desc, eq, gte, inArray, lte } from "drizzle-orm";
+import { z } from "zod";
+import { circuits, rounds, sessions } from "./schema";
+import { seriesIds, type SeriesId } from "./types";
 
 // FIXME: log!
 
-export const getOne = async (id: number) => {
-	const [first] = await db
-		.select()
-		.from(sessions)
-		.where(eq(sessions.id, id))
-		.limit(1);
+export const getOne = async (id: string) => {
+	const [first] = await db.select().from(sessions).where(eq(sessions.id, id)).limit(1);
 	return first;
 };
 
@@ -25,7 +22,7 @@ export const getNextRaces = async (ids: SeriesId[]) => {
 			start: sessions.start,
 			end: sessions.end,
 			title: rounds.title,
-			series: rounds.series,
+			series: rounds.series
 		})
 		.from(sessions)
 		.leftJoin(rounds, eq(sessions.roundId, rounds.id))
@@ -42,12 +39,12 @@ export const getNextRaces = async (ids: SeriesId[]) => {
 export const getNextSession = async (input: {
 	weekOffset?: number;
 	now?: Date;
-	roundId?: number;
+	roundId?: string;
 }) => {
 	const schema = z.object({
 		weekOffset: z.number().int().min(-52).max(52).default(0),
 		now: z.date().optional(),
-		roundId: z.number().optional(),
+		roundId: z.string().optional()
 	});
 
 	const [start, end] = getWeekendDates(input.weekOffset);
@@ -58,7 +55,7 @@ export const getNextSession = async (input: {
 			end: sessions.end,
 			number: sessions.number,
 			series: rounds.series,
-			timezone: circuits.timezone,
+			timezone: circuits.timezone
 		})
 		.from(sessions)
 		.leftJoin(rounds, eq(sessions.roundId, rounds.id))
@@ -83,7 +80,7 @@ export const getNextSessionWidget = async () => {
 				number: sessions.number,
 				start: sessions.start,
 				end: sessions.end,
-				series: rounds.series,
+				series: rounds.series
 			})
 			.from(sessions)
 			.leftJoin(rounds, eq(sessions.roundId, rounds.id))
@@ -97,7 +94,7 @@ export const getNextSessionWidget = async () => {
 		const [start, end] = getWeekendDates(weekOffset);
 		const nextRounds = await tx
 			.select({
-				series: rounds.series,
+				series: rounds.series
 			})
 			.from(rounds)
 			.where(and(gte(rounds.end, start), lte(rounds.end, end)))
@@ -107,19 +104,19 @@ export const getNextSessionWidget = async () => {
 			firstRound: nextRounds.at(0),
 			session: nextSession,
 			weekOffset,
-			series: nextRounds.map((r) => r.series),
+			series: nextRounds.map((r) => r.series)
 		};
 	});
 };
 
-export const getSessionsByRoundId = async (id: number) => {
+export const getSessionsByRoundId = async (id: string) => {
 	return await db
 		.select({
 			id: sessions.id,
 			number: sessions.number,
 			start: sessions.start,
 			end: sessions.end,
-			type: sessions.type,
+			type: sessions.type
 		})
 		.from(sessions)
 		.leftJoin(rounds, eq(sessions.roundId, rounds.id))

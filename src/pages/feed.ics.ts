@@ -15,13 +15,11 @@ const getCalDate = (date: Date): DateArray => {
 		date.getMonth() + 1,
 		date.getDate(),
 		date.getHours(),
-		date.getMinutes(),
+		date.getMinutes()
 	];
 };
 
-export const generateFeed = async (
-	items: Session[]
-): Promise<EventAttributes[]> => {
+export const generateFeed = async (items: Session[]): Promise<EventAttributes[]> => {
 	let events: EventAttributes[] = [];
 
 	for (const session of items) {
@@ -29,11 +27,7 @@ export const generateFeed = async (
 			continue;
 		}
 
-		const type = getSessionTitle(
-			session.series,
-			session.type,
-			session.number
-		);
+		const type = getSessionTitle(session.series, session.type, session.number);
 		const title = `${getSeriesEmoji(session.series)} ${session.series} ${
 			session.roundTitle
 		} - ${type}`;
@@ -45,20 +39,14 @@ export const generateFeed = async (
 			startInputType: "utc",
 			start: getCalDate(session.start),
 			end: getCalDate(session.end),
-			description: `It is time for the ${session.series} ${
-				session.roundTitle
-			}!${
-				session.link &&
-				` Watch this race and its sessions via this link: ${session.link}`
+			description: `It is time for the ${session.series} ${session.roundTitle}!${
+				session.link && ` Watch this race and its sessions via this link: ${session.link}`
 			}`,
 			// htmlContent:
 			// 	'<!DOCTYPE html><html><body><p>This is<br>test<br>html code.</p></body></html>',
 			location: session.circuitTitle ?? undefined,
 			url: session.link ?? undefined,
-			geo:
-				session.lon && session.lat
-					? { lon: session.lon, lat: session.lat }
-					: undefined,
+			geo: session.lon && session.lat ? { lon: session.lon, lat: session.lat } : undefined
 		});
 	}
 
@@ -83,13 +71,13 @@ export const GET: APIRoute = async () => {
 		return new Response(eventFeed, {
 			status: 200,
 			headers: {
-				"Content-Type": "text/calendar",
-			},
+				"Content-Type": "text/calendar"
+			}
 		});
 	} catch (error) {
 		console.error(error);
 		return new Response(null, {
-			status: 500,
+			status: 500
 		});
 	}
 };

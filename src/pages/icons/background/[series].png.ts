@@ -1,10 +1,10 @@
+import type { SeriesId } from "$db/types";
+import { getSeriesIcon } from "$lib/utils/series";
 import { icons } from "@iconify-json/fluent-emoji-high-contrast";
 import { getIconData, iconToSVG, replaceIDs } from "@iconify/utils";
 import type { APIRoute } from "astro";
 import sharp from "sharp";
 import { createNoise2D } from "simplex-noise";
-import type { SeriesId } from "$db/schema";
-import { getSeriesIcon } from "$lib/utils/series";
 
 // Define the size of the grid
 const cols = 4;
@@ -16,12 +16,7 @@ const spacingY = 400 / rows;
 
 const generateGrid = (icons: string[]) => {
 	const noise2D = createNoise2D();
-	const noiseBetween = (
-		x: number,
-		y: number,
-		max: number = 1,
-		min: number = 0
-	) => {
+	const noiseBetween = (x: number, y: number, max: number = 1, min: number = 0) => {
 		return ((noise2D(x, y) + 1) / 2) * (max - min) + min;
 	};
 	const randomBetween = (max: number = 1, min: number = 0) => {
@@ -73,16 +68,13 @@ const generateGrid = (icons: string[]) => {
 };
 
 // Custom HTML generation
-const iconsToHTML = (
-	body: string[],
-	extraAttributes: Record<string, string>
-) => {
+const iconsToHTML = (body: string[], extraAttributes: Record<string, string>) => {
 	const iconGrid = generateGrid(body);
 	const attributes: Record<string, string> = {
 		...extraAttributes,
 		width: "338",
 		height: "338",
-		viewBox: "0 0 338 338",
+		viewBox: "0 0 338 338"
 	};
 
 	let renderAttribsHTML = "";
@@ -99,7 +91,7 @@ export const GET: APIRoute = async ({ params }) => {
 
 	if (!series || !series.length)
 		return new Response(undefined, {
-			status: 404,
+			status: 404
 		});
 
 	let renderData: string[] = [];
@@ -111,12 +103,12 @@ export const GET: APIRoute = async ({ params }) => {
 		const iconData = getIconData(icons, iconId);
 		if (!iconData)
 			return new Response(`Icon "${iconId}" is missing`, {
-				status: 404,
+				status: 404
 			});
 
 		// Use it to render icon
 		const iconRenderData = iconToSVG(iconData, {
-			height: "auto",
+			height: "auto"
 		});
 		renderData.push(iconRenderData.body);
 	}
@@ -125,7 +117,7 @@ export const GET: APIRoute = async ({ params }) => {
 	const svg = iconsToHTML(
 		renderData.map((d) => replaceIDs(d)),
 		{
-			style: `color: rgba(0,0,0,0.125)`,
+			style: `color: rgba(0,0,0,0.125)`
 		}
 	);
 
@@ -136,7 +128,7 @@ export const GET: APIRoute = async ({ params }) => {
 		status: 200,
 		headers: {
 			"Content-Type": "image/png",
-			"Cache-Control": "s-maxage=1, stale-while-revalidate=59",
-		},
+			"Cache-Control": "s-maxage=1, stale-while-revalidate=59"
+		}
 	});
 };

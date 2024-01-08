@@ -3,42 +3,40 @@ import { Icon } from "astro-icon/components";
 import { getCircuitTitle } from "$lib/utils/circuit";
 import { getSeriesIcon, getSeriesTitleShort } from "$lib/utils/series";
 import NextSessionWrapper from "$components/NextSessionWrapper.svelte";
-import * as rounds from '$db/round-repository';
+import * as rounds from "$db/round-repository";
 
 type Round = Awaited<ReturnType<typeof rounds.getWeekends>>[number];
 interface Props {
-    round: Round;
-    showNextSession?: boolean;
-    link?: string;
+	round: Round;
+	showNextSession?: boolean;
+	link?: string;
 }
 const { round, showNextSession, link } = Astro.props;
 ---
 
 <button is="back-button" data-link={link} class="round-header btn btn-color">
-    <Icon name={`fluent-emoji-high-contrast:${getSeriesIcon(round.series)}`} />
+	<Icon name={`fluent-emoji-high-contrast:${getSeriesIcon(round.series)}`} />
 
-    <div class="round-title">
-        <h2>
-            {getSeriesTitleShort(round.series)}{" "}
-            {
-                getCircuitTitle(
-                    round.series,
-                    round.title,
-                    round.country,
-                    round.locality
-                ) ?? round.title
-            }
-        </h2>
-        <div>
-            {round.circuitTitle}
-        </div>
-    </div>
+	<div class="round-title">
+		<h2>
+			{getSeriesTitleShort(round.series)}{" "}
+			{
+				getCircuitTitle(round.series, round.title, round.country, round.locality) ??
+					round.title
+			}
+		</h2>
+		<div>
+			{round.circuitTitle}
+		</div>
+	</div>
 
-    {showNextSession &&
-		<NextSessionWrapper roundId={round.id} client:idle>
-			<Icon name="arrow-right" slot="icon-future" />
-			<Icon name="car" slot="icon-now" />
-		</NextSessionWrapper>
+	{
+		showNextSession && (
+			<NextSessionWrapper roundId={round.id} client:idle>
+				<Icon name="arrow-right" slot="icon-future" />
+				<Icon name="car" slot="icon-now" />
+			</NextSessionWrapper>
+		)
 	}
 </button>
 

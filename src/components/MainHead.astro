@@ -4,34 +4,33 @@ import { ViewTransitions } from "astro:transitions";
 import "../styles/global.postcss";
 
 interface Props {
-    title?: string;
+	title?: string;
 }
 
 const { title } = Astro.props;
 ---
 
 <head>
-    <meta charset="UTF-8" />
-    <SeoHead
-        title={title}
-        titleTemplate="%s | Porpoise Motorsport Calendar"
-        extend={{
-            link: [
-                // { rel: "shortcut icon", href: "/favicon.ico" },
-                { rel: "shortcut icon", href: "https://fav.farm/🏎️" },
-                { rel: "manifest", href: "/app.webmanifest" },
-            ],
-            meta: [
-                { name: "author", content: "Sebastiaan Benjamins" },
-                {
-                    name: "viewport",
-                    content:
-                        "width=device-width, initial-scale=1, viewport-fit=cover",
-                },
-                { name: "generator", content: Astro.generator },
-            ],
-        }}
-    />
+	<meta charset="UTF-8" />
+	<SeoHead
+		title={title}
+		titleTemplate="%s | Porpoise Motorsport Calendar"
+		extend={{
+			link: [
+				// { rel: "shortcut icon", href: "/favicon.ico" },
+				{ rel: "shortcut icon", href: "https://fav.farm/🏎️" },
+				{ rel: "manifest", href: "/app.webmanifest" }
+			],
+			meta: [
+				{ name: "author", content: "Sebastiaan Benjamins" },
+				{
+					name: "viewport",
+					content: "width=device-width, initial-scale=1, viewport-fit=cover"
+				},
+				{ name: "generator", content: Astro.generator }
+			]
+		}}
+	/>
 
-    <ViewTransitions />
+	<ViewTransitions />
 </head>

@@ -10,7 +10,7 @@ const sessionSq = db.$with("children").as(
 	db
 		.select({
 			roundId: sessions.roundId,
-			count: sql<number>`count(*)::int`.as("count"),
+			count: sql<number>`count(*)::int`.as("count")
 		})
 		.from(sessions)
 		.groupBy(sessions.roundId)
@@ -33,7 +33,7 @@ export const getOne = async (id: string) => {
 			locality: circuits.locality,
 			circuitTitle: circuits.title,
 			timezone: circuits.timezone,
-			sessionCount: sessionSq.count,
+			sessionCount: sessionSq.count
 		})
 		.from(sessionSq)
 		.leftJoin(rounds, eq(rounds.id, sessionSq.roundId))
@@ -53,7 +53,7 @@ export const getWeekends = async (input: {
 }) => {
 	const schema = z.object({
 		startOffset: z.number().int().min(-52).max(52).default(0),
-		endOffset: z.number().int().min(-52).max(52).default(0),
+		endOffset: z.number().int().min(-52).max(52).default(0)
 	});
 
 	const [start, end] = getWeekendDates(input.startOffset, input.endOffset);
@@ -69,7 +69,7 @@ export const getWeekends = async (input: {
 			country: circuits.country,
 			locality: circuits.locality,
 			circuitTitle: circuits.title,
-			sessionCount: sessionSq.count,
+			sessionCount: sessionSq.count
 		})
 		.from(sessionSq)
 		.leftJoin(rounds, eq(rounds.id, sessionSq.roundId))

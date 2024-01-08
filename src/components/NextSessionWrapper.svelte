@@ -1,17 +1,14 @@
 <script lang="ts">
-    import {
-        QueryClient,
-        QueryClientProvider,
-    } from "@sveltestack/svelte-query";
-    import NextSession from "./NextSession.svelte";
+	import { QueryClient, QueryClientProvider } from "@sveltestack/svelte-query";
+	import NextSession from "./NextSession.svelte";
 
-    const queryClient = new QueryClient();
+	const queryClient = new QueryClient();
 
-    export let roundId: number;
+	export let roundId: string;
 </script>
 
 <QueryClientProvider client={queryClient}>
-    <NextSession {roundId}>
+	<NextSession {roundId}>
 		<slot name="icon-future" slot="icon-future" />
 		<slot name="icon-now" slot="icon-now" />
 	</NextSession>

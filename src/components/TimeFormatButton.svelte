@@ -1,7 +1,7 @@
 <script lang="ts">
-    import { cycleTimeFormat } from "$lib/stores/dateStore";
+	import { cycleTimeFormat } from "$lib/stores/dateStore";
 </script>
 
 <button on:click={() => cycleTimeFormat()}>
-    <slot/>
+	<slot />
 </button>
