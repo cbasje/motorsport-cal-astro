@@ -3,13 +3,13 @@ import * as sessions from "$db/session-repository";
 
 export const GET: APIRoute = async ({ request }) => {
 	try {
-		const params = new URL(request.url).searchParams;
-		const roundId = params.get("roundId");
-		const now = params.get("now");
+		const query = new URL(request.url).searchParams;
+		const roundId = query.get("roundId");
+		const now = query.get("now");
 
 		const data = await sessions.getNextSession({
-			roundId: roundId ? Number(roundId) : undefined,
-			now: now ? new Date(now) : undefined,
+			roundId: roundId ?? undefined,
+			now: now ? new Date(now) : undefined
 		});
 
 		return new Response(

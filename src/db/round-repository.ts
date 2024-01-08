@@ -16,7 +16,7 @@ const sessionSq = db.$with("children").as(
 		.groupBy(sessions.roundId)
 );
 
-export const getOne = async (id: number) => {
+export const getOne = async (id: string) => {
 	const [first] = await db
 		.with(sessionSq)
 		.select({

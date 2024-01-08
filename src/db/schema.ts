@@ -1,18 +1,14 @@
 import { relations } from "drizzle-orm";
 import { integer, pgTable, real, serial, text, timestamp } from "drizzle-orm/pg-core";
-
-export const seriesIds = ["F1", "F2", "F3", "FE", "INDY", "WEC", "F1A"] as const;
-export type SeriesId = (typeof seriesIds)[number];
-
-export const sessionTypes = ["R", "S", "SQ", "Q", "FP", "T"] as const;
-export type SessionType = (typeof sessionTypes)[number];
+import type { SeriesId, SessionType } from "./types";
 
 export const weather = pgTable("weather", {
 	id: serial("id").primaryKey(),
 	temp: real("temp").notNull(),
 	weatherId: integer("weather_id").notNull(),
 	dt: timestamp("dt").notNull(),
-	circuitId: integer("circuit_id").notNull()
+	circuitId: integer("circuit_id").notNull(),
+	updatedAt: timestamp("updated_at")
 });
 
 export const weatherRelations = relations(weather, ({ one }) => ({
@@ -25,13 +21,15 @@ export const weatherRelations = relations(weather, ({ one }) => ({
 export const circuits = pgTable("circuits", {
 	id: serial("id").primaryKey(),
 	title: text("title").notNull().unique(),
+	usedTitles: text("used_titles").array(),
 	wikipediaPageId: integer("wikipedia_page_id").unique(),
 	locality: text("locality"),
 	country: text("country"),
 	timezone: text("timezone"),
 	utcOffset: integer("utc_offset"),
 	lon: real("lon"),
-	lat: real("lat")
+	lat: real("lat"),
+	updatedAt: timestamp("updated_at")
 });
 
 export const circuitRelations = relations(circuits, ({ many }) => ({
@@ -40,7 +38,7 @@ export const circuitRelations = relations(circuits, ({ many }) => ({
 }));
 
 export const rounds = pgTable("rounds", {
-	id: serial("id").primaryKey(),
+	id: text("id").primaryKey(),
 	number: integer("number").default(0).notNull(),
 	title: text("title").notNull(),
 	season: text("season").notNull(),
@@ -48,7 +46,8 @@ export const rounds = pgTable("rounds", {
 	start: timestamp("start"),
 	end: timestamp("end"),
 	circuitId: integer("circuit_id").notNull(),
-	series: text("series").$type<SeriesId>()
+	series: text("series").$type<SeriesId>(),
+	updatedAt: timestamp("updated_at")
 });
 
 export const roundRelations = relations(rounds, ({ one, many }) => ({
@@ -60,12 +59,13 @@ export const roundRelations = relations(rounds, ({ one, many }) => ({
 }));
 
 export const sessions = pgTable("sessions", {
-	id: serial("id").primaryKey(),
+	id: text("id").primaryKey(),
 	number: integer("number").default(0).notNull(),
 	start: timestamp("start").notNull(),
 	end: timestamp("end").notNull(),
-	roundId: integer("round_id").notNull(),
-	type: text("type").$type<SessionType>()
+	roundId: text("round_id").notNull(),
+	type: text("type").$type<SessionType>(),
+	updatedAt: timestamp("updated_at")
 });
 
 export const sessionRelations = relations(sessions, ({ one }) => ({

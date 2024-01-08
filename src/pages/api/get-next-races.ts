@@ -1,24 +1,24 @@
-import type { APIRoute } from "astro";
 import * as sessions from "$db/session-repository";
-import type { SeriesId } from "$db/schema";
+import type { SeriesId } from "$db/types";
+import type { APIRoute } from "astro";
 
 export const GET: APIRoute = async ({ request }) => {
 	try {
-		const params = new URL(request.url).searchParams;
-		const seriesIds = params.get("series")?.split(",") as SeriesId[];
+		const query = new URL(request.url).searchParams;
+		const seriesIds = query.get("series")?.split(",") as SeriesId[];
 
 		const data = await sessions.getNextRaces(seriesIds);
 
 		return new Response(
 			JSON.stringify({
 				success: true,
-				data,
+				data
 			})
 		);
 	} catch (error) {
 		console.error(error);
 		return new Response(JSON.stringify({ success: false, reason: error }), {
-			status: 500,
+			status: 500
 		});
 	}
 };

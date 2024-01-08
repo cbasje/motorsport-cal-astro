@@ -1,4 +1,4 @@
-import type { SeriesId } from "$db/schema";
+import type { SeriesId } from "$db/types";
 import { Map, Popup } from "maplibre-gl";
 import type { Point } from "geojson";
 
@@ -64,8 +64,8 @@ class MapLibre extends HTMLElement {
 									icon: m.series.join("-"),
 								},
 							};
-						}),
-					},
+						})
+					}
 				});
 
 				// Add a symbol layer

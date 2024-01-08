@@ -1,5 +1,11 @@
 import type { circuits, rounds, sessions, weather } from "./schema";
 
+export const seriesIds = ["F1", "F2", "F3", "FE", "INDY", "WEC", "F1A"] as const;
+export type SeriesId = (typeof seriesIds)[number];
+
+export const sessionTypes = ["R", "S", "SQ", "Q", "FP", "T", "TBC"] as const;
+export type SessionType = (typeof sessionTypes)[number];
+
 export type Weather = typeof weather.$inferSelect;
 export type NewWeather = typeof weather.$inferInsert;
 
@@ -17,7 +23,10 @@ export type NewCreatedCircuit = typeof circuits.$inferInsert &
 	Pick<Circuit, "id">;
 
 export type Round = typeof rounds.$inferSelect;
-export type NewRound = typeof rounds.$inferInsert & { circuitTitle: string };
+export type NewRound = Omit<typeof rounds.$inferInsert, "circuitId"> & {
+	circuitId?: Circuit["id"];
+	circuitTitle: string;
+} & Pick<Round, "id">;
 
 export type Session = typeof sessions.$inferSelect;
-export type NewSession = typeof sessions.$inferInsert;
+export type NewSession = typeof sessions.$inferInsert & Pick<Session, "id">;

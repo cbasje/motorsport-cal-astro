@@ -3,16 +3,16 @@ export default {
 	useTabs: true,
 	tabWidth: 4,
 	singleQuote: false,
-	trailingComma: "none",
+	trailingComma: "es5",
 	printWidth: 100,
 	plugins: ["prettier-plugin-astro", "prettier-plugin-svelte"],
 	overrides: [
 		{
 			files: "*.astro",
 			options: {
-				parser: "astro",
-			},
+				parser: "astro"
+			}
 		},
-		{ files: "*.svelte", options: { parser: "svelte" } },
-	],
+		{ files: "*.svelte", options: { parser: "svelte" } }
+	]
 };

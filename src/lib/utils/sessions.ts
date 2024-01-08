@@ -1,4 +1,4 @@
-import type { SeriesId, SessionType } from "$db/schema";
+import type { SeriesId, SessionType } from "$db/types";
 
 type TitleRecords = Record<SessionType, string>;
 export const getSessionTitle = (
@@ -13,6 +13,7 @@ export const getSessionTitle = (
 		SQ: "",
 		FP: "Practice",
 		T: "Shakedown",
+		TBC: "TBC"
 	};
 	const defaultTitles: TitleRecords = {
 		R: "Race",
@@ -21,6 +22,7 @@ export const getSessionTitle = (
 		SQ: "Sprint Qualifying",
 		FP: "Practice",
 		T: "Shakedown",
+		TBC: "TBC"
 	};
 
 	if (!type) {

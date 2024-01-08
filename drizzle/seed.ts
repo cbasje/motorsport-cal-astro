@@ -1,9 +1,10 @@
-import { circuits, rounds, sessions, seriesIds, sessionTypes } from "$db/schema";
+import { circuits, rounds, sessions } from "$db/schema";
+import { seriesIds, sessionTypes, type NewRound, type NewSession, type Round } from "$db/types";
 import { fakerEN } from "@faker-js/faker";
-import { exit } from "node:process";
 import { drizzle } from "drizzle-orm/node-postgres";
+import { generateRoundId, generateSessionId } from "lib/utils/id";
+import { exit } from "node:process";
 import postgres from "pg";
-import type { NewRound, NewSession, Round } from "$db/types";
 
 // Disable prefetch as it is not supported for "Transaction" pool mode
 export const pool = new postgres.Pool({
@@ -11,9 +12,9 @@ export const pool = new postgres.Pool({
 });
 const db = drizzle(pool);
 
-const pickRandom = <T extends Readonly<any[]>>(input: T): T[number] | undefined => {
+const pickRandom = <T extends Readonly<any[]>>(input: T): T[number] => {
 	const rnd = Math.round(Math.random() * (input.length - 1));
-	return input.at(rnd);
+	return input.at(rnd) ?? "F1";
 };
 
 async function createCircuit() {
@@ -30,7 +31,8 @@ async function createCircuit() {
 			country: l.countryCode("alpha-2"),
 			timezone: l.timeZone(),
 			lat: l.latitude(),
-			lon: l.longitude()
+			lon: l.longitude(),
+			updatedAt: new Date()
 			// TODO; utcOffset
 		})
 		.returning({ id: circuits.id });
@@ -40,22 +42,26 @@ async function createCircuit() {
 async function createRounds(circuitId: number) {
 	console.log("Creating round...");
 
-	const newRounds: Array<NewRound> = [];
+	const updatedAt = new Date();
+	const newRounds = [];
 	for (let i = 0; i < 2; i++) {
 		const title = fakerEN.company.name() + " Grand Prix";
 		const start = fakerEN.date.future();
 		const end = fakerEN.date.soon({ refDate: start });
 
+		const series = pickRandom(seriesIds);
 		newRounds.push({
+			id: generateRoundId(series, start.getFullYear().toString(), i, title),
 			circuitTitle: "",
 			number: i,
 			title,
 			season: start.getFullYear().toString(),
 			circuitId,
-			series: pickRandom(seriesIds),
+			series,
 			start,
-			end
-		});
+			end,
+			updatedAt
+		} satisfies NewRound);
 	}
 
 	return await db
@@ -67,19 +73,22 @@ async function createRounds(circuitId: number) {
 async function createSessions(rounds: Pick<Round, "id" | "start">[]) {
 	console.log("Creating sessions...");
 
-	const newSessions: Array<NewSession> = [];
+	const updatedAt = new Date();
+	const newSessions = [];
 	for (const r of rounds) {
 		for (const [i, type] of sessionTypes.entries()) {
 			const start = fakerEN.date.soon({ refDate: r.start ?? undefined });
 			const end = fakerEN.date.soon({ refDate: r.start ?? undefined });
 
 			newSessions.push({
+				id: generateSessionId(r.id, type, i),
 				number: i,
 				start,
 				end,
 				roundId: r.id,
-				type
-			});
+				type,
+				updatedAt
+			} satisfies NewSession);
 		}
 	}
 

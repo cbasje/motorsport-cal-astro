@@ -1,4 +1,4 @@
-import type { Circuit, SeriesId } from "$db/schema";
+import type { Circuit, SeriesId } from "$db/types";
 
 const regionNames = new Intl.DisplayNames(undefined, { type: "region" });
 

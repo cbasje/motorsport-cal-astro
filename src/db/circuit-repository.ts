@@ -1,6 +1,7 @@
 import { db } from "$db/drizzle";
-import { circuits, rounds, type SeriesId } from "./schema";
 import { eq, sql } from "drizzle-orm";
+import { circuits, rounds } from "./schema";
+import type { SeriesId } from "./types";
 
 // FIXME: log!
 
