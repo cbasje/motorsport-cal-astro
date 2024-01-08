@@ -1,10 +1,10 @@
-import { main as deleteSeason } from "../../../hunter/src/controllers/delete-season";
-import { main as scrapeGeocoding } from "../../../hunter/src/controllers/geocoding";
-import { main as resetDatabase } from "../../../hunter/src/controllers/reset-database";
-import { main as scrape } from "../../../hunter/src/controllers/scraper";
-import { main as scrapeWeather } from "../../../hunter/src/controllers/weather";
-import { main as scrapeWikipedia } from "../../../hunter/src/controllers/wikipedia";
 import type { APIRoute } from "astro";
+import { main as deleteSeason } from "../../../hunter/controllers/delete-season";
+import { main as huntGeocoding } from "../../../hunter/controllers/geocoding";
+import { main as hunt } from "../../../hunter/controllers/hunt";
+import { main as resetDatabase } from "../../../hunter/controllers/reset-database";
+import { main as huntWeather } from "../../../hunter/controllers/weather";
+import { main as huntWikipedia } from "../../../hunter/controllers/wikipedia";
 
 export const GET: APIRoute = async ({ request, params }) => {
 	try {
@@ -12,20 +12,20 @@ export const GET: APIRoute = async ({ request, params }) => {
 
 		let data = {};
 		switch (params.path) {
-			case "scrape":
-				data = await scrape();
+			case "hunt":
+				data = await hunt();
 
 				break;
 			case "wikipedia":
-				data = await scrapeWikipedia();
+				data = await huntWikipedia();
 
 				break;
 			case "weather":
-				data = await scrapeWeather();
+				data = await huntWeather();
 
 				break;
 			case "geocode":
-				data = await scrapeGeocoding();
+				data = await huntGeocoding();
 
 				break;
 			case "delete-season":
