@@ -18,11 +18,11 @@ export default function createIntegration(args?: Options): AstroIntegration {
 						assets: {
 							supportKind: "experimental",
 							isSharpCompatible: true,
-							isSquooshCompatible: true,
-						},
-					},
+							isSquooshCompatible: true
+						}
+					}
 				});
-			},
-		},
+			}
+		}
 	};
 }

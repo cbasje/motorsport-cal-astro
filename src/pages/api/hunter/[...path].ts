@@ -48,13 +48,13 @@ export const GET: APIRoute = async ({ request, params }) => {
 
 		return new Response(JSON.stringify({ success: true, data }), {
 			status: 200,
-			headers: { "content-type": "application/json" }
+			headers: { "Content-Type": "application/json" }
 		});
 	} catch (error) {
 		console.error(error);
 		return new Response(JSON.stringify({ success: false, reason: error }), {
 			status: 500,
-			headers: { "content-type": "application/json" }
+			headers: { "Content-Type": "application/json" }
 		});
 	}
 };
