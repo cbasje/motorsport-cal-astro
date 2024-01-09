@@ -9,6 +9,7 @@ export function start(manifest: SSRManifest, options: Options) {
 	const clientRoot = new URL("../client/", import.meta.url);
 	const app = new App(manifest);
 	const logger = app.getAdapterLogger();
+
 	_server = Bun.serve({
 		port: options.port ?? 3000,
 		hostname: options.hostname ?? "0.0.0.0",
@@ -49,10 +50,10 @@ export function start(manifest: SSRManifest, options: Options) {
 		error(error) {
 			return new Response(`<pre>${error}\n${error.stack}</pre>`, {
 				headers: {
-					"Content-Type": "text/html"
-				}
+					"Content-Type": "text/html",
+				},
 			});
-		}
+		},
 	});
 
 	logger.info(`Bun server listening on ${_server.hostname}:${_server.port}`);
@@ -76,6 +77,6 @@ export function createExports(manifest: SSRManifest, options: Options) {
 		},
 		async handle(request: Request) {
 			return app.render(request);
-		}
+		},
 	};
 }
