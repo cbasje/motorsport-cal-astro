@@ -22,7 +22,7 @@ export const getNextRaces = async (ids: SeriesId[]) => {
 			start: sessions.start,
 			end: sessions.end,
 			title: rounds.title,
-			series: rounds.series
+			series: rounds.series,
 		})
 		.from(sessions)
 		.leftJoin(rounds, eq(sessions.roundId, rounds.id))
@@ -44,7 +44,7 @@ export const getNextSession = async (input: {
 	const schema = z.object({
 		weekOffset: z.number().int().min(-52).max(52).default(0),
 		now: z.date().optional(),
-		roundId: z.string().optional()
+		roundId: z.string().optional(),
 	});
 
 	const [start, end] = getWeekendDates(input.weekOffset);
@@ -55,7 +55,7 @@ export const getNextSession = async (input: {
 			end: sessions.end,
 			number: sessions.number,
 			series: rounds.series,
-			timezone: circuits.timezone
+			timezone: circuits.timezone,
 		})
 		.from(sessions)
 		.leftJoin(rounds, eq(sessions.roundId, rounds.id))
@@ -74,13 +74,24 @@ export const getNextSession = async (input: {
 
 export const getNextSessionWidget = async () => {
 	return await db.transaction(async (tx) => {
+		const [nextRound] = await tx
+			.select({
+				start: rounds.start,
+				end: rounds.end,
+				series: rounds.series,
+			})
+			.from(rounds)
+			.where(gte(sessions.end, new Date()))
+			.orderBy(asc(sessions.start))
+			.limit(1);
+
 		const [nextSession] = await tx
 			.select({
 				type: sessions.type,
 				number: sessions.number,
 				start: sessions.start,
 				end: sessions.end,
-				series: rounds.series
+				series: rounds.series,
 			})
 			.from(sessions)
 			.leftJoin(rounds, eq(sessions.roundId, rounds.id))
@@ -88,27 +99,23 @@ export const getNextSessionWidget = async () => {
 			.orderBy(asc(sessions.start))
 			.limit(1);
 
-		if (!nextSession) return;
-
-		const millis = nextSession.start.valueOf() - Date.now();
+		const millis = (nextRound.start ?? nextSession.start)?.valueOf() - Date.now();
 		const weekOffset = Math.floor(millis / (7 * 24 * 60 * 60 * 1000));
 
 		const [start, end] = getWeekendDates(weekOffset);
-		const nextRounds = await tx
+		const weekendRounds = await tx
 			.select({
-				series: rounds.series
+				series: rounds.series,
 			})
 			.from(rounds)
 			.where(and(gte(rounds.end, start), lte(rounds.end, end)))
 			.limit(1);
 
-		if (nextRounds.length === 0) return;
-
 		return {
-			firstRound: nextRounds.at(0),
+			firstRound: nextRound,
 			session: nextSession,
 			weekOffset,
-			series: nextRounds.map((r) => r.series)
+			series: weekendRounds.map((r) => r.series),
 		};
 	});
 };
@@ -120,7 +127,7 @@ export const getSessionsByRoundId = async (id: string) => {
 			number: sessions.number,
 			start: sessions.start,
 			end: sessions.end,
-			type: sessions.type
+			type: sessions.type,
 		})
 		.from(sessions)
 		.leftJoin(rounds, eq(sessions.roundId, rounds.id))

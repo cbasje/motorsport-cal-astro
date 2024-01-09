@@ -1,28 +1,27 @@
 import type { SeriesId, SessionType } from "$db/types";
 
-type TitleRecords = Record<SessionType, string>;
 export const getSessionTitle = (
 	series: SeriesId | null,
 	type: SessionType | null,
 	number: number
 ) => {
-	const feederTitles: TitleRecords = {
+	const feederTitles: Record<SessionType, string> = {
 		R: "Feature Race",
 		S: "Sprint Race",
 		Q: "Qualifying",
 		SQ: "",
 		FP: "Practice",
 		T: "Shakedown",
-		TBC: "TBC"
+		TBC: "TBC",
 	};
-	const defaultTitles: TitleRecords = {
+	const defaultTitles: Record<SessionType, string> = {
 		R: "Race",
 		S: "Sprint",
 		Q: "Qualifying",
 		SQ: "Sprint Qualifying",
 		FP: "Practice",
 		T: "Shakedown",
-		TBC: "TBC"
+		TBC: "TBC",
 	};
 
 	if (!type) {
