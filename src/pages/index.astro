@@ -12,7 +12,6 @@ const [startOffset, endOffset] = searchParams.get("offset")?.split(",").map(Numb
 	undefined,
 ];
 const weekends = await rounds.getWeekends({ startOffset, endOffset });
-console.log(weekends);
 
 const now = Date.now();
 ---

@@ -1,7 +1,7 @@
 import { db } from "$db/drizzle";
 import { z } from "zod";
 import { circuits, rounds, sessions } from "./schema";
-import { eq, asc, and, gte, lte, sql } from "drizzle-orm";
+import { eq, asc, and, gte, lte, sql, desc } from "drizzle-orm";
 import { getWeekendDates, getWeekendOffset } from "$lib/utils/date";
 import { groupBy } from "lodash";
 
@@ -76,6 +76,6 @@ export const getWeekends = async (input: {
 		.leftJoin(sessionSq, eq(sessionSq.roundId, rounds.id))
 		.leftJoin(circuits, eq(circuits.id, rounds.circuitId))
 		.where(and(gte(rounds.start, start), lte(rounds.end, end)))
-		.orderBy(asc(rounds.series));
+		.orderBy(desc(rounds.start), asc(rounds.series));
 	return groupBy(allRounds, (r) => getWeekendOffset(r.start));
 };
