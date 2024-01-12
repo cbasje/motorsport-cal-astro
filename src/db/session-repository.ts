@@ -1,5 +1,5 @@
 import { db } from "$db/drizzle";
-import { getWeekendDates } from "$lib/utils/date";
+import { getWeekendDates, getWeekendOffset } from "$lib/utils/date";
 import { and, asc, desc, eq, gte, inArray, lte } from "drizzle-orm";
 import { z } from "zod";
 import { circuits, rounds, sessions } from "./schema";
@@ -99,10 +99,9 @@ export const getNextSessionWidget = async () => {
 			.orderBy(asc(sessions.start))
 			.limit(1);
 
-		const millis = (nextRound.start ?? nextSession.start)?.valueOf() - Date.now();
-		const weekOffset = Math.floor(millis / (7 * 24 * 60 * 60 * 1000));
+		const weekendOffset = getWeekendOffset(nextRound.start ?? nextSession.start);
 
-		const [start, end] = getWeekendDates(weekOffset);
+		const [start, end] = getWeekendDates(weekendOffset);
 		const weekendRounds = await tx
 			.select({
 				series: rounds.series,
@@ -114,7 +113,7 @@ export const getNextSessionWidget = async () => {
 		return {
 			firstRound: nextRound,
 			session: nextSession,
-			weekOffset,
+			weekendOffset,
 			series: weekendRounds.map((r) => r.series),
 		};
 	});

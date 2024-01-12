@@ -9,9 +9,10 @@ const { pathname, searchParams } = Astro.url;
 
 const [startOffset, endOffset] = searchParams.get("offset")?.split(",").map(Number) ?? [
 	0,
-	undefined
+	undefined,
 ];
 const weekends = await rounds.getWeekends({ startOffset, endOffset });
+console.log(weekends);
 
 const now = Date.now();
 ---
@@ -24,34 +25,51 @@ const now = Date.now();
 		<span>Previous</span>
 	</a>
 	<section>
-		<h1 id="this-weekend">
+		<!-- <h1 id="this-weekend">
 			{
 				new Intl.RelativeTimeFormat("en-GB", {
-					numeric: "auto"
+					numeric: "auto",
 				}).format(startOffset ?? 0, "week")
 			}
-		</h1>
+		</h1> -->
 		<ul class="round-list" role="list">
 			{
-				weekends?.length ? (
-					weekends.map((round) => (
-						<li
-							id={`round-${round.id}`}
-							transition:name={`round-${round.id}`}
-							transition:persist
-							style={`--color-hue: var(--${round.series}-hue)`}
-							class={round.end && round.end.valueOf() < now ? "past" : ""}
-						>
-							<RoundCard round={round} link={`/round/${round.id}`} showNextSession />
+				Object.keys(weekends)?.length > 0 ? (
+					Object.keys(weekends).map((weekend) => (
+						<li class="weekend">
+							<h2>
+								{new Intl.RelativeTimeFormat("en-GB", {
+									numeric: "auto",
+								}).format(Number(weekend), "week")}
+							</h2>
 
-							<div class="stack-wrapper" aria-hidden="true">
-								{[...Array(round.sessionCount)].map((_n, i) => (
+							{weekends[weekend].length > 0 &&
+								weekends[weekend].map((round) => (
 									<div
-										data-index={i}
-										transition:name={`sessions-${i}-${round.id}`}
-									/>
+										id={`round-${round.id}`}
+										class={
+											"round-item" +
+											(round.end?.valueOf() < now ? "past" : "")
+										}
+										transition:name={`round-${round.id}`}
+										style={`--color-hue: var(--${round.series}-hue)`}
+									>
+										<RoundCard
+											round={round}
+											link={`/round/${round.id}`}
+											showNextSession
+										/>
+
+										<div class="stack-wrapper" aria-hidden="true">
+											{[...Array(round.sessionCount)].map((_n, i) => (
+												<div
+													data-index={i}
+													transition:name={`sessions-${i}-${round.id}`}
+												/>
+											))}
+										</div>
+									</div>
 								))}
-							</div>
 						</li>
 					))
 				) : (
@@ -67,7 +85,7 @@ const now = Date.now();
 </MainLayout>
 
 <style lang="postcss">
-    h1 {
+    h1, h2 {
         text-transform: capitalize;
     }
 
@@ -82,8 +100,10 @@ const now = Date.now();
         > li {
             padding: 0;
             max-inline-size: unset;
-            position: relative;
         }
+		.round-item {
+            position: relative;
+		}
         :global(.past) {
             opacity: 0.5;
         }

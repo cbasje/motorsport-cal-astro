@@ -2,7 +2,8 @@ import { db } from "$db/drizzle";
 import { z } from "zod";
 import { circuits, rounds, sessions } from "./schema";
 import { eq, asc, and, gte, lte, sql } from "drizzle-orm";
-import { getWeekendDates } from "$lib/utils/date";
+import { getWeekendDates, getWeekendOffset } from "$lib/utils/date";
+import { groupBy } from "lodash";
 
 // FIXME: log!
 
@@ -10,7 +11,7 @@ const sessionSq = db.$with("children").as(
 	db
 		.select({
 			roundId: sessions.roundId,
-			count: sql<number>`count(*)::int`.as("count")
+			count: sql<number>`count(*)::int`.as("count"),
 		})
 		.from(sessions)
 		.groupBy(sessions.roundId)
@@ -33,10 +34,10 @@ export const getOne = async (id: string) => {
 			locality: circuits.locality,
 			circuitTitle: circuits.title,
 			timezone: circuits.timezone,
-			sessionCount: sessionSq.count
+			sessionCount: sessionSq.count,
 		})
-		.from(sessionSq)
-		.leftJoin(rounds, eq(rounds.id, sessionSq.roundId))
+		.from(rounds)
+		.leftJoin(sessionSq, eq(sessionSq.roundId, rounds.id))
 		.leftJoin(circuits, eq(rounds.circuitId, circuits.id))
 		.where(eq(rounds.id, id))
 		.limit(1);
@@ -53,15 +54,15 @@ export const getWeekends = async (input: {
 }) => {
 	const schema = z.object({
 		startOffset: z.number().int().min(-52).max(52).default(0),
-		endOffset: z.number().int().min(-52).max(52).default(0)
+		endOffset: z.number().int().min(-52).max(52).default(0),
 	});
 
 	const [start, end] = getWeekendDates(input.startOffset, input.endOffset);
 
-	return await db
+	const allRounds = await db
 		.with(sessionSq)
 		.select({
-			id: sessionSq.roundId,
+			id: rounds.id,
 			title: rounds.title,
 			series: rounds.series,
 			start: rounds.start,
@@ -69,11 +70,12 @@ export const getWeekends = async (input: {
 			country: circuits.country,
 			locality: circuits.locality,
 			circuitTitle: circuits.title,
-			sessionCount: sessionSq.count
+			sessionCount: sessionSq.count,
 		})
-		.from(sessionSq)
-		.leftJoin(rounds, eq(rounds.id, sessionSq.roundId))
+		.from(rounds)
+		.leftJoin(sessionSq, eq(sessionSq.roundId, rounds.id))
 		.leftJoin(circuits, eq(circuits.id, rounds.circuitId))
 		.where(and(gte(rounds.start, start), lte(rounds.end, end)))
 		.orderBy(asc(rounds.series));
+	return groupBy(allRounds, (r) => getWeekendOffset(r.start));
 };

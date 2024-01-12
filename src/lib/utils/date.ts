@@ -15,7 +15,7 @@ export const trackTime = (timeZone: string, start: Date, end?: Date) => {
 		weekday: "short",
 		hour: "numeric",
 		minute: "numeric",
-		timeZone
+		timeZone,
 	});
 
 	if (end) {
@@ -30,7 +30,7 @@ export const yourTime = (start: Date, end?: Date) => {
 	const yourTimeFormat = new Intl.DateTimeFormat("en-GB", {
 		weekday: "short",
 		hour: "numeric",
-		minute: "numeric"
+		minute: "numeric",
 	});
 
 	if (end) {
@@ -44,7 +44,7 @@ export const relTime = (date: Date, now: number) => {
 	const rel = date.valueOf() - now;
 	const relTimeFormat = new Intl.RelativeTimeFormat("en-GB", {
 		style: "long",
-		numeric: "auto"
+		numeric: "auto",
 	});
 
 	if (Math.abs(rel) > week) {
@@ -74,4 +74,11 @@ export const getWeekendDates = (start = 0, end?: number) => {
 	nextMonday.setHours(12, 0, 0, 0);
 
 	return [lastMonday, nextMonday];
+};
+
+export const getWeekendOffset = (date: Date | null) => {
+	if (!date) return 0;
+
+	const millis = date?.valueOf() - Date.now();
+	return Math.floor(millis / (7 * 24 * 60 * 60 * 1000));
 };

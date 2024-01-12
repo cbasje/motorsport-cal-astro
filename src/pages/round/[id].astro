@@ -14,11 +14,11 @@ const round = await rounds.getOne(id);
 const sessionsByRound = await sessions.getSessionsByRoundId(id);
 ---
 
-<MainLayout title={round.title ?? "Undefined Round"} path={pathname}>
+<MainLayout title={round?.title ?? "Undefined Round"} path={pathname}>
 	{
 		round && (
 			<>
-				<div transition:name={`round-${round.id}`}>
+				<div class="round-item" transition:name={`round-${round.id}`}>
 					<RoundCard round={round} />
 				</div>
 
