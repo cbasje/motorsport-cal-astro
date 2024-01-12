@@ -20,7 +20,7 @@ const now = Date.now();
 	<IndexNav />
 
 	<a href={`?offset=${(startOffset ?? 0) - 1},${endOffset ?? 0}`} class="btn btn-surface">
-		<Icon name="chevron-up" />
+		<Icon name="filled/angle-up" />
 		<span>Previous</span>
 	</a>
 	<section>
@@ -61,7 +61,7 @@ const now = Date.now();
 		</ul>
 	</section>
 	<a href={`?offset=${startOffset ?? 0},${(endOffset ?? 0) + 1}`} class="btn btn-surface">
-		<Icon name="chevron-down" />
+		<Icon name="filled/angle-down" />
 		<span>Next</span>
 	</a>
 </MainLayout>
