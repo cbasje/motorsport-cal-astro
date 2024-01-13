@@ -17,7 +17,7 @@
 	let now = new Date();
 	export let roundId: number;
 
-	const url = new URL("/api/get-next-session", "http://localhost:3000");
+	const url = new URL("/api/next-session", "http://localhost:3000");
 	url.searchParams.set("now", now.toISOString());
 	url.searchParams.set("roundId", String(roundId));
 
@@ -30,7 +30,7 @@
 			return {
 				...data,
 				start: data.start ? new Date(data.start) : undefined,
-				end: data.end ? new Date(data.end) : undefined
+				end: data.end ? new Date(data.end) : undefined,
 			} as NextSession;
 		},
 		{ refetchOnWindowFocus: false }

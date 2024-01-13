@@ -80,5 +80,5 @@ export const getWeekendOffset = (date: Date | null) => {
 	if (!date) return 0;
 
 	const millis = date?.valueOf() - Date.now();
-	return Math.floor(millis / (7 * 24 * 60 * 60 * 1000));
+	return Math.round(millis / (7 * 24 * 60 * 60 * 1000));
 };

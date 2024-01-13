@@ -81,8 +81,8 @@ export const getNextSessionWidget = async () => {
 				series: rounds.series,
 			})
 			.from(rounds)
-			.where(gte(sessions.end, new Date()))
-			.orderBy(asc(sessions.start))
+			.where(gte(rounds.end, new Date()))
+			.orderBy(asc(rounds.start))
 			.limit(1);
 
 		const [nextSession] = await tx
