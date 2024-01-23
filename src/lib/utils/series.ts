@@ -1,29 +1,31 @@
 import type { SeriesId } from "$db/types";
 
+export const icons: Record<SeriesId, string> = {
+	F1: "dashing-away",
+	F2: "boy",
+	F3: "baby",
+	FE: "battery",
+	INDY: "eagle",
+	WEC: "stopwatch",
+	WRC: "snow-capped-mountain",
+	F1A: "girl",
+};
 export const getSeriesIcon = (s: SeriesId | null) => {
-	const titles: Record<SeriesId, string> = {
-		F1: "dashing-away",
-		F2: "boy",
-		F3: "baby",
-		FE: "battery",
-		INDY: "eagle",
-		WEC: "stopwatch",
-		F1A: "girl"
-	};
-	return (s && titles[s]) ?? "police-car-light";
+	return (s && icons[s]) ?? "police-car-light";
 };
 
 export const getSeriesEmoji = (s: SeriesId | null) => {
-	const titles: Record<SeriesId, string> = {
+	const emoji: Record<SeriesId, string> = {
 		F1: "💨",
 		F2: "👦🏻",
 		F3: "👶🏻",
 		FE: "🔋",
 		INDY: "🦅",
 		WEC: "⏱️",
-		F1A: "👧🏻"
+		WRC: "🏔️",
+		F1A: "👧🏻",
 	};
-	return (s && titles[s]) ?? "🚨";
+	return (s && emoji[s]) ?? "🚨";
 };
 
 export const getSeriesTitle = (s: SeriesId | null) => {
@@ -34,7 +36,8 @@ export const getSeriesTitle = (s: SeriesId | null) => {
 		FE: "Formula E",
 		INDY: "IndyCar",
 		WEC: "WEC",
-		F1A: "F1 Academy"
+		WRC: "WRC",
+		F1A: "F1 Academy",
 	};
 	return (s && titles[s]) ?? "Error";
 };
@@ -47,7 +50,8 @@ export const getSeriesTitleShort = (s: SeriesId | null) => {
 		FE: "FE",
 		INDY: "Indy",
 		WEC: "WEC",
-		F1A: "F1A"
+		WRC: "WRC",
+		F1A: "F1A",
 	};
 	return (s && titles[s]) ?? "Err";
 };
@@ -60,7 +64,8 @@ export const getSeriesColor = (s: SeriesId | null) => {
 		FE: "#6283FE",
 		INDY: "#00C3AC",
 		WEC: "#46B613",
-		F1A: "#FD3BAD"
+		WRC: "#FC4C01",
+		F1A: "#FD3BAD",
 	};
 	return (s && colors[s]) ?? "#000";
 };
@@ -72,7 +77,8 @@ export const getSeriesSecondaryColor = (s: SeriesId) => {
 		FE: "#536FFE",
 		INDY: "#00B49D",
 		WEC: "#2BA711",
-		F1A: "#EF099F"
+		WRC: "#202A44",
+		F1A: "#EF099F",
 	};
 	return (s && colors[s]) ?? "#000";
 };

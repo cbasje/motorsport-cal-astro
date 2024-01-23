@@ -1,6 +1,6 @@
 import type { circuits, rounds, sessions, weather } from "./schema";
 
-export const seriesIds = ["F1", "F2", "F3", "FE", "INDY", "WEC", "F1A"] as const;
+export const seriesIds = ["F1", "F2", "F3", "FE", "INDY", "WEC", "WRC", "F1A"] as const;
 export type SeriesId = (typeof seriesIds)[number];
 
 export const sessionTypes = ["R", "S", "SQ", "Q", "FP", "T", "TBC"] as const;
