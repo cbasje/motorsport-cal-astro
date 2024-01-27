@@ -76,11 +76,14 @@ export const getNextSessionWidget = async () => {
 	return await db.transaction(async (tx) => {
 		const [nextRound] = await tx
 			.select({
+				id: rounds.id,
 				start: rounds.start,
 				end: rounds.end,
 				series: rounds.series,
+				country: circuits.country,
 			})
 			.from(rounds)
+			.leftJoin(circuits, eq(circuits.id, rounds.circuitId))
 			.where(gte(rounds.end, new Date()))
 			.orderBy(asc(rounds.start))
 			.limit(1);
@@ -95,7 +98,7 @@ export const getNextSessionWidget = async () => {
 			})
 			.from(sessions)
 			.leftJoin(rounds, eq(sessions.roundId, rounds.id))
-			.where(gte(sessions.end, new Date()))
+			.where(gte(sessions.start, new Date()))
 			.orderBy(asc(sessions.start))
 			.limit(1);
 
@@ -107,14 +110,13 @@ export const getNextSessionWidget = async () => {
 				series: rounds.series,
 			})
 			.from(rounds)
-			.where(and(gte(rounds.end, start), lte(rounds.end, end)))
-			.limit(1);
+			.where(and(gte(rounds.end, start), lte(rounds.end, end)));
 
 		return {
 			firstRound: nextRound,
 			session: nextSession,
-			weekendOffset,
-			series: weekendRounds.map((r) => r.series),
+			weekendOffset: weekendOffset ?? 0,
+			series: [...new Set(weekendRounds.map((r) => r.series))],
 		};
 	});
 };
@@ -131,5 +133,5 @@ export const getSessionsByRoundId = async (id: string) => {
 		.from(sessions)
 		.leftJoin(rounds, eq(sessions.roundId, rounds.id))
 		.where(eq(rounds.id, id))
-		.orderBy(desc(sessions.start));
+		.orderBy(asc(sessions.start));
 };

@@ -6,7 +6,7 @@ import * as feed from "$db/feed-repository";
 
 type Session = Awaited<ReturnType<typeof feed.getAllSessions>>[number];
 
-const TITLE = "Motorsport Calendar";
+const TITLE = "Porpoise Motorsport Calendar";
 const PRODUCT = "benjamiin..";
 
 const getCalDate = (date: Date): DateArray => {
@@ -15,7 +15,7 @@ const getCalDate = (date: Date): DateArray => {
 		date.getMonth() + 1,
 		date.getDate(),
 		date.getHours(),
-		date.getMinutes()
+		date.getMinutes(),
 	];
 };
 
@@ -44,9 +44,9 @@ export const generateFeed = async (items: Session[]): Promise<EventAttributes[]>
 			}`,
 			// htmlContent:
 			// 	'<!DOCTYPE html><html><body><p>This is<br>test<br>html code.</p></body></html>',
-			location: session.circuitTitle ?? undefined,
-			url: session.link ?? undefined,
-			geo: session.lon && session.lat ? { lon: session.lon, lat: session.lat } : undefined
+			location: session.circuitTitle || undefined,
+			url: session.link || undefined,
+			geo: session.lon && session.lat ? { lon: session.lon, lat: session.lat } : undefined,
 		});
 	}
 
@@ -71,13 +71,13 @@ export const GET: APIRoute = async () => {
 		return new Response(eventFeed, {
 			status: 200,
 			headers: {
-				"Content-Type": "text/calendar"
-			}
+				"Content-Type": "text/calendar",
+			},
 		});
 	} catch (error) {
 		console.error(error);
 		return new Response(null, {
-			status: 500
+			status: 500,
 		});
 	}
 };

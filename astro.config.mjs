@@ -1,4 +1,3 @@
-import { icons } from "$lib/utils/series";
 import svelte from "@astrojs/svelte";
 import icon from "astro-icon";
 import { defineConfig } from "astro/config";
@@ -14,7 +13,16 @@ export default defineConfig({
 		svelte(),
 		icon({
 			include: {
-				"fluent-emoji-high-contrast": Object.values(icons),
+				"fluent-emoji-high-contrast": [
+					"dashing-away",
+					"boy",
+					"baby",
+					"battery",
+					"eagle",
+					"stopwatch",
+					"snow-capped-mountain",
+					"girl",
+				],
 			},
 			svgoOptions: {
 				plugins: [
