@@ -98,7 +98,7 @@ export const getNextSessionWidget = async () => {
 			})
 			.from(sessions)
 			.leftJoin(rounds, eq(sessions.roundId, rounds.id))
-			.where(gte(sessions.start, new Date()))
+			.where(gte(sessions.end, new Date()))
 			.orderBy(asc(sessions.start))
 			.limit(1);
 
@@ -116,7 +116,13 @@ export const getNextSessionWidget = async () => {
 			firstRound: nextRound,
 			session: nextSession,
 			weekendOffset: weekendOffset ?? 0,
-			series: [...new Set(weekendRounds.map((r) => r.series))],
+			series: [
+				...new Set(
+					weekendRounds
+						.sort((a) => (a.series === nextSession.series ? 1 : 0)) // Prefer the series of nextSession
+						.map((r) => r.series)
+				),
+			],
 		};
 	});
 };

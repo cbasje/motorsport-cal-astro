@@ -74,7 +74,7 @@ const iconsToHTML = (body: string[], extraAttributes: Record<string, string>) =>
 		...extraAttributes,
 		width: "338",
 		height: "338",
-		viewBox: "0 0 338 338"
+		viewBox: "0 0 338 338",
 	};
 
 	let renderAttribsHTML = "";
@@ -86,12 +86,11 @@ const iconsToHTML = (body: string[], extraAttributes: Record<string, string>) =>
 };
 
 export const GET: APIRoute = async ({ params }) => {
-	const seriesSet = new Set(params.series?.split("-"));
-	const series = [...seriesSet];
+	const series = [...new Set(params.series?.split("-"))];
 
 	if (!series || !series.length)
 		return new Response(undefined, {
-			status: 404
+			status: 404,
 		});
 
 	let renderData: string[] = [];
@@ -103,12 +102,12 @@ export const GET: APIRoute = async ({ params }) => {
 		const iconData = getIconData(icons, iconId);
 		if (!iconData)
 			return new Response(`Icon "${iconId}" is missing`, {
-				status: 404
+				status: 404,
 			});
 
 		// Use it to render icon
 		const iconRenderData = iconToSVG(iconData, {
-			height: "auto"
+			height: "auto",
 		});
 		renderData.push(iconRenderData.body);
 	}
@@ -117,7 +116,7 @@ export const GET: APIRoute = async ({ params }) => {
 	const svg = iconsToHTML(
 		renderData.map((d) => replaceIDs(d)),
 		{
-			style: `color: rgba(0,0,0,0.125)`
+			style: `color: rgba(0,0,0,0.125)`,
 		}
 	);
 
@@ -128,7 +127,7 @@ export const GET: APIRoute = async ({ params }) => {
 		status: 200,
 		headers: {
 			"Content-Type": "image/png",
-			"Cache-Control": "s-maxage=1, stale-while-revalidate=59"
-		}
+			"Cache-Control": "s-maxage=1, stale-while-revalidate=59",
+		},
 	});
 };
