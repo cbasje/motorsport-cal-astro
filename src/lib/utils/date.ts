@@ -9,9 +9,8 @@ export const isValidDate = (input: Date | string | null | undefined) => {
 	return true;
 };
 
-export const trackTime = (timeZone: string, start: Date, end?: Date) => {
-	// FIXME: language
-	const trackTimeFormat = new Intl.DateTimeFormat("en-GB", {
+export const formatTrackTime = (timeZone: string, start: Date, end?: Date) => {
+	const trackTimeFormat = new Intl.DateTimeFormat(undefined, {
 		weekday: "short",
 		hour: "numeric",
 		minute: "numeric",
@@ -25,9 +24,8 @@ export const trackTime = (timeZone: string, start: Date, end?: Date) => {
 	}
 };
 
-export const yourTime = (start: Date, end?: Date) => {
-	// FIXME: language
-	const yourTimeFormat = new Intl.DateTimeFormat("en-GB", {
+export const formatYourTime = (start: Date, end?: Date) => {
+	const yourTimeFormat = new Intl.DateTimeFormat(undefined, {
 		weekday: "short",
 		hour: "numeric",
 		minute: "numeric",
@@ -40,9 +38,9 @@ export const yourTime = (start: Date, end?: Date) => {
 	}
 };
 
-export const relTime = (date: Date, now: number) => {
+export const formatRelTime = (date: Date, now: number) => {
 	const rel = date.valueOf() - now;
-	const relTimeFormat = new Intl.RelativeTimeFormat("en-GB", {
+	const relTimeFormat = new Intl.RelativeTimeFormat(undefined, {
 		style: "long",
 		numeric: "auto",
 	});
@@ -58,7 +56,27 @@ export const relTime = (date: Date, now: number) => {
 	}
 };
 
-export const getWeekendDates = (start = 0, end?: number) => {
+export const formatRelWeekend = (weekend: number | string) => {
+	const formatter = new Intl.RelativeTimeFormat(undefined, {
+		numeric: "auto",
+	});
+	return formatter.format(
+		typeof weekend === "string" ? Number.parseInt(weekend) : weekend,
+		"week"
+	);
+};
+export const formatRangeWeekend = (weekendOffset: number | string) => {
+	const weekendOffsetNumber =
+		typeof weekendOffset === "string" ? Number.parseInt(weekendOffset) : weekendOffset;
+	const [start, end] = getWeekendDatesFromOffset(weekendOffsetNumber);
+
+	const formatter = new Intl.DateTimeFormat(undefined, {
+		dateStyle: "medium",
+	});
+	return formatter.formatRange(start, end);
+};
+
+export const getWeekendDatesFromOffset = (startOffset = 0, endOffset?: number) => {
 	const now = new Date();
 
 	const lastMonday = new Date();
@@ -67,8 +85,8 @@ export const getWeekendDates = (start = 0, end?: number) => {
 	const day = now.getDay();
 	const diff = (day + 7 - 1) % 7; // Calculate the difference from Monday (1) to the current day
 
-	lastMonday.setDate(now.getDate() - diff + 7 * start);
-	nextMonday.setDate(now.getDate() - diff + 7 * ((end ?? start) + 1));
+	lastMonday.setDate(now.getDate() - diff + 7 * startOffset);
+	nextMonday.setDate(now.getDate() - diff + 7 * ((endOffset ?? startOffset) + 1));
 
 	lastMonday.setHours(12, 0, 0, 0);
 	nextMonday.setHours(12, 0, 0, 0);
@@ -76,9 +94,15 @@ export const getWeekendDates = (start = 0, end?: number) => {
 	return [lastMonday, nextMonday];
 };
 
-export const getWeekendOffset = (date: Date | null) => {
-	if (!date) return 0;
+export const getWeekendOffsetFromDates = (start: Date | null, end?: Date | null) => {
+	if (!start) return 0;
 
-	const millis = date?.valueOf() - Date.now();
+	let millis: number;
+	if (end) {
+		millis = (start.valueOf() + end.valueOf()) / 2 - Date.now();
+	} else {
+		millis = start.valueOf() - Date.now();
+	}
+
 	return Math.round(millis / (7 * 24 * 60 * 60 * 1000));
 };

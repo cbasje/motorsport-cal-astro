@@ -1,9 +1,10 @@
 ---
 import RoundCard from "$components/RoundCard.astro";
+import RoundNav from "$components/RoundNav.astro";
 import SessionCard from "$components/SessionCard.astro";
-import MainLayout from "$layouts/main.astro";
 import * as rounds from "$db/round-repository";
 import * as sessions from "$db/session-repository";
+import MainLayout from "$layouts/main.astro";
 
 const { pathname } = Astro.url;
 const { id } = Astro.params;
@@ -15,6 +16,8 @@ const sessionsByRound = await sessions.getSessionsByRoundId(id);
 ---
 
 <MainLayout title={round?.title ?? "Undefined Round"} path={pathname}>
+	<RoundNav />
+
 	{
 		round && (
 			<>

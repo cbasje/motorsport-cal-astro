@@ -1,9 +1,9 @@
 import { db } from "$db/drizzle";
-import { getWeekendDates, getWeekendOffset } from "$lib/utils/date";
 import { and, asc, desc, eq, gte, inArray, lte } from "drizzle-orm";
 import { z } from "zod";
 import { circuits, rounds, sessions } from "./schema";
 import { seriesIds, type SeriesId } from "./types";
+import { getWeekendDatesFromOffset, getWeekendOffsetFromDates } from "$lib/utils/date";
 
 // FIXME: log!
 
@@ -47,7 +47,7 @@ export const getNextSession = async (input: {
 		roundId: z.string().optional(),
 	});
 
-	const [start, end] = getWeekendDates(input.weekOffset);
+	const [start, end] = getWeekendDatesFromOffset(input.weekOffset);
 	const [first] = await db
 		.select({
 			type: sessions.type,
@@ -102,9 +102,15 @@ export const getNextSessionWidget = async () => {
 			.orderBy(asc(sessions.start))
 			.limit(1);
 
-		const weekendOffset = getWeekendOffset(nextRound.start ?? nextSession.start);
+		const weekendOffset = Math.max(
+			0,
+			getWeekendOffsetFromDates(
+				nextRound.start ?? nextSession.start,
+				nextRound.end ?? nextSession.end
+			)
+		);
 
-		const [start, end] = getWeekendDates(weekendOffset);
+		const [start, end] = getWeekendDatesFromOffset(weekendOffset);
 		const weekendRounds = await tx
 			.select({
 				series: rounds.series,

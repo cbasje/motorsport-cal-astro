@@ -1,5 +1,5 @@
 import { db } from "$db/drizzle";
-import { getWeekendDates, getWeekendOffset } from "$lib/utils/date";
+import { getWeekendDatesFromOffset, getWeekendOffsetFromDates } from "$lib/utils/date";
 import { and, asc, eq, gte, lte, sql } from "drizzle-orm";
 import { groupBy } from "lodash";
 import { z } from "zod";
@@ -57,7 +57,7 @@ export const getWeekends = async (input: {
 		endOffset: z.number().int().min(-52).max(52).default(0),
 	});
 
-	const [start, end] = getWeekendDates(input.startOffset, input.endOffset);
+	const [start, end] = getWeekendDatesFromOffset(input.startOffset, input.endOffset);
 
 	const allRounds = await db
 		.with(sessionSq)
@@ -77,5 +77,6 @@ export const getWeekends = async (input: {
 		.leftJoin(circuits, eq(circuits.id, rounds.circuitId))
 		.where(and(gte(rounds.start, start), lte(rounds.end, end)))
 		.orderBy(asc(rounds.start), asc(rounds.series));
-	return groupBy(allRounds, (r) => getWeekendOffset(r.start));
+	// <!-- FIXME: Real week -->
+	return groupBy(allRounds, (r) => getWeekendOffsetFromDates(r.start, r.end));
 };

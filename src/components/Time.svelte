@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { timeFormat } from "$lib/stores/dateStore";
-	import { relTime, trackTime, yourTime } from "$lib/utils/date";
+	import { formatRelTime, formatTrackTime, formatYourTime } from "$lib/utils/date";
 	import { onMount } from "svelte";
 
 	export let timeZone: string | undefined = undefined;
@@ -21,10 +21,10 @@
 
 <time datetime={start.toISOString()}>
 	{#if $timeFormat === "track" && timeZone}
-		{trackTime(timeZone, start, end)}
+		{formatTrackTime(timeZone, start, end)}
 	{:else if $timeFormat === "rel"}
-		{relTime(start, now)}
+		{formatRelTime(start, now)}
 	{:else}
-		{yourTime(start, end)}
+		{formatYourTime(start, end)}
 	{/if}
 </time>
