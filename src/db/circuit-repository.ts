@@ -1,5 +1,5 @@
 import { db } from "$db/drizzle";
-import { and, eq, ilike, sql } from "drizzle-orm";
+import { and, asc, eq, ilike, sql } from "drizzle-orm";
 import { circuits, rounds } from "./schema";
 import type { SeriesId } from "./types";
 
@@ -15,20 +15,35 @@ export const getAll = async () => {
 };
 
 export const getMapMarkers = async () => {
+	const sq = db.$with("sq").as(
+		db
+			.select({
+				firstRound:
+					sql<string>`(array_agg(${rounds.id} ORDER BY ${rounds.start} ASC))[1]`.as(
+						"firstRound"
+					),
+				start: sql<Date>`(array_agg(${rounds.id} ORDER BY ${rounds.start} ASC))[1]`.as(
+					"start"
+				),
+				series: sql<Date>`array_agg(${rounds.series} ORDER BY ${rounds.start} ASC)`.as(
+					"series"
+				),
+				circuitId: rounds.circuitId,
+				count: sql<number>`count(*)::int`.as("count"),
+			})
+			.from(rounds)
+			.where(ilike(rounds.season, `%${new Date().getFullYear().toString()}%`))
+			.groupBy(rounds.circuitId)
+	);
 	return await db
+		.with(sq)
 		.select({
+			firstRound: sq.firstRound,
+			title: circuits.title,
+			series: sq.series,
 			lat: circuits.lat,
 			lon: circuits.lon,
-			title: circuits.title,
-			series: sql<SeriesId[]>`${db
-				.select({ series: sql`json_agg(${rounds.series})` })
-				.from(rounds)
-				.where(
-					and(
-						eq(rounds.circuitId, circuits.id),
-						ilike(rounds.season, `%${new Date().getFullYear().toString()}%`)
-					)
-				)}`.as("series")
 		})
-		.from(circuits);
+		.from(circuits)
+		.leftJoin(sq, eq(sq.circuitId, circuits.id));
 };
