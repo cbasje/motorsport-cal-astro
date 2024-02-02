@@ -1,8 +1,10 @@
 name: Fly Deploy
+
 on:
     push:
         branches:
             - main
+
 jobs:
     deploy:
         name: Deploy app
@@ -10,9 +12,10 @@ jobs:
         concurrency: deploy-group # optional: ensure only one action runs at a time
         steps:
             - name: Checkout repository and submodules
-              uses: actions/checkout@v3
+              uses: actions/checkout@v4
               with:
-                  submodules: recursive
+                  token: ${{ secrets.ACCESS_TOKEN }}
+                  submodules: true
 
             - name: Setup Fly.io
               uses: superfly/flyctl-actions/setup-flyctl@master
