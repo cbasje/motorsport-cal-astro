@@ -1,9 +1,9 @@
 import type { APIRoute } from "astro";
-import * as sessions from "$db/session-repository";
+import * as widget from "$db/widget-repository";
 
 export const GET: APIRoute = async () => {
 	try {
-		const data = await sessions.getNextSessionWidget();
+		const data = await widget.getNextSessionWidget();
 
 		return new Response(
 			JSON.stringify({
