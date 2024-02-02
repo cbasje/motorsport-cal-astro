@@ -10,9 +10,9 @@ export default {
 		{
 			files: "*.astro",
 			options: {
-				parser: "astro"
-			}
+				parser: "astro",
+			},
 		},
-		{ files: "*.svelte", options: { parser: "svelte" } }
-	]
+		{ files: "*.svelte", options: { parser: "svelte" } },
+	],
 };
