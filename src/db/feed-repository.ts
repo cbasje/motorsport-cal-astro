@@ -1,5 +1,5 @@
 import { db } from "$db/drizzle";
-import { eq, sql } from "drizzle-orm";
+import { eq, notInArray, sql } from "drizzle-orm";
 import { union } from "drizzle-orm/pg-core";
 import { circuits, rounds, sessions } from "./schema";
 import type { SessionType } from "./types";
@@ -21,7 +21,10 @@ export const getAllSessions = async () => {
 			lon: circuits.lon,
 		})
 		.from(rounds)
-		.leftJoin(circuits, eq(rounds.circuitId, circuits.id));
+		.leftJoin(circuits, eq(rounds.circuitId, circuits.id))
+		.where(
+			notInArray(rounds.id, db.selectDistinct({ roundId: sessions.roundId }).from(sessions))
+		);
 
 	const allSessions = db
 		.select({
