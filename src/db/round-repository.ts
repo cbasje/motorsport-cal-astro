@@ -41,9 +41,9 @@ export const getOne = async (id: string) => {
 			isTest: inArray(
 				rounds.id,
 				db
-					.select({ id: sessions.id })
+					.selectDistinct({ roundId: sessions.roundId })
 					.from(sessions)
-					.where(and(eq(sessions.type, "T"), eq(rounds.id, sessions.roundId)))
+					.where(eq(sessions.type, "T"))
 			),
 		})
 		.from(rounds)
@@ -87,9 +87,9 @@ export const getWeekends = async (input: {
 			isTest: inArray(
 				rounds.id,
 				db
-					.select({ id: sessions.id })
+					.selectDistinct({ roundId: sessions.roundId })
 					.from(sessions)
-					.where(and(eq(sessions.type, "T"), eq(rounds.id, sessions.roundId)))
+					.where(eq(sessions.type, "T"))
 			),
 		})
 		.from(rounds)
