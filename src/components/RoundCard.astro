@@ -1,10 +1,9 @@
 ---
-import { Icon } from "astro-icon/components";
-import { getCircuitTitle } from "$lib/utils/circuit";
-import { getSeriesIcon, getSeriesTitleShort } from "$lib/utils/series";
 import NextSessionWrapper from "$components/NextSessionWrapper.svelte";
 import * as rounds from "$db/round-repository";
-import type { SeriesId } from "$db/types";
+import { getCircuitTitle } from "$lib/utils/circuit";
+import { getSeriesIcon, getSeriesTitleShort } from "$lib/utils/series";
+import { Icon } from "astro-icon/components";
 
 type Round = Awaited<ReturnType<typeof rounds.getWeekends>>[number][number];
 interface Props {
@@ -17,7 +16,7 @@ const { round, showNextSession, link } = Astro.props;
 const getRoundTitle = () => {
 	return `${getSeriesTitleShort(round.series)} ${
 		getCircuitTitle(round.series, round.title, round.country, round.locality) ?? round.title
-	}${round.isTest ?? " Test"}`;
+	}${round.isTest ? " Test" : ""}`;
 };
 ---
 
