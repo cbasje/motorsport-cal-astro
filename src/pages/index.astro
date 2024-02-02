@@ -38,7 +38,13 @@ const now = Date.now();
 							<li class="weekend">
 								<div class="weekend-title">
 									<h2>{formatRelWeekend(week)}</h2>
-									<time datetime="2011-W47">{formatRangeWeekend(week)}</time>
+									<time
+										datetime={`${weekend?.at(0)?.year}-W${
+											weekend?.at(0)?.weekNumber
+										}`}
+									>
+										{formatRangeWeekend(week)}
+									</time>
 								</div>
 
 								{weekend &&

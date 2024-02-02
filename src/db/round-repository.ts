@@ -1,6 +1,6 @@
 import { db } from "$db/drizzle";
 import { getWeekendDatesFromOffset, getWeekendOffsetFromDates } from "$lib/utils/date";
-import { and, asc, eq, gte, lte, sql } from "drizzle-orm";
+import { and, asc, eq, gte, inArray, lte, sql } from "drizzle-orm";
 import { groupBy } from "lodash";
 import { z } from "zod";
 import { circuits, rounds, sessions } from "./schema";
@@ -67,10 +67,20 @@ export const getWeekends = async (input: {
 			series: rounds.series,
 			start: rounds.start,
 			end: rounds.end,
+			year: sql<number>`DATE_PART('year', ${rounds.start})`,
+			weekNumber: sql<number>`DATE_PART('week', ${rounds.start})`,
+			weekendOffset: sql<number>`DATE_PART('week', ${rounds.start}) - DATE_PART('week', NOW())`,
 			country: circuits.country,
 			locality: circuits.locality,
 			circuitTitle: circuits.title,
 			sessionCount: sessionSq.count,
+			isTest: inArray(
+				rounds.id,
+				db
+					.select({ id: sessions.id })
+					.from(sessions)
+					.where(and(eq(sessions.type, "T"), eq(rounds.id, sessions.roundId)))
+			),
 		})
 		.from(rounds)
 		.leftJoin(sessionSq, eq(sessionSq.roundId, rounds.id))
@@ -78,5 +88,5 @@ export const getWeekends = async (input: {
 		.where(and(gte(rounds.start, start), lte(rounds.end, end)))
 		.orderBy(asc(rounds.start), asc(rounds.series));
 	// <!-- FIXME: Real week -->
-	return groupBy(allRounds, (r) => getWeekendOffsetFromDates(r.start, r.end));
+	return groupBy(allRounds, (r) => r.weekendOffset);
 };

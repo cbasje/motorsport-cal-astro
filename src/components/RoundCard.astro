@@ -4,6 +4,7 @@ import { getCircuitTitle } from "$lib/utils/circuit";
 import { getSeriesIcon, getSeriesTitleShort } from "$lib/utils/series";
 import NextSessionWrapper from "$components/NextSessionWrapper.svelte";
 import * as rounds from "$db/round-repository";
+import type { SeriesId } from "$db/types";
 
 type Round = Awaited<ReturnType<typeof rounds.getWeekends>>[number][number];
 interface Props {
@@ -12,6 +13,12 @@ interface Props {
 	link?: string;
 }
 const { round, showNextSession, link } = Astro.props;
+
+const getRoundTitle = () => {
+	return `${getSeriesTitleShort(round.series)} ${
+		getCircuitTitle(round.series, round.title, round.country, round.locality) ?? round.title
+	}${round.isTest ?? " Test"}`;
+};
 ---
 
 <button is="back-button" data-link={link} class="round-header btn btn-color">
@@ -19,11 +26,7 @@ const { round, showNextSession, link } = Astro.props;
 
 	<div class="round-title">
 		<h2>
-			{getSeriesTitleShort(round.series)}{" "}
-			{
-				getCircuitTitle(round.series, round.title, round.country, round.locality) ??
-					round.title
-			}
+			{getRoundTitle()}
 		</h2>
 		<div>
 			{round.circuitTitle}
