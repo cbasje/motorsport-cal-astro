@@ -1,4 +1,4 @@
-name: Fly Deploy
+name: Fly.io Deploy
 
 on:
     push:
@@ -7,7 +7,7 @@ on:
 
 jobs:
     deploy:
-        name: Deploy app
+        name: Fly.io Deploy app
         runs-on: ubuntu-latest
         concurrency: deploy-group # optional: ensure only one action runs at a time
         steps:
