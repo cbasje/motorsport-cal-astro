@@ -29,7 +29,7 @@ const { path } = Astro.props;
 			pages.map((p) => (
 				<li>
 					<a href={p.href} aria-current={p.href === path ? "page" : false}>
-						<Icon name={"filled/" + p.icon} />
+						<Icon name={(p.href === path ? "filled/" : "hollow/") + p.icon} />
 						<div class="visually-hidden">{p.title}</div>
 					</a>
 				</li>
@@ -39,7 +39,7 @@ const { path } = Astro.props;
 
 	<!-- TODO: <a href="#this-weekend" class="btn btn-surface"> -->
 	<a href="/?offset=0" class="btn btn-surface">
-		<Icon name="filled/arrow-up" />
+		<Icon name="hollow/arrow-up" />
 		<div class="visually-hidden">Back to top</div>
 	</a>
 </nav>

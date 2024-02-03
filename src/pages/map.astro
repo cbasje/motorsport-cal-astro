@@ -19,15 +19,17 @@ const tileLayer =
 ---
 
 <MainLayout title="World Map" path={pathname}>
-	<map-libre
-		data-latitude={latitude}
-		data-longitude={longitude}
-		data-zoom={zoom}
-		data-tiles={tileLayer}
-		data-markers={JSON.stringify(markers)}
-	>
-		<div id="map"></div>
-	</map-libre>
+	<main id="main-content">
+		<map-libre
+			data-latitude={latitude}
+			data-longitude={longitude}
+			data-zoom={zoom}
+			data-tiles={tileLayer}
+			data-markers={JSON.stringify(markers)}
+		>
+			<div id="map"></div>
+		</map-libre>
+	</main>
 
 	<script src="../lib/map-component.ts"></script>
 </MainLayout>

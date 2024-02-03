@@ -24,71 +24,73 @@ const now = Date.now();
 <MainLayout title="Homepage" path={pathname}>
 	<IndexNav />
 
-	<a href={`?offset=${startOffset - 1},${endOffset}`} class="btn btn-surface">
-		<Icon name="filled/angle-up" />
-		<span>Previous</span>
-	</a>
-	<section>
-		<ul class="round-list" role="list">
-			{
-				weekArray.length > 0 ? (
-					weekArray.map((week) => {
-						const weekend = weekends[week];
-						return (
-							<li class="weekend">
-								<div class="weekend-title">
-									<h2>{formatRelWeekend(week)}</h2>
-									<time
-										datetime={`${weekend?.at(0)?.year}-W${
-											weekend?.at(0)?.weekNumber
-										}`}
-									>
-										{formatRangeWeekend(week)}
-									</time>
-								</div>
-
-								{weekend &&
-									weekend.map((round) => (
-										<div
-											id={`round-${round.id}`}
-											class={
-												"round-item" +
-												(round.end && round.end?.valueOf() < now
-													? " past"
-													: "")
-											}
-											transition:name={`round-${round.id}`}
-											style={`--color-hue: var(--${round.series}-hue)`}
+	<main id="main-content">
+		<a href={`?offset=${startOffset - 1},${endOffset}`} class="btn btn-surface">
+			<Icon name="hollow/angle-up" />
+			<span>Previous</span>
+		</a>
+		<section>
+			<ul class="round-list" role="list">
+				{
+					weekArray.length > 0 ? (
+						weekArray.map((week) => {
+							const weekend = weekends[week];
+							return (
+								<li class="weekend">
+									<div class="weekend-title">
+										<h2>{formatRelWeekend(week)}</h2>
+										<time
+											datetime={`${weekend?.at(0)?.year}-W${
+												weekend?.at(0)?.weekNumber
+											}`}
 										>
-											<RoundCard
-												round={round}
-												link={`/round/${round.id}`}
-												showNextSession
-											/>
+											{formatRangeWeekend(week)}
+										</time>
+									</div>
 
-											<div class="stack-wrapper" aria-hidden="true">
-												{[...Array(round.sessionCount)].map((_n, i) => (
-													<div
-														data-index={i}
-														transition:name={`sessions-${i}-${round.id}`}
-													/>
-												))}
+									{weekend &&
+										weekend.map((round) => (
+											<div
+												id={`round-${round.id}`}
+												class={
+													"round-item" +
+													(round.end && round.end?.valueOf() < now
+														? " past"
+														: "")
+												}
+												transition:name={`round-${round.id}`}
+												style={`--color-hue: var(--${round.series}-hue)`}
+											>
+												<RoundCard
+													round={round}
+													link={`/round/${round.id}`}
+													showNextSession
+												/>
+
+												<div class="stack-wrapper" aria-hidden="true">
+													{[...Array(round.sessionCount)].map((_n, i) => (
+														<div
+															data-index={i}
+															transition:name={`sessions-${i}-${round.id}`}
+														/>
+													))}
+												</div>
 											</div>
-										</div>
-									))}
-							</li>
-						);
-					})
-				) : (
-					<div>Nothing here!</div>
-				)
-			}
-		</ul>
-	</section>
-	<a href={`?offset=${startOffset},${endOffset + 1}`} class="btn btn-surface">
-		<Icon name="filled/angle-down" />
-		<span>Next</span>
-	</a>
+										))}
+								</li>
+							);
+						})
+					) : (
+						<div>Nothing here!</div>
+					)
+				}
+			</ul>
+		</section>
+		<a href={`?offset=${startOffset},${endOffset + 1}`} class="btn btn-surface">
+			<Icon name="hollow/angle-down" />
+			<span>Next</span>
+		</a>
+	</main>
 </MainLayout>
 
 <style lang="postcss">

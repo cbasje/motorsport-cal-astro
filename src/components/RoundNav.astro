@@ -1,5 +1,6 @@
 ---
 import { Icon } from "astro-icon/components";
+import SharedNavItems from "./SharedNavItems.astro";
 import TimeFormatButton from "./TimeFormatButton.svelte";
 ---
 
@@ -7,7 +8,7 @@ import TimeFormatButton from "./TimeFormatButton.svelte";
 	<ul>
 		<li>
 			<TimeFormatButton client:load>
-				<Icon name="filled/clock" />
+				<Icon name="hollow/clock" />
 			</TimeFormatButton>
 		</li>
 	</ul>
@@ -15,18 +16,9 @@ import TimeFormatButton from "./TimeFormatButton.svelte";
 	<ul>
 		<li>
 			<button>
-				<Icon name="filled/paper-plane" />
+				<Icon name="hollow/paper-plane" />
 			</button>
 		</li>
-		<li>
-			<button>
-				<Icon name="filled/bell" />
-			</button>
-		</li>
-		<li>
-			<button>
-				<Icon name="filled/octagon-exclamation" />
-			</button>
-		</li>
+		<SharedNavItems />
 	</ul>
 </nav>

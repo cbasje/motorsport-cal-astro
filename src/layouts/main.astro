@@ -17,9 +17,7 @@ const { title, path } = Astro.props;
 
 		<MainNav transition:name="main-nav" {path} />
 
-		<main id="main-content">
-			<slot />
-		</main>
+		<slot />
 
 		<style lang="postcss">
             #skip-link {

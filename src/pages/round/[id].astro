@@ -18,31 +18,32 @@ const sessionsByRound = await sessions.getSessionsByRoundId(id);
 <MainLayout title={round?.title ?? "Undefined Round"} path={pathname}>
 	<RoundNav />
 
-	{
-		round && (
-			<>
-				<div class="round-item" transition:name={`round-${round.id}`}>
-					<RoundCard round={round} />
-				</div>
-
-				<ol role="list" class="session-list">
-					{sessionsByRound.map((session, i) => (
-						<li
-							transition:name={`sessions-${i}-${round.id}`}
-							class={session.end.valueOf() < Date.now() ? "past" : ""}
-							role="listitem"
-						>
-							<SessionCard
-								session={session}
-								series={round.series}
-								timeZone={round.timezone ?? ""}
-							/>
-						</li>
-					))}
-				</ol>
-			</>
-		)
-	}
+	<main id="main-content">
+		{
+			round && (
+				<>
+					<div class="round-item" transition:name={`round-${round.id}`}>
+						<RoundCard round={round} />
+					</div>
+					<ol role="list" class="session-list">
+						{sessionsByRound.map((session, i) => (
+							<li
+								transition:name={`sessions-${i}-${round.id}`}
+								class={session.end.valueOf() < Date.now() ? "past" : ""}
+								role="listitem"
+							>
+								<SessionCard
+									session={session}
+									series={round.series}
+									timeZone={round.timezone ?? ""}
+								/>
+							</li>
+						))}
+					</ol>
+				</>
+			)
+		}
+	</main>
 </MainLayout>
 
 <style lang="postcss" define:vars={{ "color-hue": `var(--${round?.series}-hue)` }}>
