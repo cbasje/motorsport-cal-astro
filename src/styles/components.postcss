@@ -54,15 +54,17 @@ input {
 	outline-offset: var(--size-1);
 }
 :where(.btn) {
+	--lcl-bg: var(--surface-1);
+	--lcl-label: var(--text-1);
+	--lcl-border: var(--surface-2);
+
 	display: flex;
 	justify-content: center;
 	align-items: center;
 	gap: 0.5rem;
 	border-radius: var(--radius-4);
 
-	/* @media (--media){ */
 	transition: all 140ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
-	/* } */
 
 	&:hover {
 		text-decoration: none;
@@ -70,34 +72,27 @@ input {
 
 	&:active {
 		translate: 0px var(--border-size-2);
+		box-shadow: var(--lcl-border) 0 0 0;
 	}
 
-	&.btn-surface {
-		background: var(--surface-1);
-		color: var(--text-1);
-		border: var(--surface-2) var(--border-size-2) solid;
-		box-shadow: var(--surface-2) 0 var(--border-size-2) 0;
+	background: var(--lcl-bg);
+	color: var(--lcl-label);
+	border: var(--lcl-border) var(--border-size-2) solid;
+	box-shadow: var(--lcl-border) 0 var(--border-size-2) 0;
 
-		&:hover {
-			background: var(--surface-2);
-			border-color: var(--surface-3);
-		}
-		&:active {
-			box-shadow: var(--surface-2) 0px 0px 0px;
-		}
+	&:hover {
+		--lcl-bg: var(--surface-2);
+		--lcl-border: var(--surface-3);
 	}
+
 	&.btn-color {
-		background: var(--color-5);
-		color: var(--text-on-accent);
-		border: var(--color-3) var(--border-size-2) solid;
-		box-shadow: var(--color-3) 0 var(--border-size-2) 0;
+		--lcl-bg: var(--color-5);
+		--lcl-label: var(--text-on-accent);
+		--lcl-border: var(--color-3);
 
 		&:hover {
-			background: var(--color-4);
-			border-color: var(--color-3);
-		}
-		&:active {
-			box-shadow: var(--color-3) 0px 0px 0px;
+			--lcl-bg: var(--color-4);
+			--lcl-border: var(--color-3);
 		}
 	}
 }
