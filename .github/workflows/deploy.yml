@@ -17,6 +17,9 @@ jobs:
                   token: ${{ secrets.ACCESS_TOKEN }}
                   submodules: recursive
 
+            - name: Print .gitmodules
+              run: cat .gitmodules
+
             - name: Setup Fly.io
               uses: superfly/flyctl-actions/setup-flyctl@master
 
