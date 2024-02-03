@@ -45,14 +45,16 @@ export const onRequest = defineMiddleware(
 			return redirect("/");
 		}
 
-		try {
-			const apiKey = getApiKey(url, request.headers);
-			locals.apiKey = apiKey;
+		if (!session || !user) {
+			try {
+				const apiKey = getApiKey(url, request.headers);
+				locals.apiKey = apiKey;
 
-			const userFromApiKey = await checkApiKey(url, apiKey, user?.role);
-			if (userFromApiKey && !user) locals.user = userFromApiKey;
-		} catch (error_) {
-			if (error_ instanceof Error) console.debug("🚨 ~ middleware", error_.message);
+				const userFromApiKey = await checkApiKey(url, apiKey);
+				if (userFromApiKey) locals.user = userFromApiKey;
+			} catch (error_) {
+				if (error_ instanceof Error) console.debug("🚨 ~ middleware", error_.message);
+			}
 		}
 
 		return next();
@@ -78,12 +80,9 @@ const checkAdmin = (url: URL, role: Role | null | undefined) => {
 	return url.pathname.startsWith("/admin/") === true && role === "ADMIN";
 };
 
-const checkApiKey = async (url: URL, apiKey: string | null, role: Role | null | undefined) => {
+const checkApiKey = async (url: URL, apiKey: string | null) => {
 	// Only /api pages require apiKey
 	if (!url.pathname.startsWith("/api/")) return;
-
-	// If ADMIN, they are allowed everything
-	if (role === "ADMIN") return;
 
 	if (!apiKey) throw new Error("No 'apiKey' included");
 
