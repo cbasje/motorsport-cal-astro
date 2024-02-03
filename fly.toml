@@ -10,7 +10,7 @@ primary_region = "ams"
 
 [processes]
   app = ""
-  cron = "bun run /app/src/test.ts"
+  # cron = "bun run /app/src/test.ts"
 
 [http_service]
   internal_port = 3000
