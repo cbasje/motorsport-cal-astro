@@ -39,10 +39,4 @@ export default defineConfig({
 	],
 
 	site: import.meta.env.PROD ? "https://porpoise.benjami.in" : "http://localhost:3000",
-
-	vite: {
-		optimizeDeps: {
-			exclude: ["oslo"],
-		},
-	},
 });
