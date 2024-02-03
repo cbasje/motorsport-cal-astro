@@ -5,6 +5,7 @@ import bun from "./adapter/index";
 
 export default defineConfig({
 	output: "server",
+
 	adapter: bun({
 		port: 3000,
 	}),

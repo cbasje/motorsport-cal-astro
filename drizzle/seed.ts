@@ -2,13 +2,13 @@ import { circuits, rounds, sessions } from "$db/schema";
 import { seriesIds, sessionTypes, type NewRound, type NewSession, type Round } from "$db/types";
 import { fakerEN } from "@faker-js/faker";
 import { drizzle } from "drizzle-orm/node-postgres";
-import { generateRoundId, generateSessionId } from "lib/utils/id";
+import { generateRoundId, generateSessionId } from "$lib/utils/id";
 import { exit } from "node:process";
 import postgres from "pg";
 
 // Disable prefetch as it is not supported for "Transaction" pool mode
 export const pool = new postgres.Pool({
-	connectionString: process.env.DATABASE_URL ?? ""
+	connectionString: process.env.DATABASE_URL ?? "",
 });
 const db = drizzle(pool);
 
@@ -32,7 +32,7 @@ async function createCircuit() {
 			timezone: l.timeZone(),
 			lat: l.latitude(),
 			lon: l.longitude(),
-			updatedAt: new Date()
+			updatedAt: new Date(),
 			// TODO; utcOffset
 		})
 		.returning({ id: circuits.id });
@@ -60,7 +60,7 @@ async function createRounds(circuitId: number) {
 			series,
 			start,
 			end,
-			updatedAt
+			updatedAt,
 		} satisfies NewRound);
 	}
 
@@ -87,7 +87,7 @@ async function createSessions(rounds: Pick<Round, "id" | "start">[]) {
 				end,
 				roundId: r.id,
 				type,
-				updatedAt
+				updatedAt,
 			} satisfies NewSession);
 		}
 	}

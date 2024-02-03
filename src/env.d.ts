@@ -1,11 +1,19 @@
 /// <reference path="../.astro/types.d.ts" />
 /// <reference types="astro/client" />
 
+declare namespace App {
+	interface Locals {
+		session: import("lucia").Session | null;
+		user: import("lucia").User | null;
+		apiKey: string | null;
+	}
+}
+
 interface ImportMetaEnv {
-    readonly DATABASE_URL: string;
-    readonly PUBLIC_MAP_API_KEY: string;
+	readonly DATABASE_URL: string;
+	readonly PUBLIC_MAP_API_KEY: string;
 }
 
 interface ImportMeta {
-    readonly env: ImportMetaEnv;
+	readonly env: ImportMetaEnv;
 }

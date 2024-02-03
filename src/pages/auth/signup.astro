@@ -1,0 +1,40 @@
+---
+import MainLayout from "$layouts/main.astro";
+---
+
+<MainLayout title="Sign up">
+	<main id="main-content">
+		<form method="POST" action="/api/auth/signup">
+			<label for="username">Username</label>
+			<input type="text" id="username" name="username" autocomplete="username" />
+
+			<label for="password">Password</label>
+			<input type="password" id="password" name="password" autocomplete="new-password" />
+
+			<button type="submit">Continue</button>
+
+			<p id="form-error"></p>
+		</form>
+	</main>
+</MainLayout>
+
+<script>
+	const errorMessageElement = document.getElementById("form-error")!;
+
+	document.forms[0].addEventListener("submit", async (e) => {
+		e.preventDefault();
+		errorMessageElement.innerText = "";
+
+		const formElement = e.target as HTMLFormElement;
+		const response = await fetch(formElement.action, {
+			method: formElement.method,
+			body: new FormData(formElement),
+		});
+
+		if (response.ok) {
+			window.location.href = "/";
+		} else {
+			errorMessageElement.innerText = await response.text();
+		}
+	});
+</script>
