@@ -1,9 +1,9 @@
 import { db } from "$db/drizzle";
-import { getWeekendDatesFromOffset, getWeekendOffsetFromDates } from "$lib/utils/date";
+import { getWeekendDatesFromOffset } from "$lib/utils/date";
 import { and, asc, eq, gte, inArray, lte, sql } from "drizzle-orm";
 import { groupBy } from "lodash";
-import { z } from "zod";
 import { circuits, rounds, sessions } from "./schema";
+import * as v from "valibot";
 
 // FIXME: log!
 
@@ -62,9 +62,9 @@ export const getWeekends = async (input: {
 	startOffset: number | undefined;
 	endOffset: number | undefined;
 }) => {
-	const schema = z.object({
-		startOffset: z.number().int().min(-52).max(52).default(0),
-		endOffset: z.number().int().min(-52).max(52).default(0),
+	const schema = v.object({
+		startOffset: v.number([v.minValue(-52), v.maxValue(52), v.integer()]),
+		endOffset: v.number([v.minValue(-52), v.maxValue(52), v.integer()]),
 	});
 
 	const [start, end] = getWeekendDatesFromOffset(input.startOffset, input.endOffset);

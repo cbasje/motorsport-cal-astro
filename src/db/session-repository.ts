@@ -1,9 +1,9 @@
 import { db } from "$db/drizzle";
 import { getWeekendDatesFromOffset } from "$lib/utils/date";
 import { and, asc, desc, eq, gte, inArray, lte } from "drizzle-orm";
-import { z } from "zod";
 import { circuits, rounds, sessions } from "./schema";
 import { seriesIds, type SeriesId } from "./types";
+import * as v from "valibot";
 
 // FIXME: log!
 
@@ -41,10 +41,10 @@ export const getNextSession = async (input: {
 	now?: Date;
 	roundId?: string;
 }) => {
-	const schema = z.object({
-		weekOffset: z.number().int().min(-52).max(52).default(0),
-		now: z.date().optional(),
-		roundId: z.string().optional(),
+	const schema = v.object({
+		weekOffset: v.number([v.integer(), v.minValue(-52), v.maxValue(52)]),
+		now: v.optional(v.date()),
+		roundId: v.optional(v.string()),
 	});
 
 	const [start, end] = getWeekendDatesFromOffset(input.weekOffset);
