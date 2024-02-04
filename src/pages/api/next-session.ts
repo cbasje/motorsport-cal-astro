@@ -5,11 +5,9 @@ export const GET: APIRoute = async ({ request }) => {
 	try {
 		const query = new URL(request.url).searchParams;
 		const roundId = query.get("roundId");
-		const now = query.get("now");
 
 		const data = await sessions.getNextSession({
 			roundId: roundId ?? undefined,
-			now: now ? new Date(now) : undefined,
 		});
 
 		return new Response(
