@@ -27,8 +27,35 @@ export const onRequest = defineMiddleware(
 			locals.user = null;
 			locals.session = null;
 
-			if (shouldProtectRoute(url)) return redirect(handleLoginRedirect(url));
-			else return next();
+			if (shouldProtectRoute(url) === true) return redirect(handleLoginRedirect(url));
+
+			if (isApiRoute(url) === true) {
+				try {
+					// TODO: start session?
+
+					const apiKey = getApiKey(url, request.headers);
+					locals.apiKey = apiKey;
+
+					const userFromApiKey = await checkApiKey(apiKey);
+					if (userFromApiKey) locals.user = userFromApiKey;
+				} catch (error_) {
+					if (error_ instanceof Error) {
+						console.error("🚨 ~ middleware", error_);
+						return new Response(
+							JSON.stringify({
+								success: false,
+								message: error_.message,
+							}),
+							{
+								status: 401,
+								headers: { "Content-Type": "application/json" },
+							}
+						);
+					}
+				}
+			}
+
+			return next();
 		}
 
 		const { session, user } = await lucia.validateSession(sessionId);
@@ -43,30 +70,8 @@ export const onRequest = defineMiddleware(
 		locals.session = session;
 		locals.user = user;
 
-		const hasAdmin = checkAdmin(url, user?.role);
-		if (hasAdmin === true) {
+		if (isAdminRoute(url) === true && user?.role === "ADMIN") {
 			return redirect("/");
-		}
-
-		if (!session || !user) {
-			try {
-				const apiKey = getApiKey(url, request.headers);
-				locals.apiKey = apiKey;
-
-				const userFromApiKey = await checkApiKey(url, apiKey);
-				if (userFromApiKey) locals.user = userFromApiKey;
-			} catch (error_) {
-				if (error_ instanceof Error) {
-					console.error("🚨 ~ middleware", error_);
-					return new Response(
-						JSON.stringify({ success: false, message: error_.message }),
-						{
-							status: 401,
-							headers: { "Content-Type": "application/json" },
-						}
-					);
-				}
-			}
 		}
 
 		return next();
@@ -87,15 +92,17 @@ const shouldProtectRoute = (url: URL) => {
 	);
 };
 
-const checkAdmin = (url: URL, role: Role | null | undefined) => {
-	// Only /admin require ADMIN role
-	return url.pathname.startsWith("/admin/") === true && role === "ADMIN";
+const isApiRoute = (url: URL) => {
+	// Only /api pages require apiKey
+	return url.pathname.startsWith("/api/") === true;
 };
 
-const checkApiKey = async (url: URL, apiKey: string | null) => {
-	// Only /api pages require apiKey
-	if (!url.pathname.startsWith("/api/")) return;
+const isAdminRoute = (url: URL) => {
+	// Only /admin require ADMIN role
+	return url.pathname.startsWith("/admin/") === true;
+};
 
+const checkApiKey = async (apiKey: string | null) => {
 	if (!apiKey) throw new Error("No 'apiKey' included");
 
 	const [existingKey] = await db
