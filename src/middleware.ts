@@ -13,9 +13,12 @@ export const onRequest = defineMiddleware(
 			const originHeader = request.headers.get("Origin");
 			const hostHeader = request.headers.get("Host");
 			if (!originHeader || !hostHeader || !verifyRequestOrigin(originHeader, [hostHeader])) {
-				return new Response(null, {
-					status: 403,
-				});
+				return new Response(
+					JSON.stringify({ success: false, message: "Incorrect Origin" }),
+					{
+						status: 403,
+					}
+				);
 			}
 		}
 
@@ -53,7 +56,16 @@ export const onRequest = defineMiddleware(
 				const userFromApiKey = await checkApiKey(url, apiKey);
 				if (userFromApiKey) locals.user = userFromApiKey;
 			} catch (error_) {
-				if (error_ instanceof Error) console.debug("🚨 ~ middleware", error_.message);
+				if (error_ instanceof Error) {
+					console.error("🚨 ~ middleware", error_);
+					return new Response(
+						JSON.stringify({ success: false, message: error_.message }),
+						{
+							status: 401,
+							headers: { "Content-Type": "application/json" },
+						}
+					);
+				}
 			}
 		}
 

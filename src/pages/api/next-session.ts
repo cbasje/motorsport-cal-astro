@@ -22,11 +22,15 @@ export const GET: APIRoute = async ({ request }) => {
 				headers: { "Content-Type": "application/json" },
 			}
 		);
-	} catch (error) {
-		console.error(error);
-		return new Response(JSON.stringify({ success: false, reason: error }), {
-			status: 500,
-			headers: { "Content-Type": "application/json" },
-		});
+	} catch (error_) {
+		if (error_ instanceof Error) {
+			console.error("🚨", error_);
+			return new Response(JSON.stringify({ success: false, message: error_.message }), {
+				status: 500,
+				headers: { "Content-Type": "application/json" },
+			});
+		}
+
+		return new Response(null, { status: 500 });
 	}
 };

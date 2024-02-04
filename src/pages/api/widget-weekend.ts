@@ -15,15 +15,15 @@ export const GET: APIRoute = async () => {
 				headers: { "Content-Type": "application/json" },
 			}
 		);
-	} catch (error) {
-		let message = "Error";
-		if (error instanceof Error) {
-			message = error.message;
+	} catch (error_) {
+		if (error_ instanceof Error) {
+			console.error("🚨", error_);
+			return new Response(JSON.stringify({ success: false, message: error_.message }), {
+				status: 500,
+				headers: { "Content-Type": "application/json" },
+			});
 		}
-		console.error("🚨", message);
-		return new Response(JSON.stringify({ success: false, message }), {
-			status: 500,
-			headers: { "Content-Type": "application/json" },
-		});
+
+		return new Response(null, { status: 500 });
 	}
 };
