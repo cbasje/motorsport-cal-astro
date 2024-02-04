@@ -38,7 +38,7 @@ class MapLibre extends HTMLElement {
 			const seriesSet = new Set(series);
 
 			seriesSet.forEach(async (item) => {
-				if (item) await loadImage(`icons/pin/${item}.png`, item);
+				if (item) await loadImage(`images/pin/${item}.png`, item);
 			});
 		};
 
