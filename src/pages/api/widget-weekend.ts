@@ -6,7 +6,7 @@ export const GET: APIRoute = async () => {
 	try {
 		const data = await widget.getNextSessionWidget();
 
-		return successRes(undefined, undefined, data);
+		return successRes(data);
 	} catch (error_) {
 		return errorRes(error_);
 	}

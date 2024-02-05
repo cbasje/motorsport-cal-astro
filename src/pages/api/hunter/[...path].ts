@@ -48,7 +48,7 @@ export const GET: APIRoute = async ({ request, params }) => {
 				break;
 		}
 
-		return successRes(undefined, undefined, data);
+		return successRes(data);
 	} catch (error_) {
 		return errorRes(error_);
 	}

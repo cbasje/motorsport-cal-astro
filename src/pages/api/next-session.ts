@@ -11,7 +11,7 @@ export const GET: APIRoute = async ({ request }) => {
 			roundId: roundId ?? undefined,
 		});
 
-		return successRes(undefined, undefined, data);
+		return successRes(data);
 	} catch (error_) {
 		return errorRes(error_);
 	}

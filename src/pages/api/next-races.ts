@@ -10,7 +10,7 @@ export const GET: APIRoute = async ({ request }) => {
 
 		const data = await sessions.getNextRaces(seriesIds);
 
-		return successRes(undefined, undefined, data);
+		return successRes(data);
 	} catch (error_) {
 		return errorRes(error_);
 	}

@@ -52,7 +52,25 @@ export const svgRes = (svg: string) => {
 	});
 };
 
-export const successRes = (error_?: unknown, emoji: string = "✅", data?: object) => {
+export const successRes = (data?: object) => {
+	return new Response(
+		JSON.stringify({
+			success: true,
+			data,
+		}),
+		{
+			status: 200,
+			headers: { "Content-Type": "application/json" },
+		}
+	);
+};
+
+export const debugRes = (error_: unknown, emoji: string, data?: object) => {
+	if (!error_) {
+		console.debug(emoji, data);
+		return successRes(data);
+	}
+
 	if (error_ instanceof CustomError) {
 		console.debug(emoji, error_.message);
 		return new Response(
@@ -84,35 +102,16 @@ export const successRes = (error_?: unknown, emoji: string = "✅", data?: objec
 	return errorRes(error_, emoji, data);
 };
 
-export const debugRes = (error_: unknown, emoji: string, data?: object) => {
-	if (error_ instanceof CustomError) {
-		console.debug(emoji, error_.message);
-		return new Response(
-			JSON.stringify({
-				success: error_.status >= 200 && error_.status <= 299,
-				message: error_.message,
-				data,
-			}),
-			{
-				status: error_.status,
-				headers: { "Content-Type": "application/json" },
-			}
-		);
-	}
-
-	return errorRes(error_, emoji, data);
-};
-
-export const errorRes = (error_: unknown, emoji: string = "🚨", data?: object) => {
+export const errorRes = (error_: any, emoji: string = "🚨", data?: object) => {
 	console.error(emoji, error_);
 	return new Response(
 		JSON.stringify({
 			success: false,
-			message: error_ instanceof Error || error_ instanceof CustomError ? error_.message : "",
+			message: "message" in error_ ? error_.message : "",
 			data,
 		}),
 		{
-			status: error_ instanceof CustomError ? error_.status : 500,
+			status: "status" in error_ ? error_.status : 500,
 			headers: { "Content-Type": "application/json" },
 		}
 	);
