@@ -1,4 +1,5 @@
 import type { SeriesId } from "$db/types";
+import { CustomError, errorRes, imageRes } from "$lib/utils/response";
 import { getSeriesIcon } from "$lib/utils/series";
 import { icons } from "@iconify-json/fluent-emoji-high-contrast";
 import { getIconData, iconToSVG, replaceIDs } from "@iconify/utils";
@@ -88,10 +89,7 @@ const iconsToHTML = (body: string[], extraAttributes: Record<string, string>) =>
 export const GET: APIRoute = async ({ params }) => {
 	const series = [...new Set(params.series?.split("-"))];
 
-	if (!series || !series.length)
-		return new Response(undefined, {
-			status: 404,
-		});
+	if (!series || !series.length) return errorRes(new CustomError("No series found", 400));
 
 	let renderData: string[] = [];
 
@@ -101,9 +99,7 @@ export const GET: APIRoute = async ({ params }) => {
 		// Get content for icon
 		const iconData = getIconData(icons, iconId);
 		if (!iconData)
-			return new Response(`Icon "${iconId}" is missing`, {
-				status: 404,
-			});
+			if (!iconData) return errorRes(new CustomError(`Icon '${id}' is missing`, 400));
 
 		// Use it to render icon
 		const iconRenderData = iconToSVG(iconData, {
@@ -121,13 +117,7 @@ export const GET: APIRoute = async ({ params }) => {
 	);
 
 	const png = sharp(Buffer.from(svg)).png();
-	const response = await png.toBuffer();
+	const buffer = await png.toBuffer();
 
-	return new Response(response, {
-		status: 200,
-		headers: {
-			"Content-Type": "image/png",
-			"Cache-Control": "s-maxage=1, stale-while-revalidate=59",
-		},
-	});
+	return imageRes(buffer);
 };

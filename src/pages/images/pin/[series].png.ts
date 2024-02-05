@@ -1,4 +1,5 @@
 import type { SeriesId } from "$db/types";
+import { CustomError, errorRes, imageRes } from "$lib/utils/response";
 import { getSeriesColor } from "$lib/utils/series";
 import type { APIRoute } from "astro";
 import sharp from "sharp";
@@ -24,10 +25,7 @@ export const GET: APIRoute = async ({ params }) => {
 	const seriesSet = new Set(params.series?.split("-"));
 	const series = [...seriesSet];
 
-	if (!series || !series.length)
-		return new Response(undefined, {
-			status: 404
-		});
+	if (!series || !series.length) return errorRes(new CustomError("No series found", 400));
 
 	let svg: string;
 	if (series && series.length === 1) {
@@ -37,13 +35,7 @@ export const GET: APIRoute = async ({ params }) => {
 	}
 
 	const png = sharp(Buffer.from(svg)).png();
-	const response = await png.toBuffer();
+	const buffer = await png.toBuffer();
 
-	return new Response(response, {
-		status: 200,
-		headers: {
-			"Content-Type": "image/png",
-			"Cache-Control": "s-maxage=1, stale-while-revalidate=59"
-		}
-	});
+	return imageRes(buffer);
 };

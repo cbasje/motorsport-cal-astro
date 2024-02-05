@@ -1,5 +1,6 @@
-import type { APIRoute } from "astro";
 import * as sessions from "$db/session-repository";
+import { errorRes, successRes } from "$lib/utils/response";
+import type { APIRoute } from "astro";
 
 export const GET: APIRoute = async ({ request }) => {
 	try {
@@ -10,25 +11,8 @@ export const GET: APIRoute = async ({ request }) => {
 			roundId: roundId ?? undefined,
 		});
 
-		return new Response(
-			JSON.stringify({
-				success: true,
-				data,
-			}),
-			{
-				status: 200,
-				headers: { "Content-Type": "application/json" },
-			}
-		);
+		return successRes(undefined, undefined, data);
 	} catch (error_) {
-		if (error_ instanceof Error) {
-			console.error("🚨", error_);
-			return new Response(JSON.stringify({ success: false, message: error_.message }), {
-				status: 500,
-				headers: { "Content-Type": "application/json" },
-			});
-		}
-
-		return new Response(null, { status: 500 });
+		return errorRes(error_);
 	}
 };

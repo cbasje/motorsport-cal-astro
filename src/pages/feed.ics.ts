@@ -3,6 +3,7 @@ import { type DateArray, type EventAttributes, createEvents } from "ics";
 import { getSeriesEmoji } from "$lib/utils/series";
 import { getSessionTitle } from "$lib/utils/sessions";
 import * as feed from "$db/feed-repository";
+import { errorRes, feedRes } from "$lib/utils/response";
 
 type Session = Awaited<ReturnType<typeof feed.getAllSessions>>[number];
 
@@ -68,16 +69,8 @@ export const GET: APIRoute = async () => {
 			});
 		});
 
-		return new Response(eventFeed, {
-			status: 200,
-			headers: {
-				"Content-Type": "text/calendar",
-			},
-		});
-	} catch (error) {
-		console.error(error);
-		return new Response(null, {
-			status: 500,
-		});
+		return feedRes(eventFeed);
+	} catch (error_) {
+		return errorRes(error_);
 	}
 };

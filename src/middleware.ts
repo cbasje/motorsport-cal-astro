@@ -1,9 +1,9 @@
 import { db } from "$db/drizzle";
 import { authKeys, authUsers } from "$db/schema";
-import type { Role } from "$db/types";
+import { getApiKey } from "$lib/utils/api";
+import { CustomError, debugRes, errorRes } from "$lib/utils/response";
 import { defineMiddleware } from "astro:middleware";
 import { SQL, and, eq, gte, isNotNull } from "drizzle-orm";
-import { getApiKey } from "$lib/utils/api";
 import { verifyRequestOrigin } from "lucia";
 import { lucia } from "./lib/auth";
 
@@ -13,12 +13,7 @@ export const onRequest = defineMiddleware(
 			const originHeader = request.headers.get("Origin");
 			const hostHeader = request.headers.get("Host");
 			if (!originHeader || !hostHeader || !verifyRequestOrigin(originHeader, [hostHeader])) {
-				return new Response(
-					JSON.stringify({ success: false, message: "Incorrect Origin" }),
-					{
-						status: 403,
-					}
-				);
+				return errorRes(new CustomError("Incorrect Origin", 403));
 			}
 		}
 
@@ -27,7 +22,8 @@ export const onRequest = defineMiddleware(
 			locals.user = null;
 			locals.session = null;
 
-			if (shouldProtectRoute(url) === true) return redirect(handleLoginRedirect(url));
+			if (shouldProtectRoute(url) === true && isApiRoute(url) === false)
+				return redirect(handleLoginRedirect(url));
 
 			if (isApiRoute(url) === true) {
 				try {
@@ -39,19 +35,7 @@ export const onRequest = defineMiddleware(
 					const userFromApiKey = await checkApiKey(apiKey);
 					if (userFromApiKey) locals.user = userFromApiKey;
 				} catch (error_) {
-					if (error_ instanceof Error) {
-						console.error("🚨 ~ middleware", error_);
-						return new Response(
-							JSON.stringify({
-								success: false,
-								message: error_.message,
-							}),
-							{
-								status: 401,
-								headers: { "Content-Type": "application/json" },
-							}
-						);
-					}
+					return debugRes(error_, "🔑");
 				}
 			}
 
@@ -94,7 +78,9 @@ const shouldProtectRoute = (url: URL) => {
 
 const isApiRoute = (url: URL) => {
 	// Only /api pages require apiKey
-	return url.pathname.startsWith("/api/") === true;
+	return (
+		url.pathname.startsWith("/api/") === true && url.pathname.startsWith("/api/auth/") === false
+	);
 };
 
 const isAdminRoute = (url: URL) => {
@@ -103,13 +89,13 @@ const isAdminRoute = (url: URL) => {
 };
 
 const checkApiKey = async (apiKey: string | null) => {
-	if (!apiKey) throw new Error("No 'apiKey' included");
+	if (!apiKey) throw new CustomError("No 'apiKey' included", 401);
 
 	const [existingKey] = await db
 		.select({ apiKey: authKeys.apiKey, userId: authKeys.userId })
 		.from(authKeys)
 		.where(and(eq(authKeys.apiKey, apiKey), gte(authKeys.expiresAt, new Date())));
-	if (!existingKey) throw new Error("'apiKey' is not valid");
+	if (!existingKey) throw new CustomError("'apiKey' is not valid", 401);
 
 	// Get user from the apiKey
 	const [user] = await db

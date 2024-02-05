@@ -1,3 +1,4 @@
+import { manifestRes } from "$lib/utils/response";
 import type { APIRoute } from "astro";
 
 export const GET: APIRoute = async ({ request }) => {
@@ -10,7 +11,7 @@ export const GET: APIRoute = async ({ request }) => {
 		lang: "en-GB",
 		id: "/",
 		start_url: "/",
-		scope: "/"
+		scope: "/",
 
 		// icons: [
 		//     {
@@ -80,17 +81,5 @@ export const GET: APIRoute = async ({ request }) => {
 		// ],
 	};
 
-	try {
-		return new Response(JSON.stringify(manifest), {
-			status: 200,
-			headers: {
-				"Content-Type": "application/json"
-			}
-		});
-	} catch (error) {
-		console.error(error);
-		return new Response(null, {
-			status: 500
-		});
-	}
+	return manifestRes(manifest);
 };

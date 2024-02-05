@@ -1,4 +1,5 @@
 import { getWeekendDatesFromOffset } from "$lib/utils/date";
+import { CustomError } from "$lib/utils/response";
 import { and, asc, eq, gte, lte, sql } from "drizzle-orm";
 import { db } from "./drizzle";
 import { circuits, rounds, sessions } from "./schema";
@@ -35,7 +36,9 @@ export const getNextSessionWidget = async () => {
 			.orderBy(asc(sessions.start))
 			.limit(1);
 
-		const weekendOffset = Math.max(0, nextRound.weekendOffset ?? nextSession.weekendOffset);
+		if (!nextRound && !nextSession) throw new CustomError("Nothing in the future", 204);
+
+		const weekendOffset = Math.max(0, nextRound?.weekendOffset ?? nextSession?.weekendOffset);
 		const [start, end] = getWeekendDatesFromOffset(weekendOffset);
 
 		const weekendRounds = await tx

@@ -48,6 +48,7 @@ export function start(manifest: SSRManifest, options: Options) {
 			return res;
 		},
 		error(error) {
+			// TODO: JSON?
 			return new Response(`<pre>${error}\n${error.stack}</pre>`, {
 				headers: {
 					"Content-Type": "text/html",

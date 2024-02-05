@@ -1,12 +1,9 @@
 import { lucia } from "$lib/auth";
+import { CustomError, errorRes } from "$lib/utils/response";
 import type { APIRoute } from "astro";
 
 export const POST: APIRoute = async ({ locals, cookies, redirect }) => {
-	if (!locals.session) {
-		return new Response(null, {
-			status: 401,
-		});
-	}
+	if (!locals.session) return errorRes(new CustomError("No session", 401));
 
 	await lucia.invalidateSession(locals.session.id);
 

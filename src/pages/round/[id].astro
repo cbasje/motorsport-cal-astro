@@ -9,7 +9,7 @@ import MainLayout from "$layouts/main.astro";
 const { pathname } = Astro.url;
 const { id } = Astro.params;
 
-if (!id) return new Response(undefined, { status: 404 });
+if (!id) return errorRes(new CustomError("Round not found", 404));
 
 const round = await rounds.getOne(id);
 const sessionsByRound = await sessions.getSessionsByRoundId(id);

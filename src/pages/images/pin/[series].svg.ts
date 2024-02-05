@@ -1,4 +1,5 @@
 import type { SeriesId } from "$db/types";
+import { CustomError, errorRes, svgRes } from "$lib/utils/response";
 import { getSeriesColor } from "$lib/utils/series";
 import type { APIRoute } from "astro";
 
@@ -24,21 +25,8 @@ export const GET: APIRoute = async ({ params }) => {
 	const series = [...seriesSet];
 
 	if (series && series.length === 1)
-		return new Response(svgSingle(getSeriesColor(series.at(0) as SeriesId)), {
-			status: 200,
-			headers: {
-				"Content-Type": "image/svg+xml"
-			}
-		});
+		return svgRes(svgSingle(getSeriesColor(series.at(0) as SeriesId)));
 	else if (series && series.length > 1)
-		return new Response(svgMultiple(series.map((s) => getSeriesColor(s as SeriesId))), {
-			status: 200,
-			headers: {
-				"Content-Type": "image/svg+xml"
-			}
-		});
-	else
-		return new Response(undefined, {
-			status: 404
-		});
+		return svgRes(svgMultiple(series.map((s) => getSeriesColor(s as SeriesId))));
+	else return errorRes(new CustomError("No series found", 400));
 };

@@ -1,7 +1,7 @@
 import { db } from "$db/drizzle";
 import { authUsers } from "$db/schema";
 import { lucia } from "$lib/auth";
-import { CustomError } from "$lib/utils/error";
+import { CustomError, debugRes } from "$lib/utils/response";
 import type { APIRoute } from "astro";
 import { eq } from "drizzle-orm";
 import { generateId } from "lucia";
@@ -34,7 +34,7 @@ export const POST: APIRoute = async ({ request, cookies, redirect }) => {
 			.from(authUsers)
 			.where(eq(authUsers.username, username.toLowerCase()))
 			.limit(1);
-		if (existingUser) throw new CustomError("Username is already in use");
+		if (existingUser) throw new CustomError("Username is already in use", 403);
 
 		const userId = generateId(15);
 		const hashedPassword = await Bun.password.hash(password);
@@ -52,20 +52,6 @@ export const POST: APIRoute = async ({ request, cookies, redirect }) => {
 
 		return redirect("/");
 	} catch (error_) {
-		console.error(error_);
-
-		if (error_ instanceof v.ValiError)
-			return new Response(error_.message, {
-				status: 400,
-			});
-
-		if (error_ instanceof CustomError)
-			return new Response(error_.message, {
-				status: 400,
-			});
-
-		return new Response("", {
-			status: 400,
-		});
+		return debugRes(error_, "🔒");
 	}
 };

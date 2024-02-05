@@ -2,7 +2,7 @@
 import MainLayout from "$layouts/main.astro";
 ---
 
-<MainLayout title="Sign in">
+<MainLayout title="Sign in" path="/login">
 	<main id="main-content">
 		<form method="POST" action="/api/auth/login">
 			<label for="username">Username</label>
@@ -34,7 +34,7 @@ import MainLayout from "$layouts/main.astro";
 		if (response.ok) {
 			window.location.href = "/";
 		} else {
-			errorMessageElement.innerText = await response.text();
+			errorMessageElement.innerText = (await response.json()).message;
 		}
 	});
 </script>

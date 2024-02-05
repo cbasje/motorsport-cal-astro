@@ -1,7 +1,7 @@
 import { db } from "$db/drizzle";
 import { authUsers } from "$db/schema";
 import { lucia } from "$lib/auth";
-import { CustomError } from "$lib/utils/error";
+import { CustomError, debugRes } from "$lib/utils/response";
 import type { APIRoute } from "astro";
 import { eq } from "drizzle-orm";
 import * as v from "valibot";
@@ -32,10 +32,10 @@ export const POST: APIRoute = async ({ request, cookies, redirect }) => {
 			.from(authUsers)
 			.where(eq(authUsers.username, username.toLowerCase()))
 			.limit(1);
-		if (!existingUser) throw new CustomError("Incorrect username or password");
+		if (!existingUser) throw new CustomError("Incorrect username or password", 401);
 
-		const isValidPassword = await Bun.password.verify(existingUser.hashedPassword!, password);
-		if (!isValidPassword) throw new CustomError("Incorrect username or password");
+		const isValidPassword = await Bun.password.verify(password, existingUser.hashedPassword);
+		if (!isValidPassword) throw new CustomError("Incorrect username or password", 401);
 
 		const session = await lucia.createSession(existingUser.id, {});
 		const sessionCookie = lucia.createSessionCookie(session.id);
@@ -43,22 +43,6 @@ export const POST: APIRoute = async ({ request, cookies, redirect }) => {
 
 		return redirect("/");
 	} catch (error_) {
-		console.error(error_);
-
-		if (error_ instanceof v.ValiError) {
-			return new Response(error_.message, {
-				status: 400,
-			});
-		}
-
-		if (error_ instanceof CustomError) {
-			return new Response(error_.message, {
-				status: 400,
-			});
-		}
-
-		return new Response("", {
-			status: 400,
-		});
+		return debugRes(error_, "🔒");
 	}
 };
