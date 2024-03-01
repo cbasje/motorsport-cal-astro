@@ -96,12 +96,7 @@ const checkApiKey = async (apiKey: string | null) => {
 	if (!apiKey) throw new CustomError("No 'apiKey' included", 401);
 
 	const [existingKey] = await db
-		.select({
-			apiKey: authKeys.apiKey,
-			userId: authKeys.userId,
-			roles: authKeys.role,
-			series: authKeys.series,
-		})
+		.select()
 		.from(authKeys)
 		.where(and(eq(authKeys.apiKey, apiKey), gte(authKeys.expiresAt, new Date())));
 	if (!existingKey) throw new CustomError("'apiKey' is not valid", 401);

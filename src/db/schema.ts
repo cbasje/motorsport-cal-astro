@@ -5,9 +5,7 @@ import { roles, type Role, type SeriesId, type SessionType } from "./types";
 export const createdAt = timestamp("created_at", {
 	precision: 3,
 	mode: "date",
-})
-	.defaultNow()
-	.notNull();
+}).defaultNow();
 export const updatedAt = timestamp("updated_at", {
 	precision: 3,
 	mode: "date",
@@ -37,17 +35,18 @@ export const authSessions = pgTable("auth_session", {
 
 // Table for the API keys
 export const authKeys = pgTable("auth_keys", {
-	id: text("id").primaryKey(),
+	apiKey: text("api_key").primaryKey(),
 	userId: text("user_id")
 		.notNull()
 		.references(() => authUsers.id),
-	apiKey: text("api_key").notNull(),
 	role: text("role").$type<Role>(),
 	series: text("series").array().$type<SeriesId[]>(),
 	expiresAt: timestamp("expires_at", {
 		withTimezone: true,
 		mode: "date",
 	}).notNull(),
+	createdAt,
+	updatedAt,
 });
 
 export const circuits = pgTable("circuits", {
@@ -78,7 +77,9 @@ export const rounds = pgTable("rounds", {
 	link: text("link"),
 	start: timestamp("start"),
 	end: timestamp("end"),
-	circuitId: integer("circuit_id").notNull(),
+	circuitId: integer("circuit_id")
+		.notNull()
+		.references(() => circuits.id),
 	series: text("series").$type<SeriesId>(),
 	createdAt,
 	updatedAt,
@@ -97,7 +98,9 @@ export const sessions = pgTable("sessions", {
 	number: integer("number").default(0).notNull(),
 	start: timestamp("start").notNull(),
 	end: timestamp("end").notNull(),
-	roundId: text("round_id").notNull(),
+	roundId: text("round_id")
+		.notNull()
+		.references(() => rounds.id),
 	type: text("type").$type<SessionType>(),
 	createdAt,
 	updatedAt,
@@ -115,7 +118,9 @@ export const weather = pgTable("weather", {
 	temp: real("temp").notNull(),
 	weatherId: integer("weather_id").notNull(),
 	dt: timestamp("dt").notNull(),
-	circuitId: integer("circuit_id").notNull(),
+	circuitId: integer("circuit_id")
+		.notNull()
+		.references(() => circuits.id),
 	createdAt,
 	updatedAt,
 });
