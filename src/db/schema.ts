@@ -1,6 +1,6 @@
 import { relations } from "drizzle-orm";
-import { integer, pgEnum, pgTable, real, serial, text, timestamp } from "drizzle-orm/pg-core";
-import { roles, type SeriesId, type SessionType } from "./types";
+import { integer, pgTable, real, serial, text, timestamp } from "drizzle-orm/pg-core";
+import { roles, type Role, type SeriesId, type SessionType } from "./types";
 
 export const createdAt = timestamp("created_at", {
 	precision: 3,
@@ -42,6 +42,8 @@ export const authKeys = pgTable("auth_keys", {
 		.notNull()
 		.references(() => authUsers.id),
 	apiKey: text("api_key").notNull(),
+	role: text("role").$type<Role>(),
+	series: text("series").array().$type<SeriesId[]>(),
 	expiresAt: timestamp("expires_at", {
 		withTimezone: true,
 		mode: "date",

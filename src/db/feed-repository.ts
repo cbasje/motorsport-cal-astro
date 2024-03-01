@@ -1,12 +1,12 @@
 import { db } from "$db/drizzle";
-import { eq, notInArray, sql } from "drizzle-orm";
+import { and, eq, inArray, notInArray, sql } from "drizzle-orm";
 import { union } from "drizzle-orm/pg-core";
 import { circuits, rounds, sessions } from "./schema";
-import type { SessionType } from "./types";
+import { seriesIds, type SeriesId, type SessionType } from "./types";
 
 // FIXME: log!
 
-export const getAllSessions = async () => {
+export const getAllSessions = async (preferredSeries: SeriesId[] = [...seriesIds]) => {
 	const allEmptyRounds = db
 		.select({
 			type: sql<SessionType | null>`'R'`,
@@ -23,7 +23,13 @@ export const getAllSessions = async () => {
 		.from(rounds)
 		.leftJoin(circuits, eq(rounds.circuitId, circuits.id))
 		.where(
-			notInArray(rounds.id, db.selectDistinct({ roundId: sessions.roundId }).from(sessions))
+			and(
+				notInArray(
+					rounds.id,
+					db.selectDistinct({ roundId: sessions.roundId }).from(sessions)
+				),
+				inArray(rounds.series, preferredSeries)
+			)
 		);
 
 	const allSessions = db
@@ -41,7 +47,8 @@ export const getAllSessions = async () => {
 		})
 		.from(sessions)
 		.leftJoin(rounds, eq(sessions.roundId, rounds.id))
-		.leftJoin(circuits, eq(rounds.circuitId, circuits.id));
+		.leftJoin(circuits, eq(rounds.circuitId, circuits.id))
+		.where(inArray(rounds.series, preferredSeries));
 
 	return await union(allEmptyRounds, allSessions);
 };

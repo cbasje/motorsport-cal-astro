@@ -5,7 +5,7 @@ declare namespace App {
 	interface Locals {
 		session: import("lucia").Session | null;
 		user: import("lucia").User | null;
-		apiKey: string | null;
+		key: import("$db/types").AuthKey | null;
 	}
 }
 

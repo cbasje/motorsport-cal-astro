@@ -54,9 +54,9 @@ export const generateFeed = async (items: Session[]): Promise<EventAttributes[]>
 	return events;
 };
 
-export const GET: APIRoute = async () => {
+export const GET: APIRoute = async ({ locals }) => {
 	try {
-		const sessions = await feed.getAllSessions();
+		const sessions = await feed.getAllSessions(locals.key?.series ?? undefined);
 
 		const events = await generateFeed(sessions);
 		const eventFeed = await new Promise<string>((resolve, reject) => {
