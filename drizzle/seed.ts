@@ -1,16 +1,13 @@
 import { circuits, rounds, sessions } from "$db/schema";
 import { seriesIds, sessionTypes, type NewRound, type NewSession, type Round } from "$db/types";
 import { fakerEN } from "@faker-js/faker";
-import { drizzle } from "drizzle-orm/node-postgres";
 import { generateRoundId, generateSessionId } from "$lib/utils/id";
 import { exit } from "node:process";
-import postgres from "pg";
+import { neon } from "@neondatabase/serverless";
+import { drizzle } from "drizzle-orm/neon-http";
 
-// Disable prefetch as it is not supported for "Transaction" pool mode
-export const pool = new postgres.Pool({
-	connectionString: process.env.DATABASE_URL ?? "",
-});
-const db = drizzle(pool);
+const sql = neon(process.env.DATABASE_URL!);
+const db = drizzle(sql);
 
 const pickRandom = <T extends Readonly<any[]>>(input: T): T[number] => {
 	const rnd = Math.round(Math.random() * (input.length - 1));

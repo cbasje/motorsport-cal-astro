@@ -1,15 +1,8 @@
-import { connectionString } from "$db/drizzle";
+import { db } from "$db/drizzle";
 import { authSessions, authUsers } from "$db/schema";
 import type { AuthSession, AuthUser } from "$db/types";
 import { DrizzlePostgreSQLAdapter } from "@lucia-auth/adapter-drizzle";
-import { drizzle } from "drizzle-orm/node-postgres";
 import { Lucia } from "lucia";
-import postgres from "pg";
-
-const pool = new postgres.Pool({
-	connectionString,
-});
-const db = drizzle(pool);
 
 const adapter = new DrizzlePostgreSQLAdapter(db, authSessions, authUsers);
 
@@ -35,7 +28,7 @@ export const lucia = new Lucia(adapter, {
 declare module "lucia" {
 	interface Register {
 		Lucia: typeof lucia;
-		DatabaseUserAttributes: AuthUser;
-		DatabaseSessionAttributes: AuthSession;
+		DatabaseUserAttributes: Omit<AuthUser, "id">;
+		DatabaseSessionAttributes: Omit<AuthSession, "id" | "userId" | "expiresAt">;
 	}
 }

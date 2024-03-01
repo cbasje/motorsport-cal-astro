@@ -1,11 +1,8 @@
-import { drizzle } from "drizzle-orm/node-postgres";
-import { migrate } from "drizzle-orm/node-postgres/migrator";
-import postgres from "pg";
-import { connectionString } from "./drizzle";
+import { neon } from "@neondatabase/serverless";
+import { drizzle } from "drizzle-orm/neon-http";
+import { migrate } from "drizzle-orm/neon-http/migrator";
 
-// This will run migrations on the database, skipping the ones already applied for migrations
-const migrationPool = new postgres.Pool({
-	connectionString,
-	max: 1
-});
-migrate(drizzle(migrationPool), { migrationsFolder: "./drizzle/migrations" });
+// This will run migrations on the database, skipping the ones already applied
+// for migrations
+const sql = neon(process.env.DATABASE_URL!);
+migrate(drizzle(sql), { migrationsFolder: "./drizzle/migrations" });
