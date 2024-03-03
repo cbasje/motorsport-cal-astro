@@ -1,9 +1,11 @@
 <script lang="ts">
 	import { useQuery } from "@sveltestack/svelte-query";
-	import { getSessionTitle } from "$lib/utils/sessions";
+	import { getSessionTitle } from "$db/sessions/utils";
 	import { onMount } from "svelte";
 	import Time from "./Time.svelte";
-	import type { Circuit, Round, Session } from "$db/types";
+	import type { Session } from "$db/sessions/types";
+	import type { Round } from "$db/rounds/types";
+	import type { Circuit } from "$db/circuits/types";
 
 	type NextSession = {
 		type: Session["type"];
