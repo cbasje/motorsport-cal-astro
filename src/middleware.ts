@@ -1,11 +1,11 @@
-import { db } from "$db/drizzle";
-import { authKeys, authUsers } from "$db/schema";
-import { getApiKey } from "$lib/utils/api";
+import { authKeys, authUsers } from "$db/auth/schema";
+import { getApiKey } from "$db/auth/utils";
+import { lucia } from "$lib/server/auth";
+import { db } from "$lib/server/db";
 import { CustomError, debugRes, errorRes } from "$lib/utils/response";
 import { defineMiddleware } from "astro:middleware";
 import { SQL, and, eq, gte, isNotNull } from "drizzle-orm";
 import { verifyRequestOrigin } from "lucia";
-import { lucia } from "./lib/auth";
 
 export const onRequest = defineMiddleware(
 	async ({ locals, cookies, request, url, redirect }, next) => {
