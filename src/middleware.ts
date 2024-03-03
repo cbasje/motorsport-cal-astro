@@ -89,7 +89,10 @@ const isApiRoute = (url: URL) => {
 
 const isAdminRoute = (url: URL) => {
 	// Only /admin require ADMIN role
-	return url.pathname.startsWith("/admin/") === true;
+	return (
+		url.pathname.startsWith("/admin/") === true ||
+		url.pathname.startsWith("/api/hunter") === true
+	);
 };
 
 const checkApiKey = async (apiKey: string | null) => {
