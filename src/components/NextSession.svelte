@@ -19,7 +19,7 @@
 	let now = new Date();
 	export let roundId: number;
 
-	const url = new URL("/api/next-session", "http://localhost:3000");
+	const url = new URL("/api/next-session", import.meta.env.SITE);
 	url.searchParams.set("now", now.toISOString());
 	url.searchParams.set("roundId", String(roundId));
 

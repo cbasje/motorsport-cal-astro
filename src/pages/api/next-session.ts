@@ -9,6 +9,7 @@ export const GET: APIRoute = async ({ request }) => {
 
 		const data = await sessions.getNextSession({
 			roundId: roundId ?? undefined,
+			now: new Date(),
 		});
 
 		return successRes(data);
