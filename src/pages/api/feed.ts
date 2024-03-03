@@ -1,15 +1,12 @@
-import type { APIRoute } from "astro";
 import * as feed from "$db/feed-repository";
-import { errorRes, feedRes } from "$lib/utils/response";
-import { generateFeed } from "$lib/utils/feed";
+import { errorRes, successRes } from "$lib/utils/response";
+import type { APIRoute } from "astro";
 
 export const GET: APIRoute = async ({ locals }) => {
 	try {
 		const sessions = await feed.getAllSessions(locals.key?.series ?? undefined);
 
-		const eventFeed = await generateFeed(sessions);
-
-		return feedRes(eventFeed);
+		return successRes(sessions);
 	} catch (error_) {
 		return errorRes(error_);
 	}
