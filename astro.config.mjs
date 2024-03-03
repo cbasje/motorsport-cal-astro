@@ -1,12 +1,15 @@
 import svelte from "@astrojs/svelte";
 import icon from "astro-icon";
 import { defineConfig } from "astro/config";
-import netlify from "@astrojs/netlify/functions";
+import bun from "./adapter/index";
 
-// https://astro.build/config
 export default defineConfig({
 	output: "server",
-	adapter: netlify(),
+
+	adapter: bun({
+		port: 3000,
+	}),
+
 	integrations: [
 		svelte(),
 		icon({
@@ -34,4 +37,6 @@ export default defineConfig({
 			},
 		}),
 	],
+
+	site: import.meta.env.PROD ? "https://porpoise.benjami.in" : "http://localhost:3000",
 });

@@ -12,10 +12,10 @@ This is a website that shows motorsport events from around the world. Currently,
 
 ## Development
 
-| Command            | Action                                           |
-| :----------------- | :----------------------------------------------- |
-| `bun`              | Installs dependencies                            |
-| `bun dev`          | Starts local dev server at `localhost:4321`      |
-| `bun build`        | Builds production site to `./dist/`              |
-| `bun astro ...`    | Run CLI commands like `astro add`, `astro check` |
-| `bun astro --help` | Get help using the Astro CLI                     |
+| Command             | Action                                           |
+| :------------------ | :----------------------------------------------- |
+| `yarn`              | Installs dependencies                            |
+| `yarn dev`          | Starts local dev server at `localhost:4321`      |
+| `yarn build`        | Builds production site to `./dist/`              |
+| `yarn astro ...`    | Run CLI commands like `astro add`, `astro check` |
+| `yarn astro --help` | Get help using the Astro CLI                     |
