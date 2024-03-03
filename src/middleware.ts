@@ -1,11 +1,11 @@
-import { db } from "$db/drizzle";
-import { authKeys, authUsers } from "$db/schema";
-import { getApiKey } from "$lib/utils/api";
+import { authKeys, authUsers } from "$db/auth/schema";
+import { getApiKey } from "$db/auth/utils";
+import { lucia } from "$lib/server/auth";
+import { db } from "$lib/server/db";
 import { CustomError, debugRes, errorRes } from "$lib/utils/response";
 import { defineMiddleware } from "astro:middleware";
 import { SQL, and, eq, gte, isNotNull } from "drizzle-orm";
 import { verifyRequestOrigin } from "lucia";
-import { lucia } from "./lib/auth";
 
 export const onRequest = defineMiddleware(
 	async ({ locals, cookies, request, url, redirect }, next) => {
@@ -30,10 +30,12 @@ export const onRequest = defineMiddleware(
 					// TODO: start session?
 
 					const apiKey = getApiKey(url, request.headers);
-					locals.apiKey = apiKey;
 
-					const userFromApiKey = await checkApiKey(apiKey);
-					if (userFromApiKey) locals.user = userFromApiKey;
+					const { key, user } = await checkApiKey(apiKey);
+					if (user) {
+						locals.user = user;
+						locals.key = key;
+					}
 				} catch (error_) {
 					return debugRes(error_, "🔑");
 				}
@@ -79,7 +81,9 @@ const shouldProtectRoute = (url: URL) => {
 const isApiRoute = (url: URL) => {
 	// Only /api pages require apiKey
 	return (
-		url.pathname.startsWith("/api/") === true && url.pathname.startsWith("/api/auth/") === false
+		(url.pathname.startsWith("/api/") === true &&
+			url.pathname.startsWith("/api/auth/") === false) ||
+		url.pathname.startsWith("/feed.ics") === true
 	);
 };
 
@@ -92,7 +96,7 @@ const checkApiKey = async (apiKey: string | null) => {
 	if (!apiKey) throw new CustomError("No 'apiKey' included", 401);
 
 	const [existingKey] = await db
-		.select({ apiKey: authKeys.apiKey, userId: authKeys.userId })
+		.select()
 		.from(authKeys)
 		.where(and(eq(authKeys.apiKey, apiKey), gte(authKeys.expiresAt, new Date())));
 	if (!existingKey) throw new CustomError("'apiKey' is not valid", 401);
@@ -109,5 +113,8 @@ const checkApiKey = async (apiKey: string | null) => {
 		.from(authUsers)
 		.where(eq(authUsers.id, existingKey.userId));
 
-	return user;
+	return {
+		key: existingKey,
+		user,
+	};
 };

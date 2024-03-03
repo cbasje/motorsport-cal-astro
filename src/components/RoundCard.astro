@@ -1,8 +1,8 @@
 ---
 import NextSessionWrapper from "$components/NextSessionWrapper.svelte";
-import * as rounds from "$db/round-repository";
-import { getCircuitTitle } from "$lib/utils/circuit";
-import { getSeriesIcon, getSeriesTitleShort } from "$lib/utils/series";
+import * as rounds from "$db/rounds/repository";
+import { getSeriesIcon, getSeriesTitleShort } from "$db/rounds/utils";
+import { getCircuitTitle } from "$db/circuits/utils";
 import { Icon } from "astro-icon/components";
 
 type Round = Awaited<ReturnType<typeof rounds.getWeekends>>[number][number];

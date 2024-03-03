@@ -1,6 +1,6 @@
-import type { SeriesId } from "$db/types";
-import { Map, Popup } from "maplibre-gl";
+import type { SeriesId } from "$db/rounds/types";
 import type { Point } from "geojson";
+import { Map, Popup } from "maplibre-gl";
 
 type Marker = {
 	firstRound: string;

@@ -1,9 +1,11 @@
-import { db } from "$db/drizzle";
+import { circuits } from "$db/circuits/schema";
+import { sessions } from "$db/sessions/schema";
+import { db } from "$lib/server/db";
 import { getWeekendDatesFromOffset } from "$lib/utils/date";
 import { and, asc, eq, gte, inArray, lte, sql } from "drizzle-orm";
 import { groupBy } from "lodash";
-import { circuits, rounds, sessions } from "./schema";
 import * as v from "valibot";
+import { rounds } from "./schema";
 
 // FIXME: log!
 

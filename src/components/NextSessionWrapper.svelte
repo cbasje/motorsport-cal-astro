@@ -4,7 +4,7 @@
 
 	const queryClient = new QueryClient();
 
-	export let roundId: string;
+	export let roundId: number;
 </script>
 
 <QueryClientProvider client={queryClient}>

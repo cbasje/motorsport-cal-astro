@@ -1,6 +1,6 @@
-import type { SeriesId } from "$db/types";
+import type { SeriesId } from "$db/rounds/types";
+import { getSeriesColor } from "$db/rounds/utils";
 import { CustomError, errorRes, imageRes } from "$lib/utils/response";
-import { getSeriesColor } from "$lib/utils/series";
 import type { APIRoute } from "astro";
 import sharp from "sharp";
 

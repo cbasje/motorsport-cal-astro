@@ -1,6 +1,7 @@
 ---
-import type { Session, SeriesId } from "$db/types";
-import { getSessionTitle } from "$lib/utils/sessions";
+import type { SeriesId } from "$db/rounds/types";
+import type { Session } from "$db/sessions/types";
+import { getSessionTitle } from "$db/sessions/utils";
 import Time from "./Time.svelte";
 
 interface Props {

@@ -1,7 +1,7 @@
-import { db } from "$db/drizzle";
-import { and, asc, eq, ilike, sql } from "drizzle-orm";
-import { circuits, rounds } from "./schema";
-import type { SeriesId } from "./types";
+import { rounds } from "$db/rounds/schema";
+import { db } from "$lib/server/db";
+import { eq, ilike, sql } from "drizzle-orm";
+import { circuits } from "./schema";
 
 // FIXME: log!
 

@@ -1,6 +1,6 @@
 <script lang="ts">
-	import { getSeriesIcon, getSeriesTitle } from "$lib/utils/series";
-	import { seriesIds, type SeriesId } from "$db/types";
+	import { seriesIds, type SeriesId } from "$db/rounds/types";
+	import { getSeriesTitle } from "$lib/utils/series";
 	import { onMount } from "svelte";
 
 	export let series: SeriesId[];

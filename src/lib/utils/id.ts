@@ -1,5 +1,5 @@
-import type { Round, Session } from "$db/types";
-import _ from "lodash";
+import type { Round } from "$db/rounds/types";
+import type { Session } from "$db/sessions/types";
 
 /**
 	@param series Round.series
