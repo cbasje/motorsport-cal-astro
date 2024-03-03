@@ -1,4 +1,4 @@
-import * as feed from "$db/feed-repository";
+import * as feed from "$db/feed/repository";
 import { errorRes, successRes } from "$lib/utils/response";
 import type { APIRoute } from "astro";
 

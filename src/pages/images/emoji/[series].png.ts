@@ -1,6 +1,6 @@
-import type { SeriesId } from "$db/types";
+import type { SeriesId } from "$db/rounds/types";
+import { getSeriesColor, getSeriesIcon } from "$db/rounds/utils";
 import { CustomError, errorRes, imageRes } from "$lib/utils/response";
-import { getSeriesColor, getSeriesIcon } from "$lib/utils/series";
 import { icons } from "@iconify-json/fluent-emoji-high-contrast";
 import { getIconData, iconToHTML, iconToSVG, replaceIDs } from "@iconify/utils";
 import type { APIRoute } from "astro";

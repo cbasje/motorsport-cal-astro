@@ -1,10 +1,13 @@
-import { circuits, rounds, sessions } from "$db/schema";
-import { seriesIds, sessionTypes, type NewRound, type NewSession, type Round } from "$db/types";
-import { fakerEN } from "@faker-js/faker";
+import { circuits } from "$db/circuits/schema";
+import { rounds } from "$db/rounds/schema";
+import { seriesIds, type NewRound, type Round } from "$db/rounds/types";
+import { sessions } from "$db/sessions/schema";
+import { sessionTypes, type NewSession } from "$db/sessions/types";
 import { generateRoundId, generateSessionId } from "$lib/utils/id";
-import { exit } from "node:process";
+import { fakerEN } from "@faker-js/faker";
 import { neon } from "@neondatabase/serverless";
 import { drizzle } from "drizzle-orm/neon-http";
+import { exit } from "node:process";
 
 const sql = neon(process.env.DATABASE_URL!);
 const db = drizzle(sql);

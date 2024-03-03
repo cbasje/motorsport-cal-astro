@@ -1,5 +1,5 @@
-import * as sessions from "$db/session-repository";
-import type { SeriesId } from "$db/types";
+import type { SeriesId } from "$db/rounds/types";
+import * as sessions from "$db/sessions/repository";
 import { errorRes, successRes } from "$lib/utils/response";
 import type { APIRoute } from "astro";
 

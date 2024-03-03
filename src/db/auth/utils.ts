@@ -1,4 +1,4 @@
-import { lucia } from "$lib/auth";
+import { lucia } from "$lib/server/auth";
 
 export const getApiKey = (url: URL, headers: Headers) => {
 	// Get apiKey from url searchParams

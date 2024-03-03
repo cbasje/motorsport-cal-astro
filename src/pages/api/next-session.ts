@@ -1,4 +1,4 @@
-import * as sessions from "$db/session-repository";
+import * as sessions from "$db/sessions/repository";
 import { errorRes, successRes } from "$lib/utils/response";
 import type { APIRoute } from "astro";
 

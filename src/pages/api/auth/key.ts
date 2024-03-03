@@ -1,6 +1,6 @@
-import { db } from "$db/drizzle";
-import { authKeys } from "$db/schema";
-import { seriesIds } from "$db/types";
+import { authKeys } from "$db/auth/schema";
+import { seriesIds } from "$db/rounds/types";
+import { db } from "$lib/server/db";
 import { debugRes, successRes } from "$lib/utils/response";
 import type { APIRoute } from "astro";
 import { generateId } from "lucia";

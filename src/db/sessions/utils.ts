@@ -1,4 +1,5 @@
-import type { SeriesId, SessionType } from "$db/types";
+import type { SeriesId } from "$db/rounds/types";
+import type { SessionType } from "./types";
 
 export const getSessionTitle = (
 	series: SeriesId | null,

@@ -1,7 +1,7 @@
-import * as feed from "$db/feed-repository";
+import { getSessionTitle } from "$db/sessions/utils";
+import { getSeriesEmoji } from "$lib/utils/series";
+import * as feed from "./repository";
 import { createEvents, type DateArray, type EventAttributes } from "ics";
-import { getSeriesEmoji } from "./series";
-import { getSessionTitle } from "./sessions";
 
 type Session = Awaited<ReturnType<typeof feed.getAllSessions>>[number];
 

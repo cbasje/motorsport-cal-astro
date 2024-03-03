@@ -1,4 +1,4 @@
-import type { SeriesId } from "$db/types";
+import type { SeriesId } from "$db/rounds/types";
 
 export const icons: Record<SeriesId, string> = {
 	F1: "dashing-away",

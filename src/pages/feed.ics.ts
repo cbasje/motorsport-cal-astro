@@ -1,7 +1,7 @@
 import type { APIRoute } from "astro";
-import * as feed from "$db/feed-repository";
+import * as feed from "$db/feed/repository";
 import { errorRes, feedRes } from "$lib/utils/response";
-import { generateFeed } from "$lib/utils/feed";
+import { generateFeed } from "$db/feed/utils";
 
 export const GET: APIRoute = async ({ locals }) => {
 	try {

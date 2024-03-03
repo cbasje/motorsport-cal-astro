@@ -1,5 +1,7 @@
 <script lang="ts">
-	import * as sessions from "$db/session-repository";
+	import * as sessions from "$db/sessions/repository";
+
+	type NextRace = Awaited<ReturnType<typeof sessions.getNextRaces>>[number];
 
 	export let nextRace: NextRace;
 
@@ -18,16 +20,16 @@
 		hours = 0,
 		mins = 0;
 	$: {
-		days = new Date(nextRace.start.valueOf() - current.valueOf()).getDate() - 1;
-		hours = new Date(nextRace.start.valueOf() - current.valueOf()).getHours() - 1;
-		mins = new Date(nextRace.start.valueOf() - current.valueOf()).getMinutes();
+		days = new Date(nextRace.start.valueOf() - currentDate.valueOf()).getDate() - 1;
+		hours = new Date(nextRace.start.valueOf() - currentDate.valueOf()).getHours() - 1;
+		mins = new Date(nextRace.start.valueOf() - currentDate.valueOf()).getMinutes();
 	}
 </script>
 
-{#if nextRace.round.title !== ""}
+{#if nextRace.title !== ""}
 	<h2>
-		{nextRace.round.series}
-		{nextRace.round.title}
+		{nextRace.series}
+		{nextRace.title}
 	</h2>
 {:else}
 	<h1>Loading...</h1>

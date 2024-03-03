@@ -1,4 +1,5 @@
-import type { Circuit, SeriesId } from "$db/types";
+import type { SeriesId } from "$db/rounds/types";
+import type { Circuit } from "./types";
 
 const regionNames = new Intl.DisplayNames(undefined, { type: "region" });
 

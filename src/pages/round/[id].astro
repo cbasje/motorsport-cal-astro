@@ -2,8 +2,8 @@
 import RoundCard from "$components/RoundCard.astro";
 import RoundNav from "$components/RoundNav.astro";
 import SessionCard from "$components/SessionCard.astro";
-import * as rounds from "$db/round-repository";
-import * as sessions from "$db/session-repository";
+import * as rounds from "$db/rounds/repository";
+import * as sessions from "$db/sessions/repository";
 import MainLayout from "$layouts/main.astro";
 
 const { pathname } = Astro.url;
