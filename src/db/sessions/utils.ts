@@ -12,8 +12,9 @@ export const getSessionTitle = (
 		Q: "Qualifying",
 		SQ: "",
 		FP: "Practice",
-		T: "Shakedown",
+		T: "Testing",
 		TBC: "TBC",
+		W: "Warmup",
 	};
 	const defaultTitles: Record<SessionType, string> = {
 		R: "Race",
@@ -21,8 +22,9 @@ export const getSessionTitle = (
 		Q: "Qualifying",
 		SQ: "Sprint Qualifying",
 		FP: "Practice",
-		T: "Shakedown",
+		T: "Testing",
 		TBC: "TBC",
+		W: "Warmup",
 	};
 
 	if (!type) {
