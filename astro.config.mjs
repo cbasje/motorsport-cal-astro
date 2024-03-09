@@ -20,6 +20,7 @@ export default defineConfig({
 					"baby",
 					"battery",
 					"eagle",
+					"baby-chick",
 					"stopwatch",
 					"snow-capped-mountain",
 					"girl",
