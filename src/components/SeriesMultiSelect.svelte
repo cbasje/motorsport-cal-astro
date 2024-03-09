@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { seriesIds, type SeriesId } from "$db/rounds/types";
-	import { getSeriesTitle } from "$lib/utils/series";
+	import { getSeriesTitle } from "$db/rounds/utils";
 	import { onMount } from "svelte";
 
 	export let series: SeriesId[];
