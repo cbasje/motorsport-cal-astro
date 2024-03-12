@@ -73,8 +73,9 @@ const handleLoginRedirect = (url: URL) => {
 const shouldProtectRoute = (url: URL) => {
 	// Only non-/auth pages should have authentication
 	return (
-		url.pathname.startsWith("/auth/") === false &&
-		url.pathname.startsWith("/api/auth/") === false
+		url.pathname.startsWith("/auth/") !== true &&
+		url.pathname.startsWith("/api/auth/") !== true &&
+		url.pathname.startsWith("/images/") !== true
 	);
 };
 
