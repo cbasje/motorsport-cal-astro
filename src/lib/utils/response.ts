@@ -36,7 +36,7 @@ export const imageRes = (buffer: Buffer) => {
 		status: 200,
 		headers: {
 			"Content-Type": "image/png",
-			"Cache-Control": "s-maxage=1, stale-while-revalidate=59",
+			"Cache-Control": "max-age=604800, stale-while-revalidate=86400",
 		},
 	});
 };
@@ -47,7 +47,7 @@ export const svgRes = (svg: string) => {
 		status: 200,
 		headers: {
 			"Content-Type": "image/svg+xml",
-			"Cache-Control": "s-maxage=1, stale-while-revalidate=59",
+			"Cache-Control": "max-age=604800, stale-while-revalidate=86400",
 		},
 	});
 };
