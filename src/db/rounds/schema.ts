@@ -2,7 +2,7 @@ import { circuits } from "$db/circuits/schema";
 import { sessions } from "$db/sessions/schema";
 import { createdAt, updatedAt } from "$db/timestamp-columns";
 import { relations } from "drizzle-orm";
-import { integer, pgTable, text, timestamp } from "drizzle-orm/pg-core";
+import { date, integer, pgTable, text } from "drizzle-orm/pg-core";
 import type { SeriesId } from "./types";
 
 export const rounds = pgTable("rounds", {
@@ -11,8 +11,8 @@ export const rounds = pgTable("rounds", {
 	title: text("title").notNull(),
 	season: text("season").notNull(),
 	link: text("link"),
-	start: timestamp("start"),
-	end: timestamp("end"),
+	start: date("start"),
+	end: date("end"),
 	circuitId: integer("circuit_id")
 		.notNull()
 		.references(() => circuits.id, {
