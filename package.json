@@ -24,14 +24,14 @@
 		"db:studio": "drizzle-kit studio"
 	},
 	"dependencies": {
-		"@astrojs/check": "^0.3.4",
-		"@astrojs/svelte": "4",
+		"@astrojs/check": "0.5.9",
+		"@astrojs/svelte": "5.2.0",
 		"@iconify-json/fluent-emoji-high-contrast": "^1.1.9",
 		"@internationalized/date": "^3.5.2",
 		"@lucia-auth/adapter-drizzle": "^1.0.0",
 		"@neondatabase/serverless": "^0.9.0",
 		"@sveltestack/svelte-query": "^1.6.0",
-		"astro": "3.6.4",
+		"astro": "4.5.5",
 		"astro-icon": "^1.0.2",
 		"astro-seo": "^0.8.0",
 		"cheerio": "^1.0.0-rc.12",
