@@ -10,7 +10,10 @@ export const weather = pgTable("weather", {
 	dt: timestamp("dt").notNull(),
 	circuitId: integer("circuit_id")
 		.notNull()
-		.references(() => circuits.id),
+		.references(() => circuits.id, {
+			onDelete: "cascade",
+			onUpdate: "cascade",
+		}),
 	createdAt,
 	updatedAt,
 });

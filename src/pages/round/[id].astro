@@ -18,7 +18,7 @@ const sessionsByRound = await sessions.getSessionsByRoundId(id);
 <MainLayout title={round?.title ?? "Undefined Round"} path={pathname}>
 	<RoundNav />
 
-	<main id="main-content">
+	<main id="main-content">		
 		{
 			round && (
 				<>

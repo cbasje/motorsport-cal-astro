@@ -18,7 +18,10 @@ export const authSessions = pgTable("auth_session", {
 	id: text("id").primaryKey(),
 	userId: text("user_id")
 		.notNull()
-		.references(() => authUsers.id),
+		.references(() => authUsers.id, {
+			onDelete: "cascade",
+			onUpdate: "cascade",
+		}),
 	expiresAt: timestamp("expires_at", {
 		withTimezone: true,
 		mode: "date",
@@ -30,7 +33,10 @@ export const authKeys = pgTable("auth_keys", {
 	apiKey: text("api_key").primaryKey(),
 	userId: text("user_id")
 		.notNull()
-		.references(() => authUsers.id),
+		.references(() => authUsers.id, {
+			onDelete: "cascade",
+			onUpdate: "cascade",
+		}),
 	role: text("role").$type<Role>(),
 	series: text("series").array().$type<SeriesId[]>(),
 	expiresAt: timestamp("expires_at", {

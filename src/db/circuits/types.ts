@@ -9,6 +9,6 @@ export type NewCircuit = Pick<typeof circuits.$inferInsert, "id" | "wikipediaPag
 		lat: number;
 	};
 };
-export type NewCreatedCircuit = typeof circuits.$inferInsert &
+export type NewCreatedCircuit = Omit<typeof circuits.$inferInsert, "updatedAt"> &
 	Pick<NewCircuit, "oldTitle"> &
 	Pick<Circuit, "id">;

@@ -11,7 +11,10 @@ export const sessions = pgTable("sessions", {
 	end: timestamp("end").notNull(),
 	roundId: text("round_id")
 		.notNull()
-		.references(() => rounds.id),
+		.references(() => rounds.id, {
+			onDelete: "cascade",
+			onUpdate: "cascade",
+		}),
 	type: text("type").$type<SessionType>(),
 	createdAt,
 	updatedAt,

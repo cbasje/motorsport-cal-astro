@@ -5,7 +5,7 @@ export const seriesIds = ["F1", "F2", "F3", "FE", "INDY", "NXT", "WEC", "WRC", "
 export type SeriesId = (typeof seriesIds)[number];
 
 export type Round = typeof rounds.$inferSelect;
-export type NewRound = Omit<typeof rounds.$inferInsert, "circuitId"> & {
+export type NewRound = Omit<typeof rounds.$inferInsert, "circuitId" | "updatedAt"> & {
 	circuitId?: Circuit["id"];
 	circuitTitle: string;
 } & Pick<Round, "id">;

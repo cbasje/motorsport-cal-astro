@@ -15,7 +15,10 @@ export const rounds = pgTable("rounds", {
 	end: timestamp("end"),
 	circuitId: integer("circuit_id")
 		.notNull()
-		.references(() => circuits.id),
+		.references(() => circuits.id, {
+			onDelete: "set null",
+			onUpdate: "set null",
+		}),
 	series: text("series").$type<SeriesId>(),
 	createdAt,
 	updatedAt,
