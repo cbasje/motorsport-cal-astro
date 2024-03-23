@@ -29,7 +29,7 @@ RUN bun install
 COPY --link . .
 
 # Build application
-RUN bun --bun run astro build
+RUN bun --bun run astro build --remote
 
 # Remove development dependencies
 RUN rm -rf node_modules && \
