@@ -72,7 +72,9 @@ export const getNextSessionWidget = async () => {
 			id: rounds.id,
 			start: rounds.start,
 			end: rounds.end,
-			weekendOffset: sql<number>`DATE_PART('week', ${rounds.start}) - DATE_PART('week', NOW())`,
+			weekendOffset: sql`strftime('%W', ${rounds.start}) - strftime('%W', 'now')`.mapWith(
+				Number
+			),
 			series: rounds.series,
 			country: circuits.country,
 		})
@@ -88,7 +90,9 @@ export const getNextSessionWidget = async () => {
 			number: sessions.number,
 			start: sessions.start,
 			end: sessions.end,
-			weekendOffset: sql<number>`DATE_PART('week', ${sessions.start}) - DATE_PART('week', NOW())`,
+			weekendOffset: sql`strftime('%W', ${sessions.start}) - strftime('%W', 'now')`.mapWith(
+				Number
+			),
 			series: rounds.series,
 		})
 		.from(sessions)
