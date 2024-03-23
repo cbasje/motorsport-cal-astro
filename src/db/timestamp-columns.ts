@@ -1,10 +1,8 @@
-import { timestamp } from "drizzle-orm/pg-core";
+import { NOW, column } from "astro:db";
 
-export const createdAt = timestamp("created_at", {
-	precision: 3,
+export const createdAt = column.date({
+	default: NOW,
 	mode: "date",
-}).defaultNow();
-export const updatedAt = timestamp("updated_at", {
-	precision: 3,
-	mode: "date",
-}).notNull();
+	optional: true,
+});
+export const updatedAt = column.date();

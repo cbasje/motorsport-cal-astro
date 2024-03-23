@@ -1,10 +1,8 @@
-import { authKeys, authUsers } from "$db/auth/schema";
 import { getApiKey } from "$db/auth/utils";
 import { lucia } from "$lib/server/auth";
-import { db } from "$lib/server/db";
 import { CustomError, debugRes, errorRes } from "$lib/utils/response";
+import { and, authKeys, authUsers, db, eq, gte, isNotNull } from "astro:db";
 import { defineMiddleware } from "astro:middleware";
-import { SQL, and, eq, gte, isNotNull } from "drizzle-orm";
 import { verifyRequestOrigin } from "lucia";
 
 export const onRequest = defineMiddleware(
@@ -112,7 +110,7 @@ const checkApiKey = async (apiKey: string | null) => {
 			username: authUsers.username,
 			email: authUsers.email,
 			role: authUsers.role,
-			hasTwoFactor: isNotNull(authUsers.twoFactorSecret) as SQL<boolean>,
+			hasTwoFactor: isNotNull(authUsers.twoFactorSecret),
 		})
 		.from(authUsers)
 		.where(eq(authUsers.id, existingKey.userId));

@@ -2,7 +2,9 @@ import svelte from "@astrojs/svelte";
 import icon from "astro-icon";
 import { defineConfig } from "astro/config";
 import bun from "./adapter/index";
+import db from "@astrojs/db";
 
+// https://astro.build/config
 export default defineConfig({
 	output: "server",
 
@@ -37,6 +39,7 @@ export default defineConfig({
 				],
 			},
 		}),
+		db(),
 	],
 
 	site: import.meta.env.PROD ? "https://porpoise.benjami.in" : "http://localhost:3000",

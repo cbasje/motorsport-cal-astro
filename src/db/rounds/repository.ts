@@ -1,11 +1,7 @@
-import { circuits } from "$db/circuits/schema";
-import { sessions } from "$db/sessions/schema";
-import { db } from "$lib/server/db";
 import { getWeekendDatesFromOffset } from "$lib/utils/date";
-import { and, asc, eq, gte, inArray, lte, sql } from "drizzle-orm";
+import { and, asc, circuits, db, eq, gte, inArray, lte, rounds, sessions, sql } from "astro:db";
 import { groupBy } from "lodash";
 import * as v from "valibot";
-import { rounds } from "./schema";
 
 // FIXME: log!
 
@@ -13,7 +9,7 @@ const sessionSq = db.$with("children").as(
 	db
 		.select({
 			roundId: sessions.roundId,
-			count: sql<number>`count(*)::int`.as("count"),
+			count: sql`count(*)`.mapWith(Number).as("count"),
 		})
 		.from(sessions)
 		.groupBy(sessions.roundId)
@@ -30,9 +26,11 @@ export const getOne = async (id: string) => {
 			link: rounds.link,
 			start: rounds.start,
 			end: rounds.end,
-			year: sql<number>`DATE_PART('year', ${rounds.start})`,
-			weekNumber: sql<number>`DATE_PART('week', ${rounds.start})`,
-			weekendOffset: sql<number>`DATE_PART('week', ${rounds.start}) - DATE_PART('week', NOW())`,
+			year: sql`strftime('%Y', ${rounds.start})`.mapWith(Number),
+			weekNumber: sql`strftime('%W', ${rounds.start})`.mapWith(Number),
+			weekendOffset: sql`strftime('%W', ${rounds.start}) - strftime('%W', 'now')`.mapWith(
+				Number
+			),
 			circuitId: rounds.circuitId,
 			series: rounds.series,
 			country: circuits.country,
@@ -79,9 +77,11 @@ export const getWeekends = async (input: {
 			series: rounds.series,
 			start: rounds.start,
 			end: rounds.end,
-			year: sql<number>`DATE_PART('year', ${rounds.start})`,
-			weekNumber: sql<number>`DATE_PART('week', ${rounds.start})`,
-			weekendOffset: sql<number>`DATE_PART('week', ${rounds.start}) - DATE_PART('week', NOW())`,
+			year: sql`strftime('%Y', ${rounds.start})`.mapWith(Number),
+			weekNumber: sql`strftime('%W', ${rounds.start})`.mapWith(Number),
+			weekendOffset: sql`strftime('%W', ${rounds.start}) - strftime('%W', 'now')`.mapWith(
+				Number
+			),
 			country: circuits.country,
 			locality: circuits.locality,
 			circuitTitle: circuits.title,

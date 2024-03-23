@@ -1,4 +1,4 @@
-import type { circuits } from "./schema";
+import type { circuits } from "astro:db";
 
 export type Circuit = typeof circuits.$inferSelect;
 export type NewCircuit = Pick<typeof circuits.$inferInsert, "id" | "wikipediaPageId"> & {

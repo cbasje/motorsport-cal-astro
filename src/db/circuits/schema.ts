@@ -1,25 +1,19 @@
-import { rounds } from "$db/rounds/schema";
 import { createdAt, updatedAt } from "$db/timestamp-columns";
-import { weather } from "$db/weather/schema";
-import { relations } from "drizzle-orm";
-import { integer, pgTable, real, serial, text } from "drizzle-orm/pg-core";
+import { column, defineTable } from "astro:db";
 
-export const circuits = pgTable("circuits", {
-	id: serial("id").primaryKey(),
-	title: text("title").notNull().unique(),
-	usedTitles: text("used_titles").array(),
-	wikipediaPageId: integer("wikipedia_page_id").unique(),
-	locality: text("locality"),
-	country: text("country"),
-	timezone: text("timezone"),
-	utcOffset: integer("utc_offset"),
-	lon: real("lon"),
-	lat: real("lat"),
-	createdAt,
-	updatedAt,
+export const circuits = defineTable({
+	columns: {
+		id: column.number({ primaryKey: true }),
+		title: column.text({ unique: true }),
+		usedTitles: column.json(), // string[]
+		wikipediaPageId: column.number({ unique: true }),
+		locality: column.text({ optional: true }),
+		country: column.text({ optional: true }),
+		timezone: column.text({ optional: true }),
+		utcOffset: column.number({ optional: true }),
+		lon: column.number({ optional: true }),
+		lat: column.number({ optional: true }),
+		createdAt,
+		updatedAt,
+	},
 });
-
-export const circuitRelations = relations(circuits, ({ many }) => ({
-	rounds: many(rounds),
-	weather: many(weather),
-}));

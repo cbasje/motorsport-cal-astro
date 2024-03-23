@@ -1,9 +1,7 @@
-import { authUsers } from "$db/auth/schema";
 import { lucia } from "$lib/server/auth";
-import { db } from "$lib/server/db";
 import { CustomError, debugRes } from "$lib/utils/response";
 import type { APIRoute } from "astro";
-import { eq } from "drizzle-orm";
+import { authUsers, db, eq } from "astro:db";
 import { generateId } from "lucia";
 import * as v from "valibot";
 

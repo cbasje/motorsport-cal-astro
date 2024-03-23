@@ -1,33 +1,19 @@
 import { circuits } from "$db/circuits/schema";
-import { sessions } from "$db/sessions/schema";
 import { createdAt, updatedAt } from "$db/timestamp-columns";
-import { relations } from "drizzle-orm";
-import { date, integer, pgTable, text } from "drizzle-orm/pg-core";
-import type { SeriesId } from "./types";
+import { column, defineTable } from "astro:db";
 
-export const rounds = pgTable("rounds", {
-	id: text("id").primaryKey(),
-	number: integer("number").default(0).notNull(),
-	title: text("title").notNull(),
-	season: text("season").notNull(),
-	link: text("link"),
-	start: date("start"),
-	end: date("end"),
-	circuitId: integer("circuit_id")
-		.notNull()
-		.references(() => circuits.id, {
-			onDelete: "set null",
-			onUpdate: "set null",
-		}),
-	series: text("series").$type<SeriesId>(),
-	createdAt,
-	updatedAt,
+export const rounds = defineTable({
+	columns: {
+		id: column.text({ primaryKey: true }),
+		number: column.number({ default: 0 }),
+		title: column.text(),
+		season: column.text(),
+		link: column.text({ optional: true }),
+		start: column.date({ optional: true }),
+		end: column.date({ optional: true }),
+		circuitId: column.number({ references: () => circuits.columns.id }),
+		series: column.text({ optional: true }), // SeriesId
+		createdAt,
+		updatedAt,
+	},
 });
-
-export const roundRelations = relations(rounds, ({ one, many }) => ({
-	circuit: one(circuits, {
-		fields: [rounds.circuitId],
-		references: [circuits.id],
-	}),
-	sessions: many(sessions),
-}));

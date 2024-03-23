@@ -1,8 +1,7 @@
-import { authKeys } from "$db/auth/schema";
 import { seriesIds } from "$db/rounds/types";
-import { db } from "$lib/server/db";
 import { debugRes, successRes } from "$lib/utils/response";
 import type { APIRoute } from "astro";
+import { authKeys, db } from "astro:db";
 import { generateId } from "lucia";
 import * as v from "valibot";
 

@@ -1,9 +1,6 @@
-import { rounds } from "$db/rounds/schema";
-import { db } from "$lib/server/db";
-import { eq, ilike, sql } from "drizzle-orm";
-import { circuits } from "./schema";
-
 // FIXME: log!
+
+import { circuits, db, eq, like, rounds, sql } from "astro:db";
 
 export const getOne = async (id: number) => {
 	const [first] = await db.select().from(circuits).where(eq(circuits.id, id)).limit(1);
@@ -32,7 +29,7 @@ export const getMapMarkers = async () => {
 				count: sql<number>`count(*)::int`.as("count"),
 			})
 			.from(rounds)
-			.where(ilike(rounds.season, `%${new Date().getFullYear().toString()}%`))
+			.where(like(rounds.season, `%${new Date().getFullYear().toString()}%`))
 			.groupBy(rounds.circuitId)
 	);
 	return await db

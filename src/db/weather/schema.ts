@@ -1,26 +1,15 @@
 import { circuits } from "$db/circuits/schema";
 import { createdAt, updatedAt } from "$db/timestamp-columns";
-import { relations } from "drizzle-orm";
-import { integer, pgTable, real, serial, timestamp } from "drizzle-orm/pg-core";
+import { column, defineTable } from "astro:db";
 
-export const weather = pgTable("weather", {
-	id: serial("id").primaryKey(),
-	temp: real("temp").notNull(),
-	weatherId: integer("weather_id").notNull(),
-	dt: timestamp("dt").notNull(),
-	circuitId: integer("circuit_id")
-		.notNull()
-		.references(() => circuits.id, {
-			onDelete: "cascade",
-			onUpdate: "cascade",
-		}),
-	createdAt,
-	updatedAt,
+export const weather = defineTable({
+	columns: {
+		id: column.text({ primaryKey: true }),
+		temp: column.number(),
+		weatherId: column.number(),
+		dt: column.date(),
+		circuitId: column.number({ references: () => circuits.columns.id }),
+		createdAt,
+		updatedAt,
+	},
 });
-
-export const weatherRelations = relations(weather, ({ one }) => ({
-	circuit: one(circuits, {
-		fields: [weather.circuitId],
-		references: [circuits.id],
-	}),
-}));

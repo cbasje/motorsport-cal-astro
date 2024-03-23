@@ -1,13 +1,21 @@
-import { circuits } from "$db/circuits/schema";
-import { rounds } from "$db/rounds/schema";
 import { seriesIds, type SeriesId } from "$db/rounds/types";
-import { sessions } from "$db/sessions/schema";
 import type { SessionType } from "$db/sessions/types";
-import { db } from "$lib/server/db";
 import { getWeekendDatesFromOffset } from "$lib/utils/date";
 import { CustomError } from "$lib/utils/response";
-import { and, asc, eq, gte, inArray, lte, notInArray, sql } from "drizzle-orm";
-import { union } from "drizzle-orm/pg-core";
+import {
+	and,
+	asc,
+	circuits,
+	db,
+	eq,
+	gte,
+	inArray,
+	lte,
+	notInArray,
+	rounds,
+	sessions,
+	sql,
+} from "astro:db";
 
 // FIXME: log!
 
@@ -55,7 +63,7 @@ export const getAllSessions = async (preferredSeries: SeriesId[] = [...seriesIds
 		.leftJoin(circuits, eq(rounds.circuitId, circuits.id))
 		.where(inArray(rounds.series, preferredSeries));
 
-	return await union(allEmptyRounds, allSessions);
+	return allEmptyRounds.union(allSessions);
 };
 
 export const getNextSessionWidget = async () => {

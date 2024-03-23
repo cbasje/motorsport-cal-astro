@@ -1,4 +1,4 @@
-import type { authKeys, authSessions, authUsers } from "./schema";
+import type { authKeys, authSessions, authUsers } from "astro:db";
 
 export const roles = ["ADMIN", "USER"] as const;
 export type Role = (typeof roles)[number];

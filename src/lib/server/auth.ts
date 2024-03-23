@@ -1,10 +1,9 @@
-import { authSessions, authUsers } from "$db/auth/schema";
 import type { AuthSession, AuthUser } from "$db/auth/types";
-import { DrizzlePostgreSQLAdapter } from "@lucia-auth/adapter-drizzle";
 import { Lucia } from "lucia";
-import { db } from "./db";
+import { AstroDbAdapter } from "./db-adapter";
+import { authSessions, authUsers, db } from "astro:db";
 
-const adapter = new DrizzlePostgreSQLAdapter(db, authSessions, authUsers);
+const adapter = new AstroDbAdapter(db, authSessions, authUsers);
 
 export const lucia = new Lucia(adapter, {
 	sessionCookie: {
