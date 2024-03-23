@@ -13,9 +13,6 @@ WORKDIR /app
 ENV NODE_ENV="production"
 ENV PROD=true
 
-ARG ASTRO_STUDIO_APP_TOKEN
-ENV ASTRO_STUDIO_APP_TOKEN ${ASTRO_STUDIO_APP_TOKEN}
-
 # Throw-away build stage to reduce size of final image
 FROM base as build
 
