@@ -1,8 +1,5 @@
 name: Fly.io Deploy
 
-env:
-    ASTRO_STUDIO_APP_TOKEN: ${{secrets.ASTRO_STUDIO_APP_TOKEN }}
-
 on:
     push:
         branches:
@@ -31,4 +28,5 @@ jobs:
             - name: Deploy to Fly.io
               run: flyctl deploy --remote-only
               env:
+                  ASTRO_STUDIO_APP_TOKEN: ${{secrets.ASTRO_STUDIO_APP_TOKEN }}
                   FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
