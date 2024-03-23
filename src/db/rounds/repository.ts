@@ -1,6 +1,6 @@
 import { getWeekendDatesFromOffset } from "$lib/utils/date";
 import { and, asc, circuits, db, eq, gte, inArray, lte, rounds, sessions, sql } from "astro:db";
-import { groupBy } from "lodash";
+import groupBy from "src/hunter/lib/utils/group-by";
 import * as v from "valibot";
 
 // FIXME: log!
