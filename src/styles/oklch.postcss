@@ -1,4 +1,11 @@
 :root {
+	--brightness: 1.2;
+
+	--gray-hue: var(--arc-hue, 285);
+	--gray-chroma: 0.0025;
+
+	--color-hue: var(--arc-hue, 285);
+
 	--F1-hue: 18;
 	--F2-hue: 240;
 	--F3-hue: 310;
@@ -10,8 +17,6 @@
 	--F1A-hue: 350;
 }
 :where(*) {
-	--brightness: 1.3;
-
 	--color-0: oklch(99% calc(0.03 * var(--brightness)) var(--color-hue, 0));
 	--color-1: oklch(95% calc(0.06 * var(--brightness)) var(--color-hue, 0));
 	--color-2: oklch(88% calc(0.12 * var(--brightness)) var(--color-hue, 0));
