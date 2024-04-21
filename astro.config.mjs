@@ -26,6 +26,7 @@ export default defineConfig({
 					"stopwatch",
 					"snow-capped-mountain",
 					"girl",
+					"police-car-light",
 				],
 			},
 			svgoOptions: {
