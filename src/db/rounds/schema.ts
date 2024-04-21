@@ -12,7 +12,7 @@ export const rounds = defineTable({
 		start: column.date({ optional: true }),
 		end: column.date({ optional: true }),
 		circuitId: column.number({ references: () => circuits.columns.id }),
-		series: column.text({ optional: true }), // SeriesId
+		series: column.text(), // SeriesId
 		createdAt,
 		updatedAt,
 	},

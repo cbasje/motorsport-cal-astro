@@ -1,6 +1,7 @@
 // FIXME: log!
 
-import { circuits, db, eq, like, rounds, sql } from "astro:db";
+import type { SeriesId } from "$db/rounds/types";
+import { circuits, count, db, eq, like, rounds, sql } from "astro:db";
 
 export const getOne = async (id: number) => {
 	const [first] = await db.select().from(circuits).where(eq(circuits.id, id)).limit(1);
@@ -15,18 +16,21 @@ export const getMapMarkers = async () => {
 	const sq = db.$with("sq").as(
 		db
 			.select({
-				firstRound:
-					sql<string>`(array_agg(${rounds.id} ORDER BY ${rounds.start} ASC))[1]`.as(
-						"firstRound"
-					),
-				start: sql<Date>`(array_agg(${rounds.id} ORDER BY ${rounds.start} ASC))[1]`.as(
+				firstRound: sql<
+					string[]
+				>`json_extract(json_group_array(${rounds.id} ORDER BY ${rounds.start} ASC), '$[0]')`.as(
+					"firstRound"
+				),
+				start: sql<
+					Date[]
+				>`json_extract(json_group_array(${rounds.id} ORDER BY ${rounds.start} ASC), '$[0]')`.as(
 					"start"
 				),
-				series: sql<Date>`array_agg(${rounds.series} ORDER BY ${rounds.start} ASC)`.as(
-					"series"
-				),
+				series: sql<
+					SeriesId[]
+				>`json_group_array(${rounds.series} ORDER BY ${rounds.start} ASC)`.as("series"),
 				circuitId: rounds.circuitId,
-				count: sql<number>`count(*)::int`.as("count"),
+				count: count().as("count"),
 			})
 			.from(rounds)
 			.where(like(rounds.season, `%${new Date().getFullYear().toString()}%`))
@@ -40,6 +44,7 @@ export const getMapMarkers = async () => {
 			series: sq.series,
 			lat: circuits.lat,
 			lon: circuits.lon,
+			count: sq.count,
 		})
 		.from(circuits)
 		.leftJoin(sq, eq(sq.circuitId, circuits.id));
